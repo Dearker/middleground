@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * Created by mrt on 2018/5/25.
+ * Created by hanyi on 2019/10/16.
  */
 public class Oauth2Util {
 
