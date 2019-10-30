@@ -30,6 +30,7 @@
         <module>hanyi-admin</module>
         <module>hanyi-gateway</module>
         <module>hanyi-utils</module>
+        <module>hanyi-job</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -14,17 +14,6 @@ feign:
       enabled: true
 
 spring:
-  redis:
-      database: 2
-      host: 127.0.0.1
-      jedis:
-        pool:
-            max-active: 20
-  rabbitmq:
-      host: ${RABBIT_MQ_HOST:localhost}
-      port:  ${RABBIT_MQ_PORT:5672}
-      username: guest
-      password: guest
   sleuth:
     enabled: true
     http:
@@ -37,14 +26,16 @@ spring:
          locator:
            enabled: true
            lowerCaseServiceId: true
+  boot:
+    admin:
+      client:
+        url: http://114.67.102.137:8001   #admin客户端地址
 
 management:
   endpoints:
     web:
       exposure:
         include: '*'
-  security:
-    enabled: false
   endpoint:
     health:
       show-details: ALWAYS
@@ -56,9 +47,9 @@ gate:
 hystrix:
   threadpool:
     default:
-      coreSize: 1000 ##并发执行的最大线程数，默认10
-      maxQueueSize: 1000 ##BlockingQueue的最大队列数
-      queueSizeRejectionThreshold: 500 ##即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+      coreSize: 1000 #并发执行的最大线程数，默认10
+      maxQueueSize: 1000 #BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 500 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
   command:
     default:
       execution:

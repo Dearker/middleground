@@ -96,7 +96,7 @@
             <version>${lombok.version}</version>
         </dependency>
 
-        <!-- google扩展的数据结构 -->
+        <!-- google扩展数据结构 -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -107,6 +107,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+
 
     </dependencies>
 
