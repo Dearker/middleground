@@ -2,6 +2,7 @@ package com.hanyi.job;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @ClassName: middleground com.hanyi.job JobApplication
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Version: 1.0
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 public class JobApplication {
 
     public static void main(String[] args) {

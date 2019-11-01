@@ -6,8 +6,6 @@ import com.xxl.job.core.handler.annotation.JobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * 任务Handler示例（Bean模式）
@@ -28,10 +26,6 @@ public class DemoJobHandler extends IJobHandler {
 	public ReturnT<String> execute(String param) throws Exception {
 		XxlJobLogger.log("XXL-JOB, Hello World.");
 		System.out.println("XXL-JOB hello world");
-		for (int i = 0; i < 5; i++) {
-			XxlJobLogger.log("beat at:" + i);
-			TimeUnit.SECONDS.sleep(2);
-		}
 		return SUCCESS;
 	}
 
