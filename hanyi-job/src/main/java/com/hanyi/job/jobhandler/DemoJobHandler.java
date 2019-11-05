@@ -6,6 +6,8 @@ import com.xxl.job.core.handler.annotation.JobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 
 /**
  * 任务Handler示例（Bean模式）
@@ -25,7 +27,7 @@ public class DemoJobHandler extends IJobHandler {
 	@Override
 	public ReturnT<String> execute(String param) throws Exception {
 		XxlJobLogger.log("XXL-JOB, Hello World.");
-		System.out.println("XXL-JOB hello world");
+		System.out.println("XXL-JOB hello world"+ new Date(System.currentTimeMillis()));
 		return SUCCESS;
 	}
 
