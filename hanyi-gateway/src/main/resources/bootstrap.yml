@@ -19,3 +19,5 @@ spring:
     base-url: http://114.67.102.137:9411
   main:
     allow-bean-definition-overriding: true
+
+

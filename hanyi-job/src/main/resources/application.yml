@@ -8,7 +8,7 @@ spring:
   boot:
     admin:
       client:
-        url: http://114.67.102.137:8001   #admin客户端地址
+        url: http://114.67.102.163:8001   #admin客户端地址
 
 management:
   endpoints:
@@ -18,19 +18,6 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-
-hystrix:
-  threadpool:
-    default:
-      coreSize: 1000 #并发执行的最大线程数，默认10
-      maxQueueSize: 1000 #BlockingQueue的最大队列数
-      queueSizeRejectionThreshold: 500 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
 
 logging:
   config: classpath:logback.xml
@@ -47,3 +34,4 @@ xxl:
       logretentiondays: -1
       port: 9999
 
+feign.sentinel.enabled: true

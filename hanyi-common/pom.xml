@@ -15,7 +15,6 @@
         <nacoe.version>0.9.0.RELEASE</nacoe.version>
         <sentinel.version>0.9.0.RELEASE</sentinel.version>
         <zipkin.version>2.1.0.RELEASE</zipkin.version>
-        <hystrix.version>2.1.0.RELEASE</hystrix.version>
         <log4j.version>2.1.2.RELEASE</log4j.version>
         <lombok.version>1.18.8</lombok.version>
         <guava.version>24.0-jre</guava.version>
@@ -54,13 +53,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
             <version>${log4j.version}</version>
-        </dependency>
-
-        <!-- 熔断器 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-            <version>${hystrix.version}</version>
         </dependency>
 
         <!-- 链路追踪 -->
