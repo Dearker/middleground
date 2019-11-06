@@ -17,11 +17,10 @@
 
 package com.hanyi.gateway.handler;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.handler.AsyncPredicate;
 import org.springframework.cloud.gateway.handler.predicate.AbstractRoutePredicateFactory;
-import org.springframework.cloud.gateway.handler.predicate.ReadBodyPredicateFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.HttpMessageReader;
@@ -44,7 +43,7 @@ import static org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilt
  */
 public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFactory<RequestBodyRoutePredicateFactory.Config> {
 
-    protected static final Log LOGGER = LogFactory.getLog(ReadBodyPredicateFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestBodyRoutePredicateFactory.class);
 
     private static final List<HttpMessageReader<?>> messageReaders = HandlerStrategies.withDefaults().messageReaders();
 
