@@ -1,0 +1,16 @@
+
+spring:
+  boot:
+    admin:
+      client:
+        url: http://114.67.102.163:8001   #admin客户端地址
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+

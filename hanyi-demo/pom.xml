@@ -13,7 +13,7 @@
 
     <properties>
         <mysql.version>8.0.17</mysql.version>
-
+        <admin.client.version>2.1.0</admin.client.version>
 
     </properties>
 
@@ -34,6 +34,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${admin.client.version}</version>
         </dependency>
 
     </dependencies>

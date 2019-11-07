@@ -20,10 +20,19 @@
         <guava.version>24.0-jre</guava.version>
         <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
+        <hutool.version>5.0.3</hutool.version>
     </properties>
 
     <dependencies>
 
+        <!-- hutool工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <!-- swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
