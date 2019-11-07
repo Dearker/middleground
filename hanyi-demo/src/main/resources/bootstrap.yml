@@ -1,0 +1,26 @@
+server:
+  port: 8003
+
+spring:
+  application:
+    name: hanyi-demo
+  cloud:
+    nacos:
+      config:
+        server-addr: 114.67.102.137:8848
+        file-extension: yml
+      discovery:
+        server-addr: 114.67.102.137:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 114.67.102.137:8488
+  zipkin:
+    base-url: http://114.67.102.137:9411
+
+#日志級別
+logging:
+  level:
+    root: info
+
+feign.sentinel.enabled: true

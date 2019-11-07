@@ -29,6 +29,7 @@
         <module>hanyi-gateway</module>
         <module>hanyi-utils</module>
         <module>hanyi-job</module>
+        <module>hanyi-demo</module>
     </modules>
     <packaging>pom</packaging>
 
