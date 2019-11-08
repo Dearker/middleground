@@ -14,7 +14,7 @@
     <properties>
         <mysql.version>8.0.17</mysql.version>
         <admin.client.version>2.1.0</admin.client.version>
-
+        <mybatisplus.version>3.1.2</mybatisplus.version>
     </properties>
 
     <dependencies>
@@ -34,6 +34,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatisplus.version}</version>
         </dependency>
 
         <dependency>

@@ -21,6 +21,7 @@
         <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.0.3</hutool.version>
+        <logstash.version>6.1</logstash.version>
     </properties>
 
     <dependencies>
@@ -104,9 +105,21 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <!-- openfeign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- 集成ELK -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash.version}</version>
         </dependency>
 
 
