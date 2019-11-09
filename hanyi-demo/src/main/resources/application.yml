@@ -1,9 +1,15 @@
-
 spring:
   boot:
     admin:
       client:
         url: http://114.67.102.163:8001   #admin客户端地址
+  datasource:
+    url: jdbc:mysql://114.67.102.163:3306/test?useUnicode=true&characterEncoding=UTF8
+    username: root
+    password: root
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
 
 management:
   endpoints:
