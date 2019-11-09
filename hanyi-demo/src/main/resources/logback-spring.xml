@@ -3,8 +3,8 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
-    <!-- Example for logging into the build folder of your project -->
-    <property name="LOG_FILE" value="/elk/logs/${springAppName}"/>
+    <!-- 集成elk需要放开该属性，Mac启动报错 -->
+    <!--<property name="LOG_FILE" value="/elk/logs/${springAppName}"/>-->
 
     <!-- You can override this to have a custom pattern -->
     <property name="CONSOLE_LOG_PATTERN"

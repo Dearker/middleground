@@ -44,9 +44,9 @@ public class CodeGenerator {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);
         dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/test?useSSL=false");
+        dsc.setUrl("jdbc:mysql://114.67.102.163:3306/test?useUnicode=true&characterEncoding=UTF8");
         dsc.setUsername("root");
-        dsc.setPassword("");
+        dsc.setPassword("root");
         mpg.setDataSource(dsc);
 
         // 包配置

@@ -4,12 +4,41 @@ spring:
       client:
         url: http://114.67.102.163:8001   #admin客户端地址
   datasource:
-    url: jdbc:mysql://114.67.102.163:3306/test?useUnicode=true&characterEncoding=UTF8
-    username: root
-    password: root
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://114.67.102.163:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+    username: root
+    password: root
+  data:
+    mongodb:
+      uri: mongodb://114.67.102.163:27017/test
+  redis:
+    host: 114.67.102.163
+    port: 6379
+    timeout: 5000 #连接超时 毫秒
+    jedis:
+      pool:
+        maxActive: 10
+        maxIdle: 10
+        minIdle: 1
+        maxWait: 10000 #连接池最大等行时间 -1没有限制
+
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  global-config:
+    #0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 0
+    #驼峰下划线转换
+    column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+  #数据库大写下划线转换
+  #capital-mode: true
+
 
 management:
   endpoints:
@@ -19,4 +48,5 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
 

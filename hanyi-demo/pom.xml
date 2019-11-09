@@ -14,7 +14,7 @@
     <properties>
         <mysql.version>8.0.17</mysql.version>
         <admin.client.version>2.1.0</admin.client.version>
-        <mybatisplus.version>3.0.1</mybatisplus.version>
+        <mybatisplus.version>3.1.2</mybatisplus.version>
     </properties>
 
     <dependencies>
@@ -30,7 +30,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- 数据库 -->
+        <!-- admin 客户端 -->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${admin.client.version}</version>
+        </dependency>
+
+        <!-- mysql数据库 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -44,10 +51,17 @@
             <version>${mybatisplus.version}</version>
         </dependency>
 
+        <!-- mybatis plus 代码生成器依赖 -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatisplus.version}</version>
         </dependency>
 
         <!-- druid -->
@@ -57,18 +71,17 @@
             <version>1.1.10</version>
         </dependency>
 
-        <!-- 分页插件 -->
+
+        <!-- redis -->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.3</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- admin 客户端 -->
+        <!-- mongodb -->
         <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>${admin.client.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
     </dependencies>
