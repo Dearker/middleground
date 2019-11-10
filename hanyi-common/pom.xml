@@ -22,9 +22,17 @@
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.0.3</hutool.version>
         <logstash.version>6.1</logstash.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
+
+        <!-- 单元测试 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
 
         <!-- hutool工具类 -->
         <dependency>

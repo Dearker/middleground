@@ -15,6 +15,10 @@
         <mysql.version>8.0.17</mysql.version>
         <admin.client.version>2.1.0</admin.client.version>
         <mybatisplus.version>3.1.2</mybatisplus.version>
+        <velocity.version>1.7</velocity.version>
+        <druid.version>1.1.10</druid.version>
+        <qiniu.version>[7.2.0, 7.2.99]</qiniu.version>
+        <gson.version>2.8.5</gson.version>
     </properties>
 
     <dependencies>
@@ -51,11 +55,11 @@
             <version>${mybatisplus.version}</version>
         </dependency>
 
-        <!-- mybatis plus 代码生成器依赖 -->
+        <!-- mybatis plus 代码生成器依赖，velocity模板 -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.7</version>
+            <version>${velocity.version}</version>
         </dependency>
 
         <dependency>
@@ -68,7 +72,7 @@
         <dependency>
             <groupId>com.github.drtrang</groupId>
             <artifactId>druid-spring-boot2-starter</artifactId>
-            <version>1.1.10</version>
+            <version>${druid.version}</version>
         </dependency>
 
 
@@ -82,6 +86,19 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+
+        <!-- 七牛云 -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>${qiniu.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
         </dependency>
 
     </dependencies>
