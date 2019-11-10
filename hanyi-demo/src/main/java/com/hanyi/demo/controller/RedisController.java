@@ -2,7 +2,7 @@ package com.hanyi.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +20,11 @@ public class RedisController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @PostMapping("")
+    @GetMapping("")
     public void setKey(){
 
         //保存字符串
-        stringRedisTemplate.opsForValue().set("aaa", "111");
+        stringRedisTemplate.opsForValue().set("hanyi", "123");
     }
 
 }

@@ -23,6 +23,6 @@ spring:
 #日志級別
 logging:
   level:
-    root: info
+    root: warn
 
 feign.sentinel.enabled: true
