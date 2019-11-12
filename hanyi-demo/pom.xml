@@ -101,6 +101,20 @@
             <version>${gson.version}</version>
         </dependency>
 
+        <!--开启 cache 缓存 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <!-- ehcache缓存 -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.6</version><!--$NO-MVN-MAN-VER$ -->
+        </dependency>
+
+
+
     </dependencies>
 
     <build>

@@ -2,6 +2,9 @@ package com.hanyi.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hanyi.demo.entity.Employee;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+
 
 /**
  * <p>
@@ -11,6 +14,8 @@ import com.hanyi.demo.entity.Employee;
  * @author hanyi
  * @since 2019-11-09
  */
+@CacheConfig(cacheNames = "employeeCache")
+@Cacheable
 public interface EmployeeMapper extends BaseMapper<Employee> {
 
 }

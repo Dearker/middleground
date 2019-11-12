@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+
+    <diskStore path="java.io.tmpdir/ehcache-rmi-4000" />
+
+    <!-- 多台机器配置 rmiUrls=//192.168.8.32:400002/demoCache|//192.168.5.231:400003/demoCache -->
+    <cacheManagerPeerProviderFactory
+            class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+            properties="peerDiscovery=manual,rmiUrls=//127.0.0.1:5000/userCache">
+    </cacheManagerPeerProviderFactory>
+    <!-- 配置 rmi 集群模式 -->
+    <cacheManagerPeerListenerFactory
+            class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+            properties="hostName=127.0.0.1,port=4000,socketTimeoutMillis=120000" />
+
+    <!-- 多播方式配置 搜索某个网段上的缓存 timeToLive 0是限制在同一个服务器 1是限制在同一个子网 32是限制在同一个网站 64是限制在同一个region
+        128是限制在同一个大洲 255是不限制 <cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+        properties="peerDiscovery=automatic, multicastGroupAddress=224.1.1.1, multicastGroupPort=40000,
+        timeToLive=32" /> -->
+
+    <!-- 默认缓存 -->
+    <defaultCache maxElementsInMemory="1000" eternal="true"
+                  timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+                  diskSpoolBufferSizeMB="30" maxElementsOnDisk="10000000"
+                  diskPersistent="true" diskExpiryThreadIntervalSeconds="120"
+                  memoryStoreEvictionPolicy="LRU">
+    </defaultCache>
+
+    <!-- demo缓存 -->
+    <cache name="employeeCache" maxElementsInMemory="1000" eternal="false"
+           timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+           diskSpoolBufferSizeMB="30" maxElementsOnDisk="10000000"
+           diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="LRU">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" />
+        <!-- 用于在初始化缓存，以及自动设置 -->
+        <bootstrapCacheLoaderFactory
+                class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory" />
+    </cache>
+</ehcache>
+
