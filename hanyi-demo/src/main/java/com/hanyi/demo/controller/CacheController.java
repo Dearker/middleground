@@ -3,8 +3,6 @@ package com.hanyi.demo.controller;
 import com.hanyi.common.model.response.CommonCode;
 import com.hanyi.common.model.response.QueryResponseResult;
 import com.hanyi.demo.component.MapEhcaChe;
-import com.hanyi.demo.entity.Employee;
-import com.hanyi.demo.mapper.EmployeeMapper;
 import com.hanyi.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;

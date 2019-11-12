@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class MapEhcaChe<K, V> {
+
 	private Map<K, V> ehcaCheMap = new ConcurrentHashMap<K, V>();
 
 	public void put(K k, V value) {
