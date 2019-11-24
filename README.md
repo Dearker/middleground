@@ -14,3 +14,6 @@
 
 #hanyi-utils该工程整合了通用的一些工具类和相关依赖，后期可以进行完善;主要有分布式id生成器：雪花算法、IdWorker等
 #md5工具类、httpClient工具类、反射工具类、Bcrypt加密工具类、cookie工具类、zip工具类等
+
+#hanyi-demo集成了mybatisplus、redis、ehcache、zookeeper、七牛云、mysql、mongodb、sleuth和elk。
+实现二级缓存、分布式锁

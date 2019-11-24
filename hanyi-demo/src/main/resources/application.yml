@@ -43,8 +43,8 @@ mybatis-plus:
   #数据库大写下划线转换
   #capital-mode: true
 
-
-
+#zookeeper地址
+zk.address: 114.67.102.163:2181
 
 management:
   endpoints:
