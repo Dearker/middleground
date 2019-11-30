@@ -1,6 +1,5 @@
 package com.hanyi.demo.generator;
 
-
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -12,10 +11,13 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @author weiwenchang
+ * @since 2019-11-13
+ */
 public class CodeGenerator {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         AutoGenerator mpg = new AutoGenerator();
 
         // 全局配置
@@ -64,6 +66,7 @@ public class CodeGenerator {
                 // to do nothing
             }
         };
+
         List<FileOutConfig> focList = new ArrayList<>();
         focList.add(new FileOutConfig("/templates/mapper.xml.vm") {
             @Override
@@ -73,6 +76,7 @@ public class CodeGenerator {
                         + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
+
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
         mpg.setTemplate(new TemplateConfig().setXml(null));
@@ -80,11 +84,11 @@ public class CodeGenerator {
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         //此处可以修改为您的表前缀
-        strategy.setTablePrefix(new String[]{"tb_"});
+        strategy.setTablePrefix("tb_");
         // 表名生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 需要生成的表
-        strategy.setInclude(new String[]{"tb_employee"});
+        strategy.setInclude("tb_employee");
         // 排除生成的表
         //strategy.setExclude(new String[]{"test"});
         strategy.setEntityLombokModel(true);
@@ -94,5 +98,6 @@ public class CodeGenerator {
         // 执行生成
         mpg.execute();
     }
+
 
 }
