@@ -82,21 +82,21 @@
 
         <!-- 流量卫兵 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
+            <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-            <version>${sentinel.version}</version>
+            <!--<version>${sentinel.version}</version>-->
         </dependency>
 
         <!-- nacos依赖 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
+            <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-            <version>${nacoe.version}</version>
+           <!-- <version>${nacoe.version}</version>-->
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
+            <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>${nacoe.version}</version>
+            <!--<version>${nacoe.version}</version>-->
         </dependency>
 
         <!-- lombok -->
