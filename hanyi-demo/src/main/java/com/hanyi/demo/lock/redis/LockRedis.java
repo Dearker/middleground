@@ -29,7 +29,7 @@ public class LockRedis {
      */
     public String lockWithTimeout(String lockKey, Long acquireTimeout, Long timeOut) {
         Jedis conn = null;
-        String retIdentifierValue = null;
+        String retIdentifierValue;
         try {
             // 1.建立redis连接
             conn = jedisPool.getResource();
@@ -59,7 +59,7 @@ public class LockRedis {
                 conn.close();
             }
         }
-        return retIdentifierValue;
+        return null;
     }
 
     /**
