@@ -39,9 +39,7 @@ public class RedisController {
         stringRedisTemplate.opsForValue().set("hanyi", "123");
     }
 
-    /**
-     * 调用本地redis可正常运行，云服务器连接超时
-     */
+
     @GetMapping("/redisson")
     public void redisson() {
 

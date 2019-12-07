@@ -28,8 +28,10 @@ public class RedissonConfig {
     public RedissonClient getRedisson() {
         Config config = new Config();
         //单机模式  依次设置redis地址和密码
-        config.useSingleServer().
-                setAddress("redis://" + redisHost + ":" + redisPort);
+        config.useReplicatedServers()
+                // 主节点变化扫描间隔时间
+                .setScanInterval(2000)
+                .addNodeAddress("redis://" + redisHost + ":" + redisPort);
         //设置序列化
         config.setCodec(new StringCodec());
         return Redisson.create(config);
