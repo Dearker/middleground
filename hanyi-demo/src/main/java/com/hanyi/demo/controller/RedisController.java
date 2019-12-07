@@ -50,7 +50,6 @@ public class RedisController {
             boolean bs = lock.tryLock(5, 6, TimeUnit.SECONDS);
             if (bs) {
                 // 业务代码
-                logger.info("进入业务代码: " + recordId);
                 System.out.println("进入业务代码："+ recordId);
                 lock.unlock();
             } else {
