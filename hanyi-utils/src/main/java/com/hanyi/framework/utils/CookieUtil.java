@@ -45,9 +45,9 @@ public class CookieUtil {
                 for (Cookie cookie : cookies) {
                     String cookieName = cookie.getName();
                     String cookieValue = cookie.getValue();
-                    for(int i=0;i<cookieNames.length;i++){
-                        if(cookieNames[i].equals(cookieName)){
-                            cookieMap.put(cookieName,cookieValue);
+                    for (String name : cookieNames) {
+                        if (name.equals(cookieName)) {
+                            cookieMap.put(cookieName, cookieValue);
                         }
                     }
                 }
