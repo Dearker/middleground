@@ -45,7 +45,7 @@ public class ZookeeperDistrbuteLock extends ZookeeperAbstractLock {
         if (zkClient.exists(LOCK_PATH)) {
             try {
                 countDownLatch.await();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         // 监听完毕后，移除事件通知

@@ -38,7 +38,7 @@ public class LockService {
         System.out.println(Thread.currentThread().getName() + "获取锁成功,锁id identifier:" + identifier + "，执行业务逻辑");
         try {
             Thread.sleep(30);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         // 释放锁

@@ -20,7 +20,7 @@ public class OrderNumGenerator {
     public String getNumber() {
         try {
             Thread.sleep(200);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         SimpleDateFormat simpt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
