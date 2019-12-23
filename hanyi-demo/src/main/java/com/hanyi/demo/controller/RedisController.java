@@ -2,6 +2,7 @@ package com.hanyi.demo.controller;
 
 import cn.hutool.core.util.HashUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.hanyi.demo.entity.Address;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -45,7 +46,10 @@ public class RedisController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("redisCache", "韩毅");
 
-        stringRedisTemplate.opsForValue().set(hanyi, jsonObject.toJSONString());
+        stringRedisTemplate.opsForValue().set(hanyi,jsonObject.toJSONString());
+
+        Address build = Address.builder().city("1").street("2").zip("3").build();
+        stringRedisTemplate.opsForValue().set(String.valueOf(HashUtil.jsHash("韩毅")), build.toString());
         logger.info("缓存id已生成：{}", hanyi);
 
     }

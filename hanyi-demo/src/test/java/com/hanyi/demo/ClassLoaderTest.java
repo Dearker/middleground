@@ -4,10 +4,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.ClassUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -157,5 +154,19 @@ public class ClassLoaderTest {
         int i8 = i >> 3;
         System.out.println("移位和计算-->" + i7 + "||" + i8);
     }
+
+    @Test
+    public void removeIfTest(){
+
+        List<String> stringList = new ArrayList<> ();
+        stringList.add("");
+        stringList.add("1");
+
+        stringList.removeIf(StrUtil::isEmpty);
+
+        stringList.forEach(System.out::println);
+
+    }
+
 
 }
