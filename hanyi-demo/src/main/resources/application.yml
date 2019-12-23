@@ -23,6 +23,7 @@ spring:
         maxIdle: 10
         minIdle: 1
         maxWait: 10000 #连接池最大等行时间 -1没有限制
+    database: 0 #指定redis的库名
   # 缓存配置读取
   cache:
     type: ehcache

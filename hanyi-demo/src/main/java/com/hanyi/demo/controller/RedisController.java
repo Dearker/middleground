@@ -1,5 +1,7 @@
 package com.hanyi.demo.controller;
 
+import cn.hutool.core.util.HashUtil;
+import com.alibaba.fastjson.JSONObject;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -37,6 +39,15 @@ public class RedisController {
 
         //保存字符串
         stringRedisTemplate.opsForValue().set("hanyi", "123");
+
+        String hanyi = String.valueOf(HashUtil.jsHash("hanyi"));
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("redisCache", "韩毅");
+
+        stringRedisTemplate.opsForValue().set(hanyi, jsonObject.toJSONString());
+        logger.info("缓存id已生成：{}", hanyi);
+
     }
 
 
@@ -50,7 +61,7 @@ public class RedisController {
             boolean bs = lock.tryLock(5, 6, TimeUnit.SECONDS);
             if (bs) {
                 // 业务代码
-                System.out.println("进入业务代码："+ recordId);
+                System.out.println("进入业务代码：" + recordId);
                 lock.unlock();
             } else {
                 Thread.sleep(300);
