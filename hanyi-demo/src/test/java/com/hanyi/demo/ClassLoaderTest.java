@@ -8,6 +8,7 @@ import cn.hutool.core.util.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.hanyi.demo.entity.Address;
@@ -165,6 +166,22 @@ public class ClassLoaderTest {
         stringList.removeIf(StrUtil::isEmpty);
 
         stringList.forEach(System.out::println);
+
+    }
+
+    /**
+     * Map的merge方法，如果key存在，则相加，如果不存在，则向map中放入元素
+     */
+    @Test
+    public void MergeTest(){
+
+        Map<String,Integer> integerMap = Maps.newHashMap();
+
+        integerMap.put("1",2);
+
+        integerMap.merge("1",4,Integer::sum);
+
+        integerMap.forEach((k,v)-> System.out.println(k+"||"+ v));
 
     }
 
