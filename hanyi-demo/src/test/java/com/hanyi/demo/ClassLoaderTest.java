@@ -1,6 +1,7 @@
 package com.hanyi.demo;
 
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
@@ -15,6 +16,8 @@ import com.hanyi.demo.entity.Address;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -182,6 +185,28 @@ public class ClassLoaderTest {
         integerMap.merge("1",4,Integer::sum);
 
         integerMap.forEach((k,v)-> System.out.println(k+"||"+ v));
+
+    }
+
+    @Test
+    public void LocalDateTimeTest(){
+
+        long localTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+
+        long localTimeTime = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+
+        System.out.println("获取的时间-->"+ localTime +"||"+localTimeTime);
+
+        long currentSeconds = DateUtil.currentSeconds();
+        System.out.println("获取的秒数-->"+currentSeconds);
+
+        DateTime dateTime = DateUtil.lastMonth();
+
+        String now = DateUtil.now();
+
+        DateTime parse = DateUtil.parse("2019-12-20");
+
+        System.out.println(dateTime+"||"+now+"||"+parse.getTime());
 
     }
 
