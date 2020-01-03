@@ -76,4 +76,22 @@ public class RedisController {
         }
     }
 
+
+    @GetMapping("/setnx")
+    public String setIfAbsentTest(){
+
+        String hanyi = String.valueOf(HashUtil.jsHash("hanyi"));
+
+        if (stringRedisTemplate.hasKey(hanyi)){
+            return "已存在缓存";
+        } else {
+            stringRedisTemplate.opsForValue().setIfAbsent(hanyi,"123",20,TimeUnit.SECONDS);
+            return "生成缓存";
+        }
+
+    }
+
+
+
+
 }
