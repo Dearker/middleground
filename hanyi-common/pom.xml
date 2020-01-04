@@ -91,7 +91,7 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-           <!-- <version>${nacoe.version}</version>-->
+            <!-- <version>${nacoe.version}</version>-->
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -130,6 +130,13 @@
             <version>${logstash.version}</version>
         </dependency>
 
+        <!-- 这个需要为 true 热部署才有效 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
 
     </dependencies>
 
