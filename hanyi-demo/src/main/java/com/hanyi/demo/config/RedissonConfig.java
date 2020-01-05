@@ -40,6 +40,11 @@ public class RedissonConfig {
         return Redisson.create(config);
     }
 
+    /**
+     * 配置redis监听容器
+     * @param redisConnectionFactory
+     * @return
+     */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
