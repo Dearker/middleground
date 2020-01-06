@@ -23,6 +23,7 @@
         <zkclient.version>0.10</zkclient.version>
         <jedis.version>2.9.0</jedis.version>
         <redisson.version>3.11.0</redisson.version>
+        <minio.version>6.0.11</minio.version>
     </properties>
 
     <dependencies>
@@ -133,6 +134,13 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>${redisson.version}</version>
+        </dependency>
+
+        <!-- minio -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
 
     </dependencies>

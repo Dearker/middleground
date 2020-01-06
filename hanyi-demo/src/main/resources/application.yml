@@ -29,6 +29,19 @@ spring:
     type: ehcache
     ehcache:
       config: classpath:app1_ehcache.xml
+  #minio配置
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 100MB #限制文件上传大小为10M
+
+# MinIO对象存储相关配置
+minio:
+  endPoint: http://114.67.102.117:9000 #MinIO服务所在地址
+  bucketName: mall #存储桶名称
+  accessKey: minioadmin #访问的key
+  secretKey: minioadmin #访问的秘钥
+
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
