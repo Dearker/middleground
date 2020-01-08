@@ -1,6 +1,8 @@
 package com.hanyi.demo.common.Interceptor;
 
 import com.hanyi.demo.common.annotation.ApiIdempotent;
+import com.hanyi.demo.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +19,9 @@ import java.lang.reflect.Method;
  * @Version: 1.0
  */
 public class ApiIdempotentInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -37,7 +42,7 @@ public class ApiIdempotentInterceptor implements HandlerInterceptor {
     }
 
     private void check(HttpServletRequest request) {
-        //tokenService.checkToken(request);
+        tokenService.checkToken(request);
     }
 
     @Override
