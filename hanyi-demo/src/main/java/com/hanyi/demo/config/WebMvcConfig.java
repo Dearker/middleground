@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @ClassName: middleground com.hanyi.demo.config WebMvcConfig
  * @Author: weiwenchang
- * @Description: java类作用描述
+ * @Description: webMvc的拦截器
  * @CreateDate: 2020-01-08 21:36
  * @Version: 1.0
  */
