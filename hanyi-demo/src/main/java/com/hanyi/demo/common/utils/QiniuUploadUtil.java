@@ -1,4 +1,4 @@
-package com.hanyi.demo.utils;
+package com.hanyi.demo.common.utils;
 
 import com.google.gson.Gson;
 import com.qiniu.common.Zone;

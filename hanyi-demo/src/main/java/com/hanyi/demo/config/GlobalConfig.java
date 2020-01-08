@@ -1,5 +1,7 @@
 package com.hanyi.demo.config;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -14,7 +16,7 @@ import org.springframework.web.filter.CorsFilter;
  * @Version: 1.0
  */
 @Configuration
-public class GlobalCorsConfig {
+public class GlobalConfig {
 
     /**
      * 允许跨域调用的过滤器
@@ -33,6 +35,11 @@ public class GlobalCorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+    }
+
+    @Bean
+    public Snowflake snowflake(){
+        return IdUtil.createSnowflake(1, 1);
     }
 
 }
