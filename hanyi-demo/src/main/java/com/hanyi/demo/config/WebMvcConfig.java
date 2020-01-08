@@ -18,7 +18,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(apiIdempotentInterceptor());
+        //拦截使用请求
+        registry.addInterceptor(apiIdempotentInterceptor()).addPathPatterns("/**");
     }
 
     @Bean
