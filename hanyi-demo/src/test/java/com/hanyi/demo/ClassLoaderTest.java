@@ -18,10 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -207,6 +204,32 @@ public class ClassLoaderTest {
         DateTime parse = DateUtil.parse("2019-12-20");
 
         System.out.println(dateTime+"||"+now+"||"+parse.getTime());
+
+    }
+
+    /**
+     * 对JSONArray中JSONObject对象进行排序
+     */
+    @Test
+    public void SortJSONTest(){
+
+        JSONArray jsonArray = new JSONArray();
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("time","2019-10-20 19:50:00");
+        jsonArray.add(jsonObject);
+
+        JSONObject json = new JSONObject();
+        json.put("time","2019-10-21 11:10:00");
+        jsonArray.add(json);
+
+        jsonArray.sort((a,b)->{
+            Date time = JSONObject.parseObject(a.toString()).getDate("time");
+            Date time1 = JSONObject.parseObject(b.toString()).getDate("time");
+            return time1.compareTo(time);
+        });
+
+        jsonArray.forEach(System.out::println);
 
     }
 
