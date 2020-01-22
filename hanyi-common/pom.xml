@@ -20,7 +20,7 @@
         <guava.version>24.0-jre</guava.version>
         <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
-        <hutool.version>5.0.7</hutool.version>
+        <hutool.version>5.1.1</hutool.version>
         <logstash.version>6.1</logstash.version>
         <junit.version>4.12</junit.version>
     </properties>
