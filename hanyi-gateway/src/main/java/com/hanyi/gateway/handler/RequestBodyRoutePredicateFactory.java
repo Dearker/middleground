@@ -39,15 +39,18 @@ import static org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilt
 
 /**
  * This predicate is BETA and may be subject to change in a future release.
+ *
  * @author weiwen
  */
 public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFactory<RequestBodyRoutePredicateFactory.Config> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestBodyRoutePredicateFactory.class);
 
-    private static final List<HttpMessageReader<?>> messageReaders = HandlerStrategies.withDefaults().messageReaders();
+    private static final List<HttpMessageReader<?>> MESSAGE_READERS = HandlerStrategies.withDefaults().messageReaders();
 
-    public static final String REQUEST_BODY_ATTR = "requestBodyAttr";
+    private static final String REQUEST_BODY_ATTR = "requestBodyAttr";
+
+    private static final String POST = "POST";
 
     public RequestBodyRoutePredicateFactory() {
         super(Config.class);
@@ -56,7 +59,7 @@ public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFact
     @Override
     public AsyncPredicate<ServerWebExchange> applyAsync(Config config) {
         return exchange -> {
-            if (!"POST".equals(exchange.getRequest().getMethodValue())) {
+            if (!POST.equals(exchange.getRequest().getMethodValue())) {
                 return Mono.just(true);
             }
             Object cachedBody = exchange.getAttribute(REQUEST_BODY_ATTR);
@@ -81,7 +84,7 @@ public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFact
                                     return cachedFlux;
                                 }
                             };
-                            return ServerRequest.create(exchange.mutate().request(mutatedRequest).build(), messageReaders)
+                            return ServerRequest.create(exchange.mutate().request(mutatedRequest).build(), MESSAGE_READERS)
                                     .bodyToMono(String.class)
                                     .doOnNext(objectValue -> {
                                         exchange.getAttributes().put(REQUEST_BODY_ATTR, objectValue);

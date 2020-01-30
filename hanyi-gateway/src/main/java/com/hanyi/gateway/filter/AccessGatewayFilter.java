@@ -25,10 +25,13 @@ public class AccessGatewayFilter implements GlobalFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AccessGatewayFilter.class);
 
+    private static final String GATE_WAY_PREFIX = "/api";
+
+    private static final String COMMA = ",";
+
     @Value("${gate.ignore.startWith}")
     private String startWith;
 
-    private static final String GATE_WAY_PREFIX = "/api";
 
     @Override
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
@@ -59,13 +62,12 @@ public class AccessGatewayFilter implements GlobalFilter {
      * @return
      */
     private boolean isStartWith(String requestUri) {
-        boolean flag = false;
-        for (String s : startWith.split(",")) {
+        for (String s : startWith.split(COMMA)) {
             if (requestUri.startsWith(s)) {
                 return true;
             }
         }
-        return flag;
+        return false;
     }
 
     /**
