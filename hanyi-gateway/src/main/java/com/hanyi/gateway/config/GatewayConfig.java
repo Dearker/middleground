@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class GatewayConfig {
 
     @Bean
-    RequestBodyRoutePredicateFactory requestBodyRoutePredicateFactory() {
+    public RequestBodyRoutePredicateFactory requestBodyRoutePredicateFactory() {
         return new RequestBodyRoutePredicateFactory();
     }
 }
