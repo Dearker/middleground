@@ -8,8 +8,6 @@ import com.hanyi.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * <p>
  * 前端控制器
@@ -27,12 +25,12 @@ public class EmployeeController {
 
     @GetMapping(value = "/list")
     public QueryResponseResult getEmployees() {
-        return new QueryResponseResult(CommonCode.SUCCESS,employeeService.list(null));
+        return new QueryResponseResult(CommonCode.SUCCESS, employeeService.list(null));
     }
 
     @GetMapping(value = "/{id}")
     public QueryResponseResult getEmployeeById(@PathVariable("id") int id) {
-        return new QueryResponseResult(CommonCode.SUCCESS,employeeService.getById(id));
+        return new QueryResponseResult(CommonCode.SUCCESS, employeeService.getById(id));
     }
 
     @PutMapping(value = "/{id}")
