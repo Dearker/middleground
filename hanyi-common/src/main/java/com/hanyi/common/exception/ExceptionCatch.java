@@ -1,9 +1,8 @@
 package com.hanyi.common.exception;
 
 import com.google.common.collect.ImmutableMap;
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.ResponseResult;
-import com.hanyi.common.model.response.ResultCode;
+import com.hanyi.framework.enums.ResultCode;
+import com.hanyi.framework.model.response.ResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -29,7 +28,7 @@ public class ExceptionCatch {
     /**
      * 定义map的builder对象，去构建ImmutableMap
      */
-    protected static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
+    private static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
 
     /**
      * 捕获CustomException此类异常
@@ -42,7 +41,7 @@ public class ExceptionCatch {
         //记录日志
         LOGGER.error("catch exception:{}",customException.getMessage());
         ResultCode resultCode = customException.getResultCode();
-        return new ResponseResult(resultCode);
+        return ResponseResult.failure(resultCode);
     }
 
     /**
@@ -62,15 +61,15 @@ public class ExceptionCatch {
         //从EXCEPTIONS中找异常类型所对应的错误代码，如果找到了将错误代码响应给用户，如果找不到给用户响应99999异常
         ResultCode resultCode = EXCEPTIONS.get(exception.getClass());
         if(resultCode !=null){
-            return new ResponseResult(resultCode);
+            return ResponseResult.failure(resultCode);
         }else{
             //返回99999异常
-            return new ResponseResult(CommonCode.SERVER_ERROR);
+            return ResponseResult.failure(ResultCode.FAILED);
         }
     }
 
     static {
         //定义异常类型所对应的错误代码
-        builder.put(HttpMessageNotReadableException.class,CommonCode.INVALID_PARAM);
+        builder.put(HttpMessageNotReadableException.class,ResultCode.PARAM_IS_INVALID);
     }
 }

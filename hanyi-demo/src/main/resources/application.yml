@@ -7,14 +7,14 @@ spring:
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://114.67.102.163:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
     username: root
-    password: root
+    password:
   data:
     mongodb:
       uri: mongodb://114.67.102.163:27017/test
   redis:
-    host: 114.67.102.163
+    host: 127.0.0.1
     port: 6379
     timeout: 5000 #连接超时 毫秒
     jedis:

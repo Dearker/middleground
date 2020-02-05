@@ -1,8 +1,6 @@
 package com.hanyi.admin.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.QueryResponseResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +19,5 @@ public class TestController {
         return "hello "+name;
     }
 
-    @GetMapping("/test")
-    public QueryResponseResult test(){
-
-        String s = "柯基";
-        return new QueryResponseResult(CommonCode.SUCCESS,s);
-    }
 
 }

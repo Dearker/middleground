@@ -1,10 +1,9 @@
 package com.hanyi.demo.controller;
 
 
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.QueryResponseResult;
 import com.hanyi.demo.entity.Employee;
 import com.hanyi.demo.service.EmployeeService;
+import com.hanyi.framework.model.response.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +23,13 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping(value = "/list")
-    public QueryResponseResult getEmployees() {
-        return new QueryResponseResult(CommonCode.SUCCESS, employeeService.list(null));
+    public ResponseResult getEmployees() {
+        return ResponseResult.success(employeeService.list(null));
     }
 
     @GetMapping(value = "/{id}")
-    public QueryResponseResult getEmployeeById(@PathVariable("id") int id) {
-        return new QueryResponseResult(CommonCode.SUCCESS, employeeService.getById(id));
+    public ResponseResult getEmployeeById(@PathVariable("id") int id) {
+        return ResponseResult.success(employeeService.getById(id));
     }
 
     @PutMapping(value = "/{id}")

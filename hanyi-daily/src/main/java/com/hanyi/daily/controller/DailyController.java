@@ -1,0 +1,21 @@
+package com.hanyi.daily.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @ClassName: middleground com.hanyi.daily.controller DailyController
+ * @Author: weiwenchang
+ * @Description: java类作用描述
+ * @CreateDate: 2020-02-04 15:50
+ * @Version: 1.0
+ */
+@RestController
+public class DailyController {
+
+    @GetMapping("/test")
+    public String getString(){
+        return "柯基小短腿";
+    }
+
+}

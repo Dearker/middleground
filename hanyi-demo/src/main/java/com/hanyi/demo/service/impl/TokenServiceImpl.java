@@ -5,13 +5,21 @@ import com.hanyi.demo.common.constant.Constant;
 import com.hanyi.demo.common.utils.JedisUtil;
 import com.hanyi.demo.service.TokenService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 接口幂等性校验
+ * @author weiwen
+ */
 @Service
 public class TokenServiceImpl implements TokenService {
+
+    private static final Logger logger = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     private static final String TOKEN_NAME = "token";
 
@@ -23,34 +31,38 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String createToken() {
-        String str = snowflake.nextIdStr();
-        String token = Constant.TOKEN_PREFIX + str;
-
+        String token = snowflake.nextIdStr();
         jedisUtil.set(token, token, Constant.EXPIRE_TIME_MINUTE);
 
         return token;
     }
 
     @Override
-    public void checkToken(HttpServletRequest request) {
+    public boolean checkToken(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_NAME);
         // header中不存在token
         if (StringUtils.isBlank(token)) {
             token = request.getParameter(TOKEN_NAME);
             // parameter中也不存在token
             if (StringUtils.isBlank(token)) {
-                //throw new ExceptionCast(ResponseCode.ILLEGAL_ARGUMENT.getMsg());
+                logger.error("checkToken方法的请求中无token");
+                return false;
             }
         }
 
         if (!jedisUtil.exists(token)) {
-            //throw new ServiceException(ResponseCode.REPETITIVE_OPERATION.getMsg());
+            logger.error("checkToken方法的请求重复提交");
+            return false;
         }
 
         Long del = jedisUtil.del(token);
-        if (del <= 0) {
-            //throw new ServiceException(ResponseCode.REPETITIVE_OPERATION.getMsg());
+
+        if(del < 0){
+            logger.error("checkToken方法的删除token失败");
+            return false;
         }
+
+        return true;
     }
 
 }

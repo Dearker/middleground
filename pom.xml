@@ -32,6 +32,7 @@
         <module>hanyi-utils</module>
         <module>hanyi-job</module>
         <module>hanyi-demo</module>
+        <module>hanyi-daily</module>
     </modules>
     <packaging>pom</packaging>
 

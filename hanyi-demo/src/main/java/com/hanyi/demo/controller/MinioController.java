@@ -1,8 +1,8 @@
 package com.hanyi.demo.controller;
 
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.QueryResponseResult;
 import com.hanyi.demo.entity.MinioUploadDto;
+import com.hanyi.framework.enums.ResultCode;
+import com.hanyi.framework.model.response.ResponseResult;
 import io.minio.MinioClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +43,7 @@ public class MinioController {
 
     @ApiOperation("文件上传")
     @PostMapping("/upload")
-    public QueryResponseResult upload(@RequestParam("file") MultipartFile file) {
+    public ResponseResult upload(@RequestParam("file") MultipartFile file) {
         try {
             //创建一个MinIO的Java客户端
             MinioClient minioClient = new MinioClient(endPoint, accessKey, secretKey);
@@ -65,24 +65,24 @@ public class MinioController {
             MinioUploadDto minioUploadDto = new MinioUploadDto();
             minioUploadDto.setName(filename);
             minioUploadDto.setUrl(endPoint + "/" + bucketName + "/" + objectName);
-            return new QueryResponseResult(CommonCode.SUCCESS, minioUploadDto);
+            return ResponseResult.success(minioUploadDto);
         } catch (Exception e) {
             LOGGER.info("上传发生错误: {}！", e.getMessage());
         }
-        return new QueryResponseResult(CommonCode.FAIL, "上传失败");
+        return ResponseResult.failure(ResultCode.UPLOAD_FAILED);
     }
 
     @ApiOperation("文件删除")
     @PostMapping("/delete")
-    public QueryResponseResult delete(@RequestParam("objectName") String objectName) {
+    public ResponseResult delete(@RequestParam("objectName") String objectName) {
         try {
             MinioClient minioClient = new MinioClient(endPoint, accessKey, secretKey);
             minioClient.removeObject(bucketName, objectName);
-            return new QueryResponseResult(CommonCode.SUCCESS, "删除成功");
+            return ResponseResult.success("删除成功");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new QueryResponseResult(CommonCode.FAIL, "删除失败");
+        return ResponseResult.failure(ResultCode.FAILED_TO_DELETE);
     }
 
 }

@@ -1,12 +1,13 @@
 package com.hanyi.framework.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by hanyi on 2019/10/16.
@@ -14,12 +15,12 @@ import java.util.Map;
 public class Oauth2Util {
 
     public static Map<String,String> getJwtClaimsFromHeader(HttpServletRequest request) {
-        if (request == null) {
+        if (Objects.isNull(request)) {
             return null;
         }
         //取出头信息
         String authorization = request.getHeader("Authorization");
-        if (StringUtils.isEmpty(authorization) || !authorization.contains("Bearer")) {
+        if (StrUtil.isEmpty(authorization) || !authorization.contains("Bearer")) {
             return null;
         }
         //从Bearer 后边开始取出token
@@ -37,4 +38,5 @@ public class Oauth2Util {
         }
         return map;
     }
+
 }

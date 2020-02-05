@@ -1,4 +1,4 @@
-package com.hanyi.common.wrapper;
+package com.hanyi.framework.wrapper;
 
 
 import javax.servlet.http.HttpServletRequest;

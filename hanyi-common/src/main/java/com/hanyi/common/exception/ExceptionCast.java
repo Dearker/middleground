@@ -1,6 +1,6 @@
 package com.hanyi.common.exception;
 
-import com.hanyi.common.model.response.ResultCode;
+import com.hanyi.framework.enums.ResultCode;
 
 /**
  * @author hanyi

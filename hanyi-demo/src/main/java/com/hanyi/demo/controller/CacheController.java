@@ -1,9 +1,8 @@
 package com.hanyi.demo.controller;
 
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.QueryResponseResult;
 import com.hanyi.demo.component.MapEhcaChe;
 import com.hanyi.demo.service.EmployeeService;
+import com.hanyi.framework.model.response.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +37,8 @@ public class CacheController {
     }
 
     @GetMapping(value = "/{id}")
-    public QueryResponseResult getEmployeeById(@PathVariable("id") int id) {
-        return new QueryResponseResult(CommonCode.SUCCESS,employeeService.getById(id));
+    public ResponseResult getEmployeeById(@PathVariable("id") int id) {
+        return ResponseResult.success(employeeService.getById(id));
     }
 
     @GetMapping("/ehcaChePut")

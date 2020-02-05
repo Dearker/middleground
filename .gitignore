@@ -6,3 +6,5 @@ target/
 .project
 .settings/
 .classpath
+LOG_FILE_IS_UNDEFINED
+LOG_FILE_IS_UNDEFINED.json

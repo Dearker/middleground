@@ -2,10 +2,13 @@ package com.hanyi.demo.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author weiwen
+ */
 public interface TokenService {
 
     String createToken();
 
-    void checkToken(HttpServletRequest request);
+    boolean checkToken(HttpServletRequest request);
 
 }

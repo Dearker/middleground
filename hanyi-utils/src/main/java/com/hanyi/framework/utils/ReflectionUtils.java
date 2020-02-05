@@ -1,8 +1,8 @@
 package com.hanyi.framework.utils;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Assert;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
+import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +32,8 @@ public class ReflectionUtils {
      */
     public static Object invokeGetter(Object obj, String propertyName) {
         Object object = obj;
-        for (String name : StringUtils.split(propertyName, ".")) {
-            String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(name);
+        for (String name : StrUtil.split(propertyName, ".")) {
+            String getterMethodName = GETTER_PREFIX + StrUtil.upperFirst(name);
             object = invokeMethod(object, getterMethodName, new Class[]{}, new Object[]{});
         }
         return object;
@@ -45,13 +45,13 @@ public class ReflectionUtils {
      */
     public static void invokeSetter(Object obj, String propertyName, Object value) {
         Object object = obj;
-        String[] names = StringUtils.split(propertyName, ".");
+        String[] names = StrUtil.split(propertyName, ".");
         for (int i = 0; i < names.length; i++) {
             if (i < names.length - 1) {
-                String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(names[i]);
+                String getterMethodName = GETTER_PREFIX + StrUtil.upperFirst(names[i]);
                 object = invokeMethod(object, getterMethodName, new Class[]{}, new Object[]{});
             } else {
-                String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(names[i]);
+                String setterMethodName = SETTER_PREFIX + StrUtil.upperFirst(names[i]);
                 invokeMethodByName(object, setterMethodName, new Object[]{value});
             }
         }
@@ -87,38 +87,10 @@ public class ReflectionUtils {
             return;
         }
         try {
-            field.set(obj, convert(value, field.getType()));
+            field.set(obj, Convert.convert(field.getType(),value));
         } catch (IllegalAccessException e) {
             logger.error("不可能抛出的异常:{}", e.getMessage());
         }
-    }
-
-    public static Object convert(Object object, Class<?> type) {
-        if (object instanceof Number) {
-            Number number = (Number) object;
-            if (type.equals(byte.class) || type.equals(Byte.class)) {
-                return number.byteValue();
-            }
-            if (type.equals(short.class) || type.equals(Short.class)) {
-                return number.shortValue();
-            }
-            if (type.equals(int.class) || type.equals(Integer.class)) {
-                return number.intValue();
-            }
-            if (type.equals(long.class) || type.equals(Long.class)) {
-                return number.longValue();
-            }
-            if (type.equals(float.class) || type.equals(Float.class)) {
-                return number.floatValue();
-            }
-            if (type.equals(double.class) || type.equals(Double.class)) {
-                return number.doubleValue();
-            }
-        }
-        if (type.equals(String.class)) {
-            return object == null ? "" : object.toString();
-        }
-        return object;
     }
 
     /**
@@ -164,8 +136,8 @@ public class ReflectionUtils {
      * 如向上转型到Object仍无法找到, 返回null.
      */
     public static Field getAccessibleField(final Object obj, final String fieldName) {
-        Validate.notNull(obj, "object can't be null");
-        Validate.notBlank(fieldName, "fieldName can't be blank");
+        Assert.notNull(obj, "object can't be null");
+        Assert.notBlank(fieldName, "fieldName can't be blank");
         for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 Field field = superClass.getDeclaredField(fieldName);
@@ -173,7 +145,7 @@ public class ReflectionUtils {
                 return field;
             } catch (NoSuchFieldException e) {//NOSONAR
                 // Field不在当前类定义,继续向上转型
-                continue;// new add
+                // new add
             }
         }
         return null;
@@ -188,8 +160,8 @@ public class ReflectionUtils {
      */
     public static Method getAccessibleMethod(final Object obj, final String methodName,
                                              final Class<?>... parameterTypes) {
-        Validate.notNull(obj, "object can't be null");
-        Validate.notBlank(methodName, "methodName can't be blank");
+        Assert.notNull(obj, "object can't be null");
+        Assert.notBlank(methodName, "methodName can't be blank");
 
         for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
             try {
@@ -198,7 +170,7 @@ public class ReflectionUtils {
                 return method;
             } catch (NoSuchMethodException e) {
                 // Method不在当前类定义,继续向上转型
-                continue;// new add
+                // new add
             }
         }
         return null;
@@ -212,8 +184,8 @@ public class ReflectionUtils {
      * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
      */
     public static Method getAccessibleMethodByName(final Object obj, final String methodName) {
-        Validate.notNull(obj, "object can't be null");
-        Validate.notBlank(methodName, "methodName can't be blank");
+        Assert.notNull(obj, "object can't be null");
+        Assert.notBlank(methodName, "methodName can't be blank");
 
         for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
             Method[] methods = searchType.getDeclaredMethods();
@@ -231,7 +203,8 @@ public class ReflectionUtils {
      * 改变private/protected的方法为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
      */
     public static void makeAccessible(Method method) {
-        if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))
+        if ((!Modifier.isPublic(method.getModifiers())
+                || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))
                 && !method.isAccessible()) {
             method.setAccessible(true);
         }

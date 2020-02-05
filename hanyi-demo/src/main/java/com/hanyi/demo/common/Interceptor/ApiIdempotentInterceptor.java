@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 /**
  * @ClassName: middleground com.hanyi.demo.common.Interceptor ApiIdempotentInterceptor
  * @Author: weiwenchang
- * @Description: java类作用描述
+ * @Description: 拦截请求校验
  * @CreateDate: 2020-01-06 23:06
  * @Version: 1.0
  */
@@ -35,15 +35,15 @@ public class ApiIdempotentInterceptor implements HandlerInterceptor {
 
         ApiIdempotent methodAnnotation = method.getAnnotation(ApiIdempotent.class);
         if (methodAnnotation != null) {
-            // 幂等性校验, 校验通过则放行, 校验失败则抛出异常, 并通过统一异常处理返回友好提示
-            check(request);
+            // 幂等性校验, 校验通过则放行, 校验失败则不放行
+            return check(request);
         }
 
         return true;
     }
 
-    private void check(HttpServletRequest request) {
-        tokenService.checkToken(request);
+    private boolean check(HttpServletRequest request) {
+        return tokenService.checkToken(request);
     }
 
     @Override

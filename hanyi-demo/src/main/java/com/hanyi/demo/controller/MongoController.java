@@ -1,10 +1,9 @@
 package com.hanyi.demo.controller;
 
-import com.hanyi.common.model.response.CommonCode;
-import com.hanyi.common.model.response.QueryResponseResult;
 import com.hanyi.demo.component.PersonService;
 import com.hanyi.demo.entity.Address;
 import com.hanyi.demo.entity.Person;
+import com.hanyi.framework.model.response.ResponseResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,32 +26,32 @@ public class MongoController {
     private PersonService personService;
 
     @GetMapping("/test1")
-    public QueryResponseResult testSave(){
+    public ResponseResult testSave(){
         Person person = new Person(ObjectId.get(), "刘德华", 50,new Address("人民路", "香港市", "666666"));
-        return new QueryResponseResult(CommonCode.SUCCESS,this.personService.savePerson(person));
+        return ResponseResult.success(this.personService.savePerson(person));
     }
 
     @GetMapping("/test2")
-    public QueryResponseResult testQueryPersonListByName(){
-        return new QueryResponseResult(CommonCode.SUCCESS,this.personService.queryPersonListByName("刘德华"));
+    public ResponseResult testQueryPersonListByName(){
+        return ResponseResult.success(this.personService.queryPersonListByName("刘德华"));
     }
 
     @GetMapping("/test3")
-    public QueryResponseResult testQueryPagePersonList(){
-        return new QueryResponseResult(CommonCode.SUCCESS,this.personService.queryPagePersonList(1, 10));
+    public ResponseResult testQueryPagePersonList(){
+        return ResponseResult.success(this.personService.queryPagePersonList(1, 10));
     }
 
     @GetMapping("/test4")
-    public QueryResponseResult testUpdatae(){
+    public ResponseResult testUpdatae(){
         Person person = new Person();
         person.setId(new ObjectId("5dc640cb056bad2d95313728"));
         person.setAge(23);
-        return new QueryResponseResult(CommonCode.SUCCESS,this.personService.update(person));
+        return ResponseResult.success(this.personService.update(person));
     }
 
     @GetMapping("/test5")
-    public QueryResponseResult testDelete(){
-        return new QueryResponseResult(CommonCode.SUCCESS,this.personService.deleteById("5dc640cb056bad2d95313728"));
+    public ResponseResult testDelete(){
+        return ResponseResult.success(this.personService.deleteById("5dc640cb056bad2d95313728"));
     }
 
 }
