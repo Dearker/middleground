@@ -1,7 +1,7 @@
 package com.hanyi.demo.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.hanyi.demo.common.constant.Constant;
+import com.hanyi.demo.common.constant.TokenConstant;
 import com.hanyi.demo.common.utils.JedisUtil;
 import com.hanyi.demo.service.TokenService;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +32,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String createToken() {
         String token = snowflake.nextIdStr();
-        jedisUtil.set(token, token, Constant.EXPIRE_TIME_MINUTE);
+        jedisUtil.set(token, token, TokenConstant.EXPIRE_TIME_MINUTE);
 
         return token;
     }

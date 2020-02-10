@@ -1,5 +1,12 @@
 server:
     port: 8004
+    servlet:
+        context-path: /hanyi-daily
+
+#日志級別
+logging:
+    level:
+        root: info
 
 spring:
     datasource:
@@ -18,3 +25,7 @@ spring:
             charset: UTF-8
             enabled: true
             force: true
+
+keji.id: 1
+keji.name: 韩毅
+keji.age: 20

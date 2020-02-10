@@ -34,10 +34,10 @@ public class EmployeeController {
 
     @PutMapping(value = "/{id}")
     public String updateEmployee(@PathVariable("id") int id,
-                                 @RequestParam(value = "lastName", required = true) String lastName,
-                                 @RequestParam(value = "email", required = true) String email,
-                                 @RequestParam(value = "gender", required = true) int gender,
-                                 @RequestParam(value = "dId", required = true) int dId) {
+                                 @RequestParam(value = "lastName") String lastName,
+                                 @RequestParam(value = "email") String email,
+                                 @RequestParam(value = "gender") int gender,
+                                 @RequestParam(value = "dId") int dId) {
         Employee employee = new Employee();
         employee.setId(id);
         employee.setLastName("张");
