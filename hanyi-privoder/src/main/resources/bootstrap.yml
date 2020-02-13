@@ -1,0 +1,34 @@
+server:
+  port: 8005
+  servlet:
+    context-path: /hanyi-privoder
+
+spring:
+  application:
+    name: hanyi-privoder
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+      discovery:
+        server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 127.0.0.1:8080
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+#日志級別
+logging:
+  level:
+    root: info

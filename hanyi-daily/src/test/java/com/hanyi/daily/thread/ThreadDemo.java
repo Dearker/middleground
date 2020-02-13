@@ -1,5 +1,6 @@
 package com.hanyi.daily.thread;
 
+import com.hanyi.daily.pojo.User;
 import org.junit.Test;
 
 /**
@@ -29,6 +30,12 @@ public class ThreadDemo {
         for (int i = 0; i < 30; i++) {
             System.out.println("主线程: " + i);
         }
+    }
+
+    @Test
+    public void toStringTest(){
+        User user = new User();
+        System.out.println(user);
     }
 
 

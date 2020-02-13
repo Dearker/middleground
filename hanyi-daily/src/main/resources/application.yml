@@ -29,3 +29,16 @@ spring:
 keji.id: 1
 keji.name: 韩毅
 keji.age: 20
+
+person:
+    name: 柯基
+    age: 21
+    stringList:
+        - 柴犬
+        - 哈士奇
+        - 小短腿
+    bookList:
+        - bookName: 销毁
+          count: 20
+        - bookName: 创建
+          count: 22

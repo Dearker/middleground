@@ -1,4 +1,3 @@
-
 #请求和响应GZIP压缩支持
 feign:
   httpclient:
@@ -21,11 +20,30 @@ spring:
         enabled: true
   #通用网关配置
   cloud:
-     gateway:
-       discovery:
-         locator:
-           enabled: true
-           lowerCaseServiceId: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+          # 全局默认过滤器
+      default-filters:
+        - AddResponseHeader=key,value
+        # 路由(集合)
+      routes:
+        # id唯一标识
+        - id: service-route
+          # 路由服务地址
+          #  uri: http://127.0.0.1:9091
+          # 动态路由
+          uri: lb://hanyi-privoder
+          # 断言，路由拦截规则
+          predicates:
+            - Path=/hanyi-privoder/**
+          filters:
+            # 添加前缀
+            - PrefixPath=/hanyi-privoder
+            # 去除前缀
+            #- StripPrefix=1
   boot:
     admin:
       client:
@@ -40,6 +58,3 @@ management:
     health:
       show-details: ALWAYS
 
-gate:
-  ignore:
-    startWith: /auth/jwt

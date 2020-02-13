@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hanyi-daily</artifactId>
+    <!-- 将项目打成war包时使用 -->
+    <!--<packaging>war</packaging>-->
 
     <properties>
         <mybatis.version>1.3.2</mybatis.version>

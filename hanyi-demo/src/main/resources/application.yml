@@ -7,9 +7,9 @@ spring:
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
-    password:
+    password: 971019
   data:
     mongodb:
       uri: mongodb://114.67.102.163:27017/test

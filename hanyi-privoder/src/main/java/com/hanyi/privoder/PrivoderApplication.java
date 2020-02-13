@@ -1,26 +1,26 @@
-package com.hanyi.daily;
+package com.hanyi.privoder;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * @ClassName: middleground com.hanyi.daily DailyApplication
- * @Author: weiwenchang
- * @Description: 继承SpringBootServletInitializer是为了将springboot项目打成war包放在tomcat下访问
- * @CreateDate: 2020-02-04 15:23
- * @Version: 1.0
+ * @author weiwenchang
+ * @since 2020-02-12
  */
 @SpringBootApplication
-public class DailyApplication extends SpringBootServletInitializer {
+@EnableDiscoveryClient
+public class PrivoderApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(DailyApplication.class, args);
+        SpringApplication.run(PrivoderApplication.class, args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(DailyApplication.class);
+        return builder.sources(PrivoderApplication.class);
     }
+
 }
