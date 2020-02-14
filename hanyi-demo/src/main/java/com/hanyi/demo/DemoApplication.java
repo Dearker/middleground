@@ -14,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @CreateDate: 2019-11-07 19:49
  * @Version: 1.0
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.hanyi.demo","com.hanyi.common"})
 @EnableDiscoveryClient
 @EnableFeignClients
 @MapperScan("com.hanyi.demo.mapper")

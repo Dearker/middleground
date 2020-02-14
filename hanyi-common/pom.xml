@@ -12,8 +12,8 @@
     <artifactId>hanyi-common</artifactId>
 
     <properties>
-        <zipkin.version>2.1.0.RELEASE</zipkin.version>
         <logstash.version>6.1</logstash.version>
+        <seata.version>1.0.0</seata.version>
     </properties>
 
     <dependencies>
@@ -28,7 +28,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-            <version>${zipkin.version}</version>
         </dependency>
 
         <!-- 流量卫兵 -->
@@ -65,6 +64,23 @@
             <version>${logstash.version}</version>
         </dependency>
 
+        <!-- 集成seata 2.1.0 内嵌seata 0.7.1-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+            <!--<exclusions>
+                <exclusion>
+                    <groupId>io.seata</groupId>
+                    <artifactId>seata-all</artifactId>
+                </exclusion>
+            </exclusions>-->
+        </dependency>
+
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-all</artifactId>
+            <version>${seata.version}</version>
+        </dependency>
 
     </dependencies>
 

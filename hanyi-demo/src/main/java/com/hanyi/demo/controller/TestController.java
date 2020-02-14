@@ -1,8 +1,8 @@
 package com.hanyi.demo.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.hanyi.demo.client.UserServiceClient;
 import com.hanyi.demo.common.annotation.ApiIdempotent;
+import com.hanyi.demo.feign.PrivoderFeignClient;
 import com.hanyi.demo.service.TokenService;
 import com.hanyi.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
@@ -24,7 +24,7 @@ public class TestController {
     private TokenService tokenService;
 
     @Autowired
-    private UserServiceClient userServiceClient;
+    private PrivoderFeignClient privoderFeignClient;
 
     @GetMapping("/createToken")
     public String createToken(){
@@ -50,7 +50,7 @@ public class TestController {
 
     @GetMapping("/name")
     public String getUserName(){
-        return userServiceClient.getUserName();
+        return privoderFeignClient.getUserName();
     }
 
 }

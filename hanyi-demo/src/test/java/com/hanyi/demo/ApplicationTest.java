@@ -1,6 +1,6 @@
 package com.hanyi.demo;
 
-import com.hanyi.demo.client.UserServiceClient;
+import com.hanyi.demo.feign.PrivoderFeignClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ApplicationTest {
 
     @Autowired
-    private UserServiceClient userServiceClient;
+    private PrivoderFeignClient privoderFeignClient;
 
     @Test
     public void feignTest(){
 
-        String userName = userServiceClient.getUserName();
+        String userName = privoderFeignClient.getUserName();
         System.out.println("获取的数据"+userName);
     }
 

@@ -17,7 +17,10 @@ spring:
       transport:
         port: 8719
         dashboard: 127.0.0.1:8080
-
+    #seata 服务分组，要与服务端nacos-config.txt中service.vgroup_mapping的后缀对应
+    alibaba:
+      seata:
+        tx-service-group: storage-service-group
 
 management:
   endpoints:
