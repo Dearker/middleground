@@ -1,4 +1,5 @@
 ##middleground规范及简介
+
 1、所有应用的端口都需以800开头，如网关端口为8000,admin端口为8001，以此类推，后期方便管理，应用的端口可统一写在该文件中
 
 2、所有应用的nacos和sentinel、日志、zipkin、adminClient、端口、应用名称、相对路径这些通用的配置都需要写在bootstrap.yml中
@@ -18,14 +19,14 @@
 
 7、hanyi-daily未集成三方依赖供日常使用，hanyi-privoder已集成三方依赖为生产者
 
-## seata应用配置
+### seata应用配置
 
 1. 每个应用的resource里需要配置一个registry.conf ，demo中与seata-server里的配置相同
 
 2. application.propeties 的各个配置项，注意spring.cloud.alibaba.seata.tx-service-group 是服务组名称，与nacos-config.txt 配置的service.vgroup_mapping.${your-service-gruop}具有对应关系
 
 
-## 测试
+### 测试
 
 1. 分布式事务成功，模拟正常下单、扣库存
 
