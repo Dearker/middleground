@@ -12,7 +12,7 @@ spring:
     password:
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/test
+      uri: mongodb://114.67.102.163:27017/test
   redis:
     host: 127.0.0.1
     port: 6379

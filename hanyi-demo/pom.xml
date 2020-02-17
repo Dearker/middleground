@@ -143,6 +143,12 @@
             <version>${minio.version}</version>
         </dependency>
 
+        <!-- sentinel动态规则扩展 -->
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -152,7 +158,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.9.RELEASE</version>
                 <configuration>
                     <fork>true</fork>
                 </configuration>
@@ -164,7 +169,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
