@@ -1,4 +1,4 @@
-##middleground规范及简介
+## middleground规范及简介
 
 1、所有应用的端口都需以800开头，如网关端口为8000,admin端口为8001，以此类推，后期方便管理，应用的端口可统一写在该文件中
 
@@ -102,7 +102,7 @@
     mvn clean install -Dmaven.test.skip=true
 
 
-### docker 部署数据库
+### docker 部署数据库及三方依赖
 
 1、mysql
 
