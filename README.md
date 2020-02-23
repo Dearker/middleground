@@ -42,6 +42,7 @@
 1、nacos
     
     Mac/Linux
+        云主机存在内外网ip的问题，需要在config里面的application.properties文件里面添加nacos.inetutils.ip-address参数
         启动：sh startup.sh -m standalone
    
     windows
@@ -53,6 +54,9 @@
 2、seata
     
     Mac/Linux
+        初始化：seata的nacos配置
+               cd conf
+               sh nacos-config.sh 114.67.102.137
         启动：nohup ./seata-server.sh -p 8091 -h 114.67.102.137 -m file >/dev/null 2>&1 &
     
     windows
@@ -64,7 +68,7 @@
 3、sentinel
 
     Mac/Linux/windows
-        启动：nohup java -Dserver.port=8488 -Dcsp.sentinel.dashboard.server=114.67.102.137:8488 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.6.3.jar >/dev/null 2>&1 &   
+        启动：nohup java -Dserver.port=8488 -Dcsp.sentinel.dashboard.server=114.67.102.137:8488 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.7.1.jar >/dev/null 2>&1 &   
     
     参考文档地址：
         https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
