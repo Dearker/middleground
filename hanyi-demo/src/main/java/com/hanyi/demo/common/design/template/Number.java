@@ -7,7 +7,7 @@ package com.hanyi.demo.common.design.template;
  * @CreateDate: 2020-01-23 15:17
  * @Version: 1.0
  */
-public class Number extends BankTemplateMethod{
+class Number extends AbstractBankTemplateMethod {
 
     @Override
     void takeNumber() {

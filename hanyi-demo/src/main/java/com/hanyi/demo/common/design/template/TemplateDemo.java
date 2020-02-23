@@ -11,13 +11,13 @@ public class TemplateDemo {
 
     public static void main(String[] args) {
 
-        BankTemplateMethod bankTemplate = new DrawMoney();
+        AbstractBankTemplateMethod bankTemplate = new DrawMoney();
         bankTemplate.process();
 
-        BankTemplateMethod bankTemplateMethod = new Number();
-        bankTemplateMethod.process();
+        AbstractBankTemplateMethod abstractBankTemplateMethod = new Number();
+        abstractBankTemplateMethod.process();
 
-        BankTemplateMethod b = new BankTemplateMethod() {
+        AbstractBankTemplateMethod b = new AbstractBankTemplateMethod() {
             @Override
             void takeNumber() {
                 System.out.println("111");
