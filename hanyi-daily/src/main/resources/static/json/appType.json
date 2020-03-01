@@ -1,0 +1,16 @@
+{
+    "code": 0,
+    "msg": "操作成功",
+    "data": [
+        {"typeId": 1, "typeName": "实用工具", "ratio": "25.34%"},
+        {"typeId": 2, "typeName": "影音娱乐", "ratio": "25.34%"},
+        {"typeId": 3, "typeName": "财务", "ratio": "25.34%"},
+        {"typeId": 4, "typeName": "书籍阅读", "ratio": "25.34%"},
+        {"typeId": 5, "typeName": "家用数码", "ratio": "25.34%"},
+        {"typeId": 6, "typeName": "实用工具", "ratio": "25.34%"},
+        {"typeId": 7, "typeName": "实用工具", "ratio": "25.34%"},
+        {"typeId": 8, "typeName": "实用工具", "ratio": "25.34%"},
+        {"typeId": 9, "typeName": "实用工具", "ratio": "25.34%"},
+        {"typeId": 10, "typeName": "实用工具", "ratio": "25.34%"}
+    ]
+}

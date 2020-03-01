@@ -1,7 +1,15 @@
 package com.hanyi.daily.thread;
 
-import com.hanyi.daily.pojo.User;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.thread.ThreadUtil;
+import com.hanyi.daily.thread.pojo.Athlete;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @PackAge: middleground com.hanyi.daily.thread
@@ -11,6 +19,11 @@ import org.junit.Test;
  * @Version: 1.0
  */
 public class ThreadDemo {
+
+    /**
+     * 初始化线程池
+     */
+    private static final ThreadPoolExecutor EXECUTOR = ThreadUtil.newExecutor(8, 16);
 
     /**
      * join 子线程先执行，执行完成后再执行主线程
@@ -32,11 +45,35 @@ public class ThreadDemo {
         }
     }
 
+    /**
+     * 多个线程异步执行，在将各线程执行的结果汇总
+     */
     @Test
-    public void toStringTest(){
-        User user = new User();
-        System.out.println(user);
+    public void multithreadedAsyncCallback() throws Exception {
+
+        TimeInterval timer = DateUtil.timer();
+        int length = 8;
+
+        List<Integer> integerList = new ArrayList<>(length);
+
+        List<Athlete> personList = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            personList.add(new Athlete(i));
+
+        }
+        List<Future<Integer>> futureList = EXECUTOR.invokeAll(personList);
+
+        for (Future<Integer> future : futureList) {
+            integerList.add(future.get());
+        }
+
+        System.out.println("执行耗时--》 "+ timer.intervalRestart());
+        System.out.println("获取的数组为："+ integerList);
+        int sum = integerList.stream().mapToInt(Integer::intValue).sum();
+        System.out.println("总数为："+sum);
+
     }
+
 
 
 }

@@ -6,6 +6,8 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,47 @@ public class DateTest {
             }
         }
         stringList.forEach(System.out::println);
+    }
+
+    /**
+     * 获取开始时间和结束时间之间总共多少天
+     */
+    @Test
+    public void dateTest(){
+
+        DateTime start = DateUtil.date();
+        DateTime end = DateUtil.lastWeek();
+        long l = DateUtil.betweenDay(start, end, true);
+        System.out.println(l);
+        DateRange range = DateUtil.range(start, end, DateField.DAY_OF_YEAR);
+
+        range.forEach(s-> System.out.println(s.toString()));
+
+    }
+
+    /**
+     * 时间转换类
+     */
+    @Test
+    public void LocalDateTimeTest(){
+
+        long localTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+
+        long localTimeTime = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+
+        System.out.println("获取的时间-->"+ localTime +"||"+localTimeTime);
+
+        long currentSeconds = DateUtil.currentSeconds();
+        System.out.println("获取的秒数-->"+currentSeconds);
+
+        DateTime dateTime = DateUtil.lastMonth();
+
+        String now = DateUtil.now();
+
+        DateTime parse = DateUtil.parse("2019-12-20");
+
+        System.out.println(dateTime+"||"+now+"||"+parse.getTime());
+
     }
 
 }

@@ -1,11 +1,13 @@
 package com.hanyi.demo;
 
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.*;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -16,8 +18,7 @@ import com.hanyi.demo.entity.Address;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,9 @@ public class ClassLoaderTest {
 
     }
 
+    /**
+     * 分布式id 雪花算法
+     */
     @Test
     public void IdTest() {
         long l = snowflake.nextId();
@@ -58,6 +62,9 @@ public class ClassLoaderTest {
         //Props props = new Props("test.properties");
     }
 
+    /**
+     * 格式化时间
+     */
     @Test
     public void DateTest() {
 
@@ -126,7 +133,9 @@ public class ClassLoaderTest {
         System.out.println("误判数量：" + list.size());
     }
 
-
+    /**
+     * 偏移量
+     */
     @Test
     public void forTest() {
 
@@ -156,6 +165,9 @@ public class ClassLoaderTest {
         System.out.println("移位和计算-->" + i7 + "||" + i8);
     }
 
+    /**
+     * list的判断删除
+     */
     @Test
     public void removeIfTest(){
 
@@ -185,27 +197,7 @@ public class ClassLoaderTest {
 
     }
 
-    @Test
-    public void LocalDateTimeTest(){
 
-        long localTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-
-        long localTimeTime = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
-
-        System.out.println("获取的时间-->"+ localTime +"||"+localTimeTime);
-
-        long currentSeconds = DateUtil.currentSeconds();
-        System.out.println("获取的秒数-->"+currentSeconds);
-
-        DateTime dateTime = DateUtil.lastMonth();
-
-        String now = DateUtil.now();
-
-        DateTime parse = DateUtil.parse("2019-12-20");
-
-        System.out.println(dateTime+"||"+now+"||"+parse.getTime());
-
-    }
 
     /**
      * 对JSONArray中JSONObject对象进行排序
@@ -230,8 +222,18 @@ public class ClassLoaderTest {
         });
 
         jsonArray.forEach(System.out::println);
-
     }
 
+    /**
+     * 读取本地json文件
+     */
+    @Test
+    public void readJSONFile(){
+
+        URL url = this.getClass().getClassLoader().getResource("appType.json");
+        System.out.println(url);
+        //File file = new File(url);
+
+    }
 
 }
