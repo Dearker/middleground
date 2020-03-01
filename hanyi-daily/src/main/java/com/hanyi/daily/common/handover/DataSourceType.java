@@ -1,4 +1,4 @@
-package com.hanyi.daily.common.component;
+package com.hanyi.daily.common.handover;
 
 import com.hanyi.daily.common.enums.DataType;
 
@@ -27,7 +27,7 @@ public class DataSourceType {
      * 获取数据源类型
      * @return
      */
-    public static DataType getDataBaseType() {
+    static DataType getDataBaseType() {
         return TYPE.get() == null ? DataType.PRIMARY : TYPE.get();
     }
 

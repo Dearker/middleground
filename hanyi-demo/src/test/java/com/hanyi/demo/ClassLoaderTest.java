@@ -224,16 +224,6 @@ public class ClassLoaderTest {
         jsonArray.forEach(System.out::println);
     }
 
-    /**
-     * 读取本地json文件
-     */
-    @Test
-    public void readJSONFile(){
 
-        URL url = this.getClass().getClassLoader().getResource("appType.json");
-        System.out.println(url);
-        //File file = new File(url);
-
-    }
 
 }

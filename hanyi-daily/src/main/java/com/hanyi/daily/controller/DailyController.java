@@ -1,7 +1,7 @@
 package com.hanyi.daily.controller;
 
 import cn.hutool.core.lang.Dict;
-import com.hanyi.daily.common.component.UserProperty;
+import com.hanyi.daily.common.config.UserProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

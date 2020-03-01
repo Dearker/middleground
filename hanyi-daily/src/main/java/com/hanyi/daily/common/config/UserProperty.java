@@ -1,4 +1,4 @@
-package com.hanyi.daily.common.component;
+package com.hanyi.daily.common.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

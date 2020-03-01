@@ -1,7 +1,7 @@
 package com.hanyi.daily.common.aspect;
 
 import com.hanyi.daily.common.annotation.DataSource;
-import com.hanyi.daily.common.component.DataSourceType;
+import com.hanyi.daily.common.handover.DataSourceType;
 import com.hanyi.daily.common.enums.DataType;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;

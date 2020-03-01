@@ -1,6 +1,6 @@
 package com.hanyi.daily.common.config;
 
-import com.hanyi.daily.common.component.DynamicDataSource;
+import com.hanyi.daily.common.handover.DynamicDataSource;
 import com.hanyi.daily.common.enums.DataType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

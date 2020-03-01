@@ -1,4 +1,4 @@
-package com.hanyi.daily.Robin;
+package com.hanyi.daily.loadBalance;
 
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @CreateDate: 2020-02-08 11:59
  * @Version: 1.0
  */
-public class RobinDemo {
+public class LoadBalanceDemo {
 
     private static int pos = 0;
 

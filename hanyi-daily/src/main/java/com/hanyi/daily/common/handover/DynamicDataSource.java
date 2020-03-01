@@ -1,4 +1,4 @@
-package com.hanyi.daily.common.component;
+package com.hanyi.daily.common.handover;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
