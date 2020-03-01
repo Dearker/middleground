@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -21,7 +23,11 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private Integer userId;
+
+    @NotBlank(message = "用户名称不能为空")
     private String userName;
+
+    @NotNull(message = "用户年龄不能为空")
     private Integer userAge;
 
 }

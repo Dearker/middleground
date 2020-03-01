@@ -23,7 +23,7 @@ public class ThreadDemo {
     /**
      * 初始化线程池
      */
-    private static final ThreadPoolExecutor EXECUTOR = ThreadUtil.newExecutor(8, 16);
+    private static final ThreadPoolExecutor EXECUTOR = ThreadUtil.newExecutor(16, 16);
 
     /**
      * join 子线程先执行，执行完成后再执行主线程
