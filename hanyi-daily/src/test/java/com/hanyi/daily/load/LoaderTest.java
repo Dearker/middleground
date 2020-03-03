@@ -1,7 +1,10 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.hanyi.daily.property.Book;
+import com.hanyi.daily.property.Person;
 import org.junit.Test;
 
 import java.io.File;
@@ -39,6 +42,19 @@ public class LoaderTest {
     @Test
     public void systemPropertiesTest() {
         System.getProperties().list(System.out);
+    }
+
+    /**
+     * 根据字节码获取其对应的对象
+     */
+    @Test
+    public void genericTypeTest(){
+        Person person = getObject(Person.class);
+        Book book = getObject(Book.class);
+    }
+
+    private <T> T getObject(Class<T> clazz){
+        return ReflectUtil.newInstance(clazz);
     }
 
 }
