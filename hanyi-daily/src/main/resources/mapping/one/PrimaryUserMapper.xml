@@ -4,10 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hanyi.daily.mapper.one.PrimaryUserMapper">
 
-
-
     <select id="findAll" resultType="com.hanyi.daily.pojo.User">
-        select user_id as userId , user_name as userName , user_age as userAge from sys_user;
+        select user_id,user_name,user_age  from sys_user;
     </select>
 
 </mapper>

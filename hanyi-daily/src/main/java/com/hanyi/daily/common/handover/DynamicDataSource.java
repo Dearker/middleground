@@ -2,6 +2,9 @@ package com.hanyi.daily.common.handover;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
+import javax.sql.DataSource;
+import java.util.Map;
+
 /**
  * @ClassName: middleground com.hanyi.daily.common.component DynamicDataSource
  * @Author: weiwenchang
@@ -10,6 +13,12 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * @Version: 1.0
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
+
+    public DynamicDataSource(DataSource defaultTargetDataSource, Map<Object, Object> targetDataSources) {
+        super.setDefaultTargetDataSource(defaultTargetDataSource);
+        super.setTargetDataSources(targetDataSources);
+        super.afterPropertiesSet();
+    }
 
     @Override
     protected Object determineCurrentLookupKey() {

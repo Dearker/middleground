@@ -5,7 +5,7 @@
 <mapper namespace="com.hanyi.daily.mapper.two.SecondaryUserMapper">
 
     <select id="findAll" resultType="com.hanyi.daily.pojo.User">
-        select user_id as userId , user_name as userName , user_age as userAge from sys_user2;
+        select user_id,user_name,user_age from sys_user2;
     </select>
 
 

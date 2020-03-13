@@ -1,0 +1,17 @@
+server:
+  port: 8006
+  servlet:
+    context-path: /hanyi-cache
+
+
+spring:
+  #redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 1
+    # 连接超时时间（毫秒）
+    timeout: 5000
+
+

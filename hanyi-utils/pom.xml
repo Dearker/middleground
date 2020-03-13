@@ -18,7 +18,7 @@
         <jwt.version>1.0.8.RELEASE</jwt.version>
         <log4j.version>2.1.2.RELEASE</log4j.version>
         <lombok.version>1.18.8</lombok.version>
-        <guava.version>24.0-jre</guava.version>
+        <guava.version>28.1-jre</guava.version>
         <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.1.1</hutool.version>
@@ -91,13 +91,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- 日志 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -124,6 +117,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- 配置文件处理器，在使用配置文件进行绑定时会进行提示 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>

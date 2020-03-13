@@ -21,11 +21,11 @@ public class UserService {
     @Autowired
     private SecondaryUserMapper secondaryUserMapper;
 
-    public List<User> primary(){
+    public List<User> primary() {
         return primaryUserMapper.findAll();
     }
 
-    public List<User> secondary  (){
+    public List<User> secondary() {
         return secondaryUserMapper.findAll();
     }
 

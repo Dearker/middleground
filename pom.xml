@@ -33,6 +33,7 @@
         <module>hanyi-demo</module>
         <module>hanyi-daily</module>
         <module>hanyi-privoder</module>
+        <module>hanyi-cache</module>
     </modules>
     <packaging>pom</packaging>
 

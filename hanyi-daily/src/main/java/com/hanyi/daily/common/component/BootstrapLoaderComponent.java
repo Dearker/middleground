@@ -1,7 +1,6 @@
 package com.hanyi.daily.common.component;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @CreateDate: 2020-03-01 11:41
  * @Version: 1.0
  */
-@Order(value = 1)
 @Component
 public class BootstrapLoaderComponent implements CommandLineRunner {
 

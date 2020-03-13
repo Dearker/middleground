@@ -1,44 +1,107 @@
 server:
-    port: 8004
-    servlet:
-        context-path: /hanyi-daily
+  port: 8004
+  servlet:
+    context-path: /hanyi-daily
 
 #日志級別
 logging:
-    level:
-        root: info
+  level:
+    root: info
 
 spring:
-    datasource:
-        primary:
-            driver-class-name: com.mysql.cj.jdbc.Driver
-            jdbc-url: jdbc:mysql://localhost:3306/testdatasource1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
-            username: root
-            password:
-        secondary:
-            driver-class-name: com.mysql.cj.jdbc.Driver
-            jdbc-url: jdbc:mysql://localhost:3306/testdatasource2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
-            username: root
-            password:
-    http:
-        encoding:
-            charset: UTF-8
-            enabled: true
-            force: true
+  datasource:
+    druid:
+      primary:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/testdatasource1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+        username: root
+        password:
+      secondary:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/testdatasource2?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+        username: root
+        password:
+
+      # 初始连接数
+      initialSize: 2
+      # 最小连接池数量
+      minIdle: 5
+      # 最大连接池数量
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      # 配置一个连接在池中最大生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 900000
+      # 配置检测连接是否有效
+      validationQuery: SELECT 1 FROM testdatasource1
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        # 设置白名单，不填则允许所有访问
+        allow:
+          url-pattern: /monitor/druid/*
+      filter:
+        stat:
+          enabled: true
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+          wall:
+            config:
+              multi-statement-allow: true
+
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+#Mybatis配置
+mybatis:
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+  # 搜索指定包别名
+  typeAliasesPackage: com.hanyi
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath:mapping/**/*.xml
+  #开启查询sql打印
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 
 keji.id: 1
 keji.name: 韩毅
 keji.age: 20
 
 person:
-    name: 柯基
-    age: 21
-    stringList:
-        - 柴犬
-        - 哈士奇
-        - 小短腿
-    bookList:
-        - bookName: 销毁
-          count: 20
-        - bookName: 创建
-          count: 22
+  name: 柯基
+  age: 21
+  stringList:
+    - 柴犬
+    - 哈士奇
+    - 小短腿
+  bookList:
+    - bookName: 销毁
+      count: 20
+    - bookName: 创建
+      count: 22
+
+#开启自动配置的日志报告
+debug: true
