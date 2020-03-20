@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -26,6 +28,24 @@ public class CollectionTest {
 
         List<String> strings = Arrays.asList(StrUtil.split(join, ","));
         strings.forEach(System.out::println);
+    }
+
+    /**
+     * ConcurrentHashMap允许一边更新、一边遍历，其他的map实现类则不行
+     */
+    @Test
+    public void concurrentHashMapTest() {
+
+        Map<String, Integer> integerMap = new ConcurrentHashMap<>();
+        integerMap.put("a", 1);
+        integerMap.put("b", 2);
+        integerMap.put("c", 3);
+
+        System.out.println(integerMap.size());
+        for (Map.Entry<String, Integer> entry : integerMap.entrySet()) {
+            integerMap.remove(entry.getKey());
+        }
+        System.out.println(integerMap.size());
     }
 
 }
