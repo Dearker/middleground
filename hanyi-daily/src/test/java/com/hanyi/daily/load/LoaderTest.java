@@ -80,5 +80,30 @@ public class LoaderTest {
         return list;
     }
 
+    /**
+     * finally 测试
+     */
+    @Test
+    public void finallyTest() {
+        System.out.println(getInt());
+        System.out.println(getInt2());
+    }
+
+    private int getInt() {
+        try {
+            return 1;
+        } finally {
+            System.out.println("1111");
+        }
+    }
+
+    private int getInt2() {
+        try {
+            return 2;
+        } finally {
+            System.out.println("2222");
+        }
+    }
+
 
 }

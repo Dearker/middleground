@@ -6,6 +6,7 @@ import com.hanyi.daily.service.SearchDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -36,6 +37,9 @@ public class ApplicationTest {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private BeanFactory beanFactory;
+
     @Test
     public void bootTest() {
         System.out.println(personProp);
@@ -57,8 +61,10 @@ public class ApplicationTest {
             System.out.println("获取的所有的接口列表：" + Arrays.asList(interfaces));
             System.out.println("获取的实现类为：" + v);
         });
-        Object searchDataService = applicationContext.getBean("searchDataServiceImpl");
+        SearchDataService searchDataService = applicationContext.getBean(SearchDataService.class);
         System.out.println("获取的对象为："+searchDataService);
+        SearchDataService bean = beanFactory.getBean(SearchDataService.class);
+        System.out.println("获取的bean对象为："+ bean);
     }
 
     /**

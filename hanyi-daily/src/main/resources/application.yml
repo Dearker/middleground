@@ -104,4 +104,4 @@ person:
       count: 22
 
 #开启自动配置的日志报告
-debug: true
+#debug: true
