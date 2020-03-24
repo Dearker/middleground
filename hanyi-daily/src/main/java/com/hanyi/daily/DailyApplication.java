@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableExtConfigPackage
-public class DailyApplication  {
+public class DailyApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DailyApplication.class, args);
