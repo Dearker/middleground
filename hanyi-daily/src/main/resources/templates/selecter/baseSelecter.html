@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <title>基本选择器</title>
+    <script type="text/javascript" src="../../static/js/grammar/common.js"></script>
+
+    <style type="text/css">
+        div, span {
+            width: 180px;
+            height: 180px;
+            margin: 20px;
+            background: #9999CC;
+            border: #000 1px solid;
+            float: left;
+            font-size: 17px;
+            font-family: Roman;
+        }
+
+        div .mini {
+            width: 50px;
+            height: 50px;
+            background: #CC66FF;
+            border: #000 1px solid;
+            font-size: 12px;
+            font-family: Roman;
+        }
+
+        div .mini01 {
+            width: 50px;
+            height: 50px;
+            background: #CC66FF;
+            border: #000 1px solid;
+            font-size: 12px;
+            font-family: Roman;
+        }
+
+        .one {
+            width: 200px;
+            height: 140px;
+            margin: 20px;
+            background: red;
+            border: #000 1px solid;
+            float: left;
+            font-size: 17px;
+            font-family: Roman;
+        }
+
+        .second {
+            width: 300px;
+            height: 340px;
+            margin: 20px;
+            background: yellow;
+            border: pink 3px dotted;
+            float: left;
+            font-size: 22px;
+            font-family: Roman;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="d1" style="width: 200px; height: 200px; background-color: darkgreen;">
+    <input type="text" id="i1" name="" value=""/> <br/>
+    <input type="button" id="i2" value=" 点击 "/>
+
+</div>
+
+<hr/>
+<input type="button" value="保存" class="mini" name="ok" class="mini"/>
+<input type="button" value="改变 id 为 one 的元素的背景色为 红色" id="b1"/>
+<input type="button" value=" 改变元素名为 <div> 的所有元素的背景色为 红色" id="b2"/>
+<input type="button" value=" 改变 class 为 mini 的所有元素的背景色为 红色" id="b3"/>
+<input type="button" value=" 改变所有的<span>元素和 id 为 two 的元素的背景色为红色" id="b4"/>
+
+<hr/>
+<div id="one">
+    id为one
+</div>
+
+<div id="two" class="mini">
+    id为two class是 mini
+    <div class="mini">class是 mini</div>
+</div>
+
+<div class="one">
+    class是 one
+    <div class="mini">class是 mini</div>
+    <div class="mini">class是 mini</div>
+</div>
+<div class="one">
+    class是 one
+    <div class="mini01">class是 mini01</div>
+    <div class="mini">class是 mini</div>
+</div>
+
+<div id="mover">
+    div 动画
+</div>
+
+<span class="spanone">class为spanone的span元素</span>
+<span class="mini">class为mini的span元素</span>
+
+<hr/>
+<input id="myinput" type="text" name="username" value="张三"/><br/>
+<div id="mydiv">
+    <p>
+        <a href="#">哈士奇</a>
+    </p>
+</div>
+
+<hr/>
+<ul>
+    <li id="bj" name="beijing">北京</li>
+    <li id="tj" name="tianjin">天津</li>
+</ul>
+<input type="checkbox" name="hobby" id="hobby1" value="smoke"/>  抽烟
+<input type="checkbox" name="hobby" id="hobby2" value="drink"/>  喝酒
+<input type="checkbox" name="hobby" id="hobby3" value="hot hair"/>  烫头
+
+<hr/>
+<input type="button" value="采用属性增加样式(改变id=one的样式)" id="c1" />
+<input type="button" value="removeClass" id="c3" />
+<input type="button" value=" 切换样式" id="c4" />
+<input type="button" value=" 通过css()获得id为one背景颜色" id="c5" />
+<input type="button" value=" 通过css()设置id为one背景颜色为绿色" id="c6" />
+
+<hr/>
+<br/>
+
+<table id="tab1" border="1" width="800" align="center" >
+    <tr>
+        <td colspan="5"><input type="button" value="反选" onclick="reverse()"></td>
+    </tr>
+    <tr>
+        <th><input type="checkbox" onclick="selectAll(this)" ></th>
+        <th>分类ID</th>
+        <th>分类名称</th>
+        <th>分类描述</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td><input type="checkbox" class="itemSelect"></td>
+        <td>1</td>
+        <td>手机数码</td>
+        <td>手机数码类商品</td>
+        <td><a href="">修改</a>|<a href="">删除</a></td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" class="itemSelect"></td>
+        <td>2</td>
+        <td>电脑办公</td>
+        <td>电脑办公类商品</td>
+        <td><a href="">修改</a>|<a href="">删除</a></td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" class="itemSelect"></td>
+        <td>3</td>
+        <td>鞋靴箱包</td>
+        <td>鞋靴箱包类商品</td>
+        <td><a href="">修改</a>|<a href="">删除</a></td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" class="itemSelect"></td>
+        <td>4</td>
+        <td>家居饰品</td>
+        <td>家居饰品类商品</td>
+        <td><a href="">修改</a>|<a href="">删除</a></td>
+    </tr>
+</table>
+
+</body>
+
+</html>

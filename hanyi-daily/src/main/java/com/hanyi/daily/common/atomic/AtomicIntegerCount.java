@@ -1,5 +1,8 @@
 package com.hanyi.daily.common.atomic;
 
+import cn.hutool.core.thread.ThreadUtil;
+
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -46,10 +49,10 @@ public class AtomicIntegerCount implements Runnable {
 
     public static void main(String[] args) {
         AtomicIntegerCount atomicIntegerCount = new AtomicIntegerCount();
-        Thread t1 = new Thread(atomicIntegerCount);
-        Thread t2 = new Thread(atomicIntegerCount);
-        t1.start();
-        t2.start();
+        ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(2, 2);
+        threadPoolExecutor.submit(atomicIntegerCount);
+        threadPoolExecutor.submit(atomicIntegerCount);
+        threadPoolExecutor.shutdown();
     }
 
 }

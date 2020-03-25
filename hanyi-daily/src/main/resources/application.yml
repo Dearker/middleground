@@ -9,6 +9,8 @@ logging:
     root: info
 
 spring:
+  thymeleaf:
+    cache: false
   datasource:
     druid:
       primary:

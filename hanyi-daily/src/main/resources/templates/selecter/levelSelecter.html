@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="../../static/js/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../../static/js/grammar/common.js"></script>
+    <title>层级选择器</title>
+    <style type="text/css">
+        div {
+            width: 150px;
+            height: 100px;
+            border: 1px solid black;
+            background-color: #9999CC;
+        }
+
+        .A {
+            margin: 100px 0px 100px 500px;
+        }
+
+        #b1 {
+            margin: 100px -0px 100px -250px;
+        }
+
+        #b11 {
+            margin: 100px 0px 100px -200px;
+        }
+
+        #b12 {
+            margin: -200px 0px 100px 100px;
+        }
+
+        #b2 {
+            margin: -200px 0px 100px 400px;
+        }
+
+        #b21 {
+            margin: 100px 0px 100px -200px;
+        }
+
+        #b22 {
+            margin: -200px 0px 100px 100px;
+        }
+
+        #b3 {
+            margin: -200px 0px 100px 1000px;
+        }
+
+        #b31 {
+            margin: 100px 0px 100px -200px;
+        }
+
+        #b32 {
+            margin: -200px 0px 100px 100px;
+        }
+    </style>
+</head>
+
+<body>
+<input type="button" id="bt1" value="A   B : A 下所有 B"/>
+<input type="button" id="bt2" value="A > B : A 下直接 B"/>
+<input type="button" id="bt3" value="B1 + B : B1 同级下后一个"/>
+<input type="button" id="bt4" value="B1 ~ B : B1 同级下后所有"/>
+<input type="button" id="bt5" value="clear"/>
+
+<div id="a1" class="A">A
+    <div id="b1" class="B">
+        B1
+        <div id="b11" class="B">
+            B11
+        </div>
+        <div id="b12" class="B">
+            B12
+        </div>
+    </div>
+    <div id="b2" class="B">
+        B2
+        <div id="b21" class="B">
+            B21
+        </div>
+        <div id="b22" class="B">
+            B22
+        </div>
+    </div>
+
+    <div id="b3" class="B">
+        B3
+        <div id="b31" class="B">
+            B31
+        </div>
+        <div id="b32" class="B">
+            B32
+        </div>
+    </div>
+</div>
+</body>
+</html>

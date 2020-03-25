@@ -2,7 +2,6 @@ package com.hanyi.daily.common.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,9 +24,9 @@ public class WebInterceptor implements HandlerInterceptor {
 
         log.info("在请求处理之前进行调用（Controller方法调用之前）");
         request.setAttribute("startTime", System.currentTimeMillis());
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        /*HandlerMethod handlerMethod = (HandlerMethod) handler;
         log.info("controller object is {}", handlerMethod.getBean().getClass().getName());
-        log.info("controller method is {}", handlerMethod.getMethod());
+        log.info("controller method is {}", handlerMethod.getMethod());*/
 
         //需要返回true，否则请求不会被控制器处理
         return true;

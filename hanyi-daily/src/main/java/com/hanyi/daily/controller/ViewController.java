@@ -38,5 +38,9 @@ public class ViewController {
         return "freemarkerIndex";
     }
 
+    @GetMapping("/linkage")
+    public String linkage(){
+        return "linkage";
+    }
 
 }

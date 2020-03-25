@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>表单标签</title>
+    <script type="text/javascript" src="../../static/js/grammar/linkage.js"></script>
+    <!--
+        属性:
+            action="服务器的路径"	用户填写的数据,会被提交到指定的服务其中
+            method="提交方式"		GET	POST
+        输入标签: input
+            文本输入框:
+                属性:
+                    type="text"
+                    value="123" 默认值
+                    placeholder="请输入用户名"  提示信息
+            密码输入框:
+                属性:
+                    type="password"
+                    value="123" 默认值
+                    placeholder="请输入密码"  提示信息
+            单选框:
+                属性:
+                    type="radio"
+                    name="gender" name属性值相同,可以实现单选
+                    checked="checked"	默认选定项
+                        属性名和属性值相同,只能选checked
+            复选框:
+                属性:
+                    type="checkbox"
+                    checked="checked"	默认选定项			不建议使用
+                        属性名和属性值相同,只能选checked
+            文件域:
+                属性:
+                    type="file"
+
+            按钮
+                普通按钮:		需要结合js一起用
+                    属性:
+                        type="button"
+                        value="按钮名字"
+
+                提交按钮:	把数据提交到指定的服务器
+                    属性:
+                        type="submit"
+                        value="提交查询"	默认值
+
+                图片提交按钮:	把数据提交到指定的服务器
+                    属性:
+                        type="image" src="图片路径"
+
+            form表单中的下拉菜单
+        	标签: select
+        		属性:
+        			size="5" 下拉菜单中,默认显示的项数
+        			name="cities" 下拉菜单的名字
+        			multiple="multiple" 多选
+			选项标签:option
+				selected="selected" 默认选定项
+				value="bj" 发送到服务器的数据值 bj
+
+			文本域标签: textarea			已经不用
+				属性:
+					cols: 列数
+					rows: 行数
+
+    -->
+</head>
+<body>
+<form action="#" method="get">
+    用户名:<input type="text" placeholder="请输入用户名" name="username"/><br/>
+    密　码:<input type="password" placeholder="请输入密码"/><br/>
+
+    性　别:<input type="radio" name="gender" checked="checked"/>男
+    <input type="radio" name="gender"/>女<br/>
+
+    爱　好:<input type="checkbox"/>抽烟
+    <input type="checkbox"/>喝酒
+    <input type="checkbox"/>打麻将<br/>
+    上传头像:<input type="file"/><br/>
+    <input type="button" value="点我提交"/>
+    <input type="reset"/>
+    <input type="submit" value="提交"/>
+    <input type="image" src="../../static/images/register.gif" value="注册"/>
+</form>
+
+<hr/>
+<br/>
+
+<form action="#" method="get">
+    <select size="5" name="cities" multiple="multiple">
+        <option value="bj">北京</option>
+        <option value="sh">上海</option>
+        <option value="gz" selected="selected">广州</option>
+        <option value="sz">深圳</option>
+        <option value="hz">杭州</option>
+    </select>
+    <br/>
+    <!--文本域-->
+    <textarea rows="10" cols="10">
+
+    </textarea>
+    <input type="submit" value="提交" />
+</form>
+
+<br/>
+
+<div>
+    <input type="button" onclick="local_href()"> 跳转页面
+</div>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>用户注册</title>
+    <link rel="stylesheet" type="text/css" href="css/linkage.css"/>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/grammar/linkage.js"></script>
+</head>
+<body>
+<div class="regist_bg">
+    <div class="regist">
+        <form action="../index.html">
+            <table width="600" height="350px">
+                <tr>
+                    <td colspan="3">
+                        <font color="#3164af">会员注册</font> USER REGISTER
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">用户名</td>
+                    <td colspan="2"><input id="loginnameId" type="text" name="loginname" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">密码</td>
+                    <td colspan="2"><input id="loginpwdId" type="password" name="loginpwd" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">确认密码</td>
+                    <td colspan="2"><input id="reloginpwdId" type="password" name="reloginpwd" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">Email</td>
+                    <td colspan="2"><input id="emailId" type="text" name="email" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">姓名</td>
+                    <td colspan="2"><input id="userNameId" type="text" name="username" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">性别</td>
+                    <td colspan="2">
+                        <input type="radio" name="gender" value="男" checked="checked"/>男
+                        <input type="radio" name="gender" value="女"/>女
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">出生日期</td>
+                    <td colspan="2"><input type="text" name="birthday" size="60"/></td>
+                </tr>
+                <tr>
+                    <td align="right">所在地</td>
+                    <td colspan="3">
+                        <select id="provinceId" onchange="selectCity(this.value)" style="width:150px">
+                            <option value="">----请-选-择-省----</option>
+                            <option value="0">北京</option>
+                            <option value="1">吉林省</option>
+                            <option value="2">江苏省</option>
+                        </select>
+
+                        <select id="cityId" style="width:150px">
+                            <option value="0">----请-选-择-市----</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="80" align="right">验证码</td>
+                    <td width="100"><input type="text" name="verifyCode"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <input type="submit" value="注册"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
