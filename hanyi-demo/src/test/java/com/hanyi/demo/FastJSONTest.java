@@ -18,18 +18,17 @@ import com.hanyi.demo.entity.Address;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @ClassName: middleground com.hanyi.demo ClassLoaderTest
+ * @ClassName: middleground com.hanyi.demo
  * @Author: weiwenchang
  * @Description: java类作用描述
  * @CreateDate: 2019-12-12 20:05
  * @Version: 1.0
  */
-public class ClassLoaderTest {
+public class FastJSONTest {
 
     private static final Snowflake snowflake = IdUtil.createSnowflake(1, 1);
 
@@ -38,7 +37,7 @@ public class ClassLoaderTest {
      */
     @Test
     public void ClassLoader() {
-        String aPackage = ClassUtil.getPackage(ClassLoaderTest.class);
+        String aPackage = ClassUtil.getPackage(FastJSONTest.class);
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation(aPackage, SpringBootApplication.class);
         classes.forEach(s -> System.out.println(ClassUtil.getPackage(s)));
 
@@ -223,7 +222,5 @@ public class ClassLoaderTest {
 
         jsonArray.forEach(System.out::println);
     }
-
-
 
 }
