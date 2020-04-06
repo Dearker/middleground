@@ -1,0 +1,74 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: wordpress-deploy
+  namespace: blog
+  #该label作用在department上
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  #滚动更新策略，每次最多开启一个pod去取代一个旧的pod，滚动更新的版本最多为5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  revisionHistoryLimit: 5
+  #pod模板
+  template:
+    metadata:
+      #该label作用在pod上
+      labels:
+        app: wordpress
+    spec:
+      #定义一个初始化容器用于检测mysql服务是否可用，如果可用则继续向下创建容器，否则阻塞在初始化容器中
+      initContainers:
+        - name: init-db
+          image: busybox
+          command: ['sh', '-c', 'until nslookup mysql; do echo waiting for mysql service; sleep 2; done;']
+      containers:
+        - name: wordpress
+          imagePullPolicy: IfNotPresent
+          image: wordpress
+          ports:
+            - containerPort: 80
+              name: wdport
+          #监听80端口，在容器启动10秒之后开始监听，每隔3秒检测一次，如果检测失败则重启
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          #监听80端口，在容器启动15秒之后检测容器是否可读，每隔10秒检测一次，不可读则从service中移除
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql-service:3306
+            - name: WORDPRESS_DB_USER
+              value: wordpress
+            - name: WORDPRESS_DB_PASSWORD
+              value: wordpress
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-service
+  namespace: blog
+spec:
+  type: NodePort
+  selector:
+    app: wordpress
+  ports:
+    - port: 80
+      name: wordpressport
+      protocol: TCP
+      targetPort: wdport
+      #映射外网ip，该端口的范围必须在30000-32767之间
+      nodePort: 30002
+

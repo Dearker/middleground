@@ -1,0 +1,21 @@
+# 该任务为定时pod
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: cronjob-demo
+spec:
+  schedule: "*/1 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: hello
+              image: busybox
+              args:
+                - "bin/sh"
+                - "-c"
+                - "for i in 9 8 7 6 5 4 3 2 1; do echo $i; done"

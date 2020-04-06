@@ -124,5 +124,15 @@
 
     docker run --privileged=true -d --name zookeeper --publish 2181:2181 -d zookeeper:3.5.6    
     
+### 使用kubernetes命令
+ 
+1、查看dashboard令牌(最高权限)
+       
+     在node01节点上执行命令：kubectl describe secret admin-token-nr9r4 -n kube-system   
+       
+2、向master中添加节点
     
+    先将master中的~/.kube/config文件的内容复制到需要添加的node中，让node和master可以使用秘钥通信
+    在执行命令添加节点：
+        kubeadm join 192.168.0.3:6443 --token 8ln737.77grxng35yn6b263 --discovery-token-ca-cert-hash sha256:aada718a2aafdad65bd3dc241d394d64846a38047db10bf45f59c70d587ced74 
     

@@ -1,0 +1,55 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+  namespace: blog
+  labels:
+    app: mysql
+spec:
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          imagePullPolicy: IfNotPresent
+          image: mysql:5.7
+          #command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
+          ports:
+            - containerPort: 3306
+              name: dbport
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: wordpress
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_USER
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              value: wordpress
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+      volumes:
+        - name: db
+          hostPath:
+            path: /var/lib/mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: blog
+spec:
+  #该service中的selector用于筛选匹配的pod名称
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      name: mysqlport
+      protocol: TCP
+      targetPort: dbport
+
+

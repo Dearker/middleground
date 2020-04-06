@@ -1,0 +1,72 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: wordpress-pod-deploy
+  namespace: blog
+  #该label作用在department上
+  labels:
+    app: wordpress-pod
+spec:
+  template:
+    metadata:
+      labels:
+        app: wordpress-pod
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: wdpress
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: localhost:3306
+            - name: WORDPRESS_DB_USER
+              value: wordpress
+            - name: WORDPRESS_DB_PASSWORD
+              value: wordpress
+        - name: mysql
+          image: mysql:5.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+              name: dbport
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: rootPassWord
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_USER
+              value: wordpress
+            - name: MYSQL_PASSWORD
+              value: wordpress
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+      volumes:
+        - name: db
+          hostPath:
+            path: /var/lib/mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-pod-service
+  namespace: blog
+spec:
+  type: NodePort
+  selector:
+    app: wordpress
+  ports:
+    - port: 80
+      name: wordpressport
+      protocol: TCP
+      targetPort: wdport
+      #映射外网ip
+      nodePort: 30003
+
+
+
+
