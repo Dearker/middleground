@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: quay.io/external_storage/nfs-client-provisioner:latest
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: fuseim.pri/ifs
+            - name: NFS_SERVER
+              value: 192.168.0.3
+            - name: NFS_PATH
+              value: /opt/k8s-data
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 192.168.0.3
+            path: /opt/k8s-data
