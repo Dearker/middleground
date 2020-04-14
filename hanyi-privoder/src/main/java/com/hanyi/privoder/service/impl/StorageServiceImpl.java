@@ -8,7 +8,6 @@ import com.hanyi.privoder.entity.Storage;
 import com.hanyi.privoder.mapper.StorageMapper;
 import com.hanyi.privoder.service.StorageService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -32,7 +31,6 @@ public class StorageServiceImpl implements StorageService {
      * @param count
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deduct(String commodityCode, int count) {
         if (CommonConstant.PRODUCT.equals(commodityCode)) {
             //throw new RuntimeException("异常:模拟业务异常:Storage branch exception");

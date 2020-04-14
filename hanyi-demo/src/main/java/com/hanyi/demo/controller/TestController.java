@@ -8,9 +8,12 @@ import com.hanyi.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @author weiwenchang
@@ -23,33 +26,36 @@ public class TestController {
     @Autowired
     private TokenService tokenService;
 
-    @Autowired
+    @Resource
+    private DiscoveryClient discoveryClient;
+
+    @Resource
     private PrivoderFeignClient privoderFeignClient;
 
     @GetMapping("/createToken")
-    public String createToken(){
+    public String createToken() {
         return tokenService.createToken();
     }
 
     @GetMapping("/hi")
-    @SentinelResource(value="hi")
-    @ApiOperation(value="熔断测试", notes="Sentinel")
-    public String hi(@RequestParam(value = "name",defaultValue = "hanyi",required = false)String name){
+    @SentinelResource(value = "hi")
+    @ApiOperation(value = "熔断测试", notes = "Sentinel")
+    public String hi(@RequestParam(value = "name", defaultValue = "hanyi", required = false) String name) {
 
-        return "hello "+name;
+        return "hello " + name;
     }
 
     @ApiIdempotent
     @GetMapping("/test")
-    @ApiOperation(value="测试接口", notes="test")
-    public ResponseResult test(){
+    @ApiOperation(value = "测试接口", notes = "test")
+    public ResponseResult test() {
 
         String s = "柯基";
         return ResponseResult.success(s);
     }
 
     @GetMapping("/name")
-    public String getUserName(){
+    public String getUserName() {
         return privoderFeignClient.getUserName();
     }
 

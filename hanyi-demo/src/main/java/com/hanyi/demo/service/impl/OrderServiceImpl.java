@@ -6,7 +6,6 @@ import com.hanyi.demo.mapper.OrderMapper;
 import com.hanyi.demo.service.OrderService;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -34,8 +33,7 @@ public class OrderServiceImpl implements OrderService {
      * @param commodityCode
      * @param count
      */
-    @GlobalTransactional
-    @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void placeOrder(String userId, String commodityCode, Integer count) {
         BigDecimal orderMoney = new BigDecimal(count).multiply(new BigDecimal(5));
@@ -47,7 +45,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderMapper.insert(order);
         privoderFeignClient.deduct(commodityCode, count);
-
     }
 
 

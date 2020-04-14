@@ -42,8 +42,9 @@
 1、nacos
     
     Mac/Linux
-        启动：sh startup.sh -m standalone
-   
+        单机模式启动：sh startup.sh -m standalone
+        集群模式启动：sh startup.sh
+        
     windows
         启动：双击startup.cmd
    
@@ -64,10 +65,35 @@
 3、sentinel
 
     Mac/Linux/windows
-        启动：nohup java -Dserver.port=8488 -Dcsp.sentinel.dashboard.server=114.67.102.137:8488 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.6.3.jar >/dev/null 2>&1 &   
+        启动：nohup java -Xms128m -Xmx128m -Dserver.port=8488 -Dcsp.sentinel.dashboard.server=114.67.102.117:8488 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.7.2.jar >/dev/null 2>&1 &   
     
     参考文档地址：
         https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D
+        
+    sentinel整合nacos进行持久化规则,需要在nacos中配置对应的规则，具体规则定义参考地址
+    http://www.itmuch.com/spring-cloud-alibaba/sentinel-configuration-rule/
+    案例格式如下：
+    
+        [
+            {
+                "resource": "/rateLimit/byUrl",
+                "limitApp": "default",
+                "grade": 1,
+                "count": 1,
+                "strategy": 0,
+                "controlBehavior": 0,
+                "clusterMode": false
+            }
+        ]
+        
+        - resource：资源名
+        - limitApp：流控针对的调用来源，default不区分来源
+        - grade：限流阈值类型(0-根据并发数量来限流 1-根据QPS来进行流量控制)
+        - count：限流阈值
+        - strategy：调用关系限流策略
+        - controlBehavior：流量控制效果(直接拒绝、WarmUP、匀速排队)
+        - clusterMode：是否集群模式
+             
        
 4、xxl-job
 
@@ -135,4 +161,6 @@
     先将master中的~/.kube/config文件的内容复制到需要添加的node中，让node和master可以使用秘钥通信
     在执行命令添加节点：
         kubeadm join 192.168.0.3:6443 --token 8ln737.77grxng35yn6b263 --discovery-token-ca-cert-hash sha256:aada718a2aafdad65bd3dc241d394d64846a38047db10bf45f59c70d587ced74 
+
+
     

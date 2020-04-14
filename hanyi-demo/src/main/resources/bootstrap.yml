@@ -9,14 +9,14 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
+        server-addr: 114.67.102.117:8848
         file-extension: yml
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 114.67.102.117:8848
     sentinel:
       transport:
         port: 8719
-        dashboard: 127.0.0.1:8080
+        dashboard: 114.67.102.117:8080
     #seata 服务分组，要与服务端nacos-config.txt中service.vgroup_mapping的后缀对应
     alibaba:
       seata:
@@ -30,9 +30,10 @@ logging:
     #root: warn
     com.hanyi.demo: debug
 
-feign.sentinel.enabled: true
-# 开启feign熔断器的支持
 feign:
+  # 开启feign熔断器的支持
+  sentinel:
+    enabled: true
   compression:
     # 请求压缩
     request:

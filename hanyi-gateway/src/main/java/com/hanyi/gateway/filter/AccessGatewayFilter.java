@@ -1,8 +1,7 @@
 package com.hanyi.gateway.filter;
 
 import cn.hutool.core.util.StrUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
@@ -23,14 +22,12 @@ import java.util.LinkedHashSet;
  * @author weiwenchang
  */
 @Component
+@Slf4j
 public class AccessGatewayFilter implements GlobalFilter, Ordered {
-
-    private static final Logger log = LoggerFactory.getLogger(AccessGatewayFilter.class);
 
     private static final String GATE_WAY_PREFIX = "/api";
 
     private static final String COMMA = ",";
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
@@ -45,7 +42,7 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
         if (StrUtil.isEmpty(token)){
             //设置响应状态码，提示用户未授权
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            //进行拦截
+            //进行拦截，返回拒绝访问
             return response.setComplete();
         }*/
         //放行请求
@@ -73,7 +70,6 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
         return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
     }
 
-
     /**
      * 返回执行顺序，数字越小，执行顺序越靠前
      * @return
@@ -81,17 +77,6 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
     @Override
     public int getOrder() {
         return 0;
-    }
-
-    /**
-     * 网关抛异常
-     *
-     * @param body
-     * @param code
-     */
-    private Mono<Void> setFailedRequest(ServerWebExchange serverWebExchange, String body, int code) {
-        serverWebExchange.getResponse().setStatusCode(HttpStatus.OK);
-        return serverWebExchange.getResponse().setComplete();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.hanyi.demo.feign;
 
 import com.hanyi.demo.config.FeignConfiguration;
+import com.hanyi.demo.feign.impl.PrivoderFeignClientFallbackFactory;
 import com.hanyi.demo.feign.impl.PrivoderFeignClientImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "hanyi-privoder",
         // 服务降级处理类,调用方如果出现异常也会走该处理类
         //fallback = PrivoderFeignClientImpl.class,
+        //服务异常捕获类
+        fallbackFactory = PrivoderFeignClientFallbackFactory.class,
         //feign客户端配置，日志级别的配置
         configuration = FeignConfiguration.class)
 public interface PrivoderFeignClient {
@@ -27,3 +30,4 @@ public interface PrivoderFeignClient {
     Boolean deduct(@RequestParam("commodityCode") String commodityCode, @RequestParam("count") Integer count);
 
 }
+

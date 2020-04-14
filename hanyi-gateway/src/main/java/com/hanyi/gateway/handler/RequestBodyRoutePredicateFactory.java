@@ -17,8 +17,8 @@
 
 package com.hanyi.gateway.handler;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.handler.AsyncPredicate;
 import org.springframework.cloud.gateway.handler.predicate.AbstractRoutePredicateFactory;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -26,6 +26,7 @@ import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.HandlerStrategies;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ServerWebExchange;
@@ -42,9 +43,9 @@ import static org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilt
  *
  * @author weiwen
  */
+@Slf4j
+@Component
 public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFactory<RequestBodyRoutePredicateFactory.Config> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestBodyRoutePredicateFactory.class);
 
     private static final List<HttpMessageReader<?>> MESSAGE_READERS = HandlerStrategies.withDefaults().messageReaders();
 
@@ -67,8 +68,8 @@ public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFact
                 try {
                     return Mono.just(true);
                 } catch (ClassCastException e) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Predicate test failed because class in predicate does not match the cached body object",
+                    if (log.isDebugEnabled()) {
+                        log.debug("Predicate test failed because class in predicate does not match the cached body object",
                                 e);
                     }
                 }
@@ -103,15 +104,8 @@ public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFact
                 "ReadBodyPredicateFactory is only async.");
     }
 
-    public static class Config {
+    @Data
+    static class Config {
         private String attr;
-
-        public String getAttr() {
-            return attr;
-        }
-
-        public void setAttr(String attr) {
-            this.attr = attr;
-        }
     }
 }
