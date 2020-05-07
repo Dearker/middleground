@@ -3,10 +3,9 @@ package com.hanyi.demo.controller;
 import cn.hutool.core.util.HashUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.hanyi.demo.entity.Address;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +24,8 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/redis")
+@Slf4j
 public class RedisController {
-
-    private static final Logger logger = LoggerFactory.getLogger(RedisController.class);
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -46,11 +44,11 @@ public class RedisController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("redisCache", "韩毅");
 
-        stringRedisTemplate.opsForValue().set(hanyi,jsonObject.toJSONString());
+        stringRedisTemplate.opsForValue().set(hanyi, jsonObject.toJSONString());
 
         Address build = Address.builder().city("1").street("2").zip("3").build();
         stringRedisTemplate.opsForValue().set(String.valueOf(HashUtil.jsHash("韩毅")), build.toString());
-        logger.info("缓存id已生成：{}", hanyi);
+        log.info("缓存id已生成：{}", hanyi);
 
     }
 
@@ -68,30 +66,28 @@ public class RedisController {
                 System.out.println("进入业务代码：" + recordId);
                 lock.unlock();
             } else {
-                Thread.sleep(300);
+                TimeUnit.SECONDS.sleep(3);
             }
         } catch (Exception e) {
-            logger.error("", e);
+            log.error("{}", e.toString());
             lock.unlock();
         }
     }
 
 
     @GetMapping("/setnx")
-    public String setIfAbsentTest(){
+    public String setIfAbsentTest() {
 
         String hanyi = String.valueOf(HashUtil.jsHash("hanyi"));
 
-        if (stringRedisTemplate.hasKey(hanyi)){
+        if (stringRedisTemplate.hasKey(hanyi)) {
             return "已存在缓存";
         } else {
-            stringRedisTemplate.opsForValue().setIfAbsent(hanyi,"123",20,TimeUnit.SECONDS);
+            stringRedisTemplate.opsForValue().setIfAbsent(hanyi, "123", 20, TimeUnit.SECONDS);
             return "生成缓存";
         }
 
     }
-
-
 
 
 }

@@ -48,11 +48,11 @@ public class ConditionTest {
 
     public static void main(String[] args) throws Exception {
         final ConditionTest useCondition = new ConditionTest();
-        Thread t1 = new Thread(() -> useCondition.m1(), "t1");
-        Thread t2 = new Thread(() -> useCondition.m2(), "t2");
-        Thread t3 = new Thread(() -> useCondition.m3(), "t3");
-        Thread t4 = new Thread(() -> useCondition.m4(), "t4");
-        Thread t5 = new Thread(() -> useCondition.m5(), "t5");
+        Thread t1 = new Thread(useCondition::m1, "t1");
+        Thread t2 = new Thread(useCondition::m2, "t2");
+        Thread t3 = new Thread(useCondition::m3, "t3");
+        Thread t4 = new Thread(useCondition::m4, "t4");
+        Thread t5 = new Thread(useCondition::m5, "t5");
 
         t1.start();
         t2.start();

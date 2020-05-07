@@ -7,14 +7,14 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 114.67.102.137:8848
+        server-addr: 114.67.102.117:8848
         file-extension: yml
       discovery:
-        server-addr: 114.67.102.137:8848
+        server-addr: 114.67.102.117:8848
     sentinel:
       transport:
         port: 8719
-        dashboard: 114.67.102.137:8488
+        dashboard: 114.67.102.117:8488
   zipkin:
     base-url: http://114.67.102.137:9411
   main:

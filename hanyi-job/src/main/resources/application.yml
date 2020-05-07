@@ -26,7 +26,7 @@ xxl:
   job:
     accessToken: ''
     admin:
-      addresses: http://114.67.102.137:8088/xxl-job-admin
+      addresses: http://114.67.102.117:8088/xxl-job-admin
     executor:
       appname: xxl-job-executor-sample
       ip: ''

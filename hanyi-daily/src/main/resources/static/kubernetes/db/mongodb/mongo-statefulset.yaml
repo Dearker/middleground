@@ -51,7 +51,7 @@ spec:
     - name: mongodb
       port: 27017
       targetPort: 27017
-      nodePort: 30004
+      nodePort: 27017
   selector:
     name: mongodb
 

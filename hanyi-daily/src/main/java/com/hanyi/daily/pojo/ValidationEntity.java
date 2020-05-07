@@ -38,6 +38,7 @@ import java.sql.Timestamp;
 @Data
 public class ValidationEntity implements Serializable {
 
+    private static final long serialVersionUID = -6867123537464898529L;
     /**
      * 用户名
      */

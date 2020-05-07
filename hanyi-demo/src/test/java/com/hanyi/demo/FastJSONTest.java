@@ -138,7 +138,7 @@ public class FastJSONTest {
     @Test
     public void forTest() {
 
-        Object obj;
+        Object obj = null;
         for (int i = 0; i <= 10; i++) {
             obj = new Object();
         }

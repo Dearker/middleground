@@ -1,8 +1,8 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress-deploy
-  namespace: blog
+  namespace: default
   #该label作用在department上
   labels:
     app: wordpress
@@ -15,6 +15,9 @@ spec:
       maxSurge: 1
       maxUnavailable: 1
   revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: wordpress
   #pod模板
   template:
     metadata:
@@ -40,26 +43,26 @@ spec:
               port: 80
             initialDelaySeconds: 10
             periodSeconds: 3
-          #监听80端口，在容器启动15秒之后检测容器是否可读，每隔10秒检测一次，不可读则从service中移除
+          #监听80端口，在容器启动5秒之后检测容器是否可读，每隔10秒检测一次，不可读则从service中移除
           readinessProbe:
             tcpSocket:
               port: 80
-            initialDelaySeconds: 15
+            initialDelaySeconds: 5
             periodSeconds: 10
           env:
             - name: WORDPRESS_DB_HOST
-              value: mysql-service:3306
+              value: mysql-service:30003
             - name: WORDPRESS_DB_USER
-              value: wordpress
+              value: root
             - name: WORDPRESS_DB_PASSWORD
-              value: wordpress
+              value: "root"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: wordpress-service
-  namespace: blog
+  namespace: default
 spec:
   type: NodePort
   selector:

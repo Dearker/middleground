@@ -22,6 +22,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class User implements Serializable {
 
+    private static final long serialVersionUID = 4958893400046869582L;
+
     private Integer userId;
 
     @NotBlank(message = "用户名称不能为空")

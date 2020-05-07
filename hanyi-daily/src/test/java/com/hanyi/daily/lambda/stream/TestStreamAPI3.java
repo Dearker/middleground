@@ -1,12 +1,6 @@
 package com.hanyi.daily.lambda.stream;
 
-import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -34,7 +28,7 @@ public class TestStreamAPI3 {
 		List<Integer> list = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
 		
 		Integer sum = list.stream()
-			.reduce(0, (x, y) -> x + y);
+			.reduce(0, Integer::sum);
 		
 		System.out.println(sum);
 		
@@ -92,18 +86,15 @@ public class TestStreamAPI3 {
 	@Test
 	public void test4(){
 		Optional<Double> max = emps.stream()
-			.map(Employee::getSalary)
-			.collect(Collectors.maxBy(Double::compare));
+				.map(Employee::getSalary).max(Double::compare);
 		
 		System.out.println(max.get());
 		
-		Optional<Employee> op = emps.stream()
-			.collect(Collectors.minBy((e1, e2) -> Double.compare(e1.getSalary(), e2.getSalary())));
+		Optional<Employee> op = emps.stream().min(Comparator.comparingDouble(Employee::getSalary));
 		
 		System.out.println(op.get());
 		
-		Double sum = emps.stream()
-			.collect(Collectors.summingDouble(Employee::getSalary));
+		Double sum = emps.stream().mapToDouble(Employee::getSalary).sum();
 		
 		System.out.println(sum);
 		
@@ -111,9 +102,8 @@ public class TestStreamAPI3 {
 			.collect(Collectors.averagingDouble(Employee::getSalary));
 		
 		System.out.println(avg);
-		
-		Long count = emps.stream()
-			.collect(Collectors.counting());
+
+		Long count = emps.stream().count();
 		
 		System.out.println(count);
 		
@@ -172,8 +162,7 @@ public class TestStreamAPI3 {
 	@Test
 	public void test9(){
 		Optional<Double> sum = emps.stream()
-			.map(Employee::getSalary)
-			.collect(Collectors.reducing(Double::sum));
+				.map(Employee::getSalary).reduce(Double::sum);
 		
 		System.out.println(sum.get());
 	}

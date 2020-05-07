@@ -2,8 +2,7 @@ package com.hanyi.demo.component;
 import	java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.util.StrUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,9 +18,8 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
+@Slf4j
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
-
-    private static final Logger logger = LoggerFactory.getLogger(RedisKeyExpirationListener.class);
 
 
     @Autowired
@@ -41,12 +39,12 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
 
         String s = message.toString();
 
-        logger.info("过期的key值: {}",s);
+        log.info("过期的key值: {}",s);
 
         if(StrUtil.isNotBlank(s)){
 
             stringRedisTemplate.opsForValue().set(s,"456",20,TimeUnit.SECONDS);
-            logger.info("设置新的缓存成功");
+            log.info("设置新的缓存成功");
         }
 
     }
