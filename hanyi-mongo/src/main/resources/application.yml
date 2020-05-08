@@ -1,0 +1,13 @@
+server:
+  port: 8007
+
+spring:
+  data:
+    mongodb:
+      host: 114.67.102.163
+      port: 27017
+      database: xc_cms
+logging:
+  level:
+    org.springframework.data.mongodb.core: debug
+

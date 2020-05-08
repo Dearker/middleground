@@ -34,6 +34,7 @@
         <module>hanyi-daily</module>
         <module>hanyi-privoder</module>
         <module>hanyi-cache</module>
+        <module>hanyi-mongo</module>
     </modules>
     <packaging>pom</packaging>
 
