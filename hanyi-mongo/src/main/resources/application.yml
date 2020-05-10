@@ -7,6 +7,31 @@ spring:
       host: 114.67.102.163
       port: 27017
       database: xc_cms
+    ##mongo连接池
+      #每个host的最小TCP连接数
+      min-connections-per-host: 10
+      #每个host的最大TCP连接数
+      max-connections-per-host: 100
+      threads-allowed-to-block-for-connection-multiplier: 5
+      server-selection-timeout: 30000
+      max-wait-time: 120000
+      max-connection-idel-time: 0
+      max-connection-life-time: 0
+      # TCP连接超时，毫秒
+      connect-timeout: 10000
+      socket-timeout: 0
+      ssl-enabled: false
+      ssl-invalid-host-name-allowed: false
+      always-use-m-beans: false
+      heartbeat-socket-timeout: 20000
+      heartbeat-connect-timeout: 20000
+      #最小的心跳检测发送频率，单位毫秒
+      min-heartbeat-frequency: 500
+      heartbeat-frequency: 10000
+      local-threshold: 15
+      authentication-database: admin
+
+
 logging:
   level:
     org.springframework.data.mongodb.core: debug

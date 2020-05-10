@@ -1,15 +1,22 @@
 package com.hanyi.mongo.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.hanyi.mongo.pojo.CmsPage;
 import com.hanyi.mongo.repository.CmsPageRepository;
 import com.hanyi.mongo.service.PageService;
+import com.hanyi.mongo.vo.CmsPageStatistics;
 import com.hanyi.mongo.vo.QueryPageRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -26,6 +33,9 @@ public class PageServiceImpl implements PageService {
 
     @Autowired
     private CmsPageRepository cmsPageRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     /**
      * 页面查询方法
@@ -156,6 +166,16 @@ public class PageServiceImpl implements PageService {
         if (optional.isPresent()) {
             cmsPageRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public List<CmsPageStatistics> findListByGroup() {
+        Aggregation aggregation = Aggregation.newAggregation(Aggregation.group("pageType").count().as("count")
+                        .last("pageType").as("type"),
+                Aggregation.project("type", "count"));
+
+        AggregationResults<CmsPageStatistics> jsonObjects = mongoTemplate.aggregate(aggregation, "cms_page", CmsPageStatistics.class);
+        return jsonObjects.getMappedResults();
     }
 
 

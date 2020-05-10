@@ -1,8 +1,12 @@
 package com.hanyi.mongo.service;
 
 import com.hanyi.mongo.pojo.CmsPage;
+import com.hanyi.mongo.vo.CmsPageStatistics;
 import com.hanyi.mongo.vo.QueryPageRequest;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
+
 
 /**
  * @PackAge: middleground com.hanyi.mongo.service
@@ -22,4 +26,6 @@ public interface PageService {
     void update(String id, CmsPage cmsPage);
 
     void delete(String id);
+
+    List<CmsPageStatistics> findListByGroup();
 }

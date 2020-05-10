@@ -162,5 +162,10 @@
     在执行命令添加节点：
         kubeadm join 192.168.0.3:6443 --token 8ln737.77grxng35yn6b263 --discovery-token-ca-cert-hash sha256:aada718a2aafdad65bd3dc241d394d64846a38047db10bf45f59c70d587ced74 
 
-
+3、清理docker占用的磁盘空间
     
+    docker system prune: 用于清理磁盘，删除关闭的容器、无用的数据卷和网络，无tag的镜像
+    
+    docker system prune -a: 可以将没有容器使用Docker镜像删掉
+    
+    查看文档：https://blog.csdn.net/ujm097/article/details/90402158
