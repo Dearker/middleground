@@ -13,7 +13,7 @@ spring:
       #每个host的最大TCP连接数
       max-connections-per-host: 100
       threads-allowed-to-block-for-connection-multiplier: 5
-      server-selection-timeout: 30000
+      server-selection-timeout: 300000
       max-wait-time: 120000
       max-connection-idel-time: 0
       max-connection-life-time: 0

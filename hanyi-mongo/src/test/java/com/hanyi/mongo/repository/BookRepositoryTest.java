@@ -7,6 +7,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import com.hanyi.mongo.MongodbApplicationTests;
 import com.hanyi.mongo.common.thread.InsertTask;
 import com.hanyi.mongo.common.thread.UpdateTask;
+import com.hanyi.mongo.common.thread.WaitTask;
 import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
@@ -20,6 +21,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @PackAge: middleground com.hanyi.mongo.repository
@@ -31,7 +33,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class BookRepositoryTest extends MongodbApplicationTests {
 
-    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(20, 20);
+    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(10, 10);
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -84,25 +86,39 @@ public class BookRepositoryTest extends MongodbApplicationTests {
     }
 
     @Test
-    public void testBatchUpdate() throws InterruptedException {
+    public void testBatchUpdate() {
 
         for (int i = 101; i < 500; i++) {
-            List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)), Book.class);
-            //对2万条数据进行拆分
-            bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
-            List<UpdateTask> updateTaskList = new ArrayList<>(40);
-            int length = bookList.size();
-            for (int j = 0; j < 40; j++) {
 
-                if (length < j * 500 + 500) {
-                    updateTaskList.add(new UpdateTask(bookRepository, bookList.subList(j * 500, j * 500 + 500)));
+            long bookTypeCount = mongoTemplate.count(new Query(Criteria.where("book_type").is(i)), Book.class);
+            System.out.println("获取的类型总数为：" + bookTypeCount);
+            for (int j = 0; j < Math.ceil(bookTypeCount / 500); j++) {
+                if (j == 0) {
+                    List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).limit(500), Book.class);
+                    bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
+                    THREADPOOLEXECUTOR.execute(new UpdateTask(bookRepository, bookList));
                 } else {
-                    updateTaskList.add(new UpdateTask(bookRepository, bookList.subList(j * 500, length)));
+                    List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).skip(j * 500).limit(500), Book.class);
+                    bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
+                    THREADPOOLEXECUTOR.execute(new UpdateTask(bookRepository, bookList));
                 }
             }
-            THREADPOOLEXECUTOR.invokeAll(updateTaskList);
             System.out.println("类型为: " + i + "的数据更新完成");
         }
+
+    }
+
+    @Test
+    public void sleepTest(){
+
+        TimeInterval timer = DateUtil.timer();
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        for (int i = 0; i < 10; i++) {
+            THREADPOOLEXECUTOR.execute(new WaitTask(atomicInteger));
+        }
+        System.out.println("获取的数据："+ atomicInteger.get());
+        System.out.println("总共耗时：" + timer.intervalRestart());
+
     }
 
 }
