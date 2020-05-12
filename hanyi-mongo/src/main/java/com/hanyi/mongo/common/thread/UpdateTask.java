@@ -4,6 +4,7 @@ import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.repository.BookRepository;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @PackAge: middleground com.hanyi.mongo.common.thread
@@ -12,8 +13,7 @@ import java.util.List;
  * @CreateDate: 2020-05-10 22:37
  * @Version: 1.0
  */
-public class UpdateTask implements Runnable {
-
+public class UpdateTask implements Callable<Integer> {
 
     private BookRepository bookRepository;
 
@@ -25,7 +25,8 @@ public class UpdateTask implements Runnable {
     }
 
     @Override
-    public void run() {
+    public Integer call() throws Exception {
         bookRepository.saveAll(bookList);
+        return 1;
     }
 }

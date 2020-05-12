@@ -86,39 +86,42 @@ public class BookRepositoryTest extends MongodbApplicationTests {
     }
 
     @Test
-    public void testBatchUpdate() {
+    public void testBatchUpdate() throws InterruptedException {
 
         for (int i = 101; i < 500; i++) {
 
             long bookTypeCount = mongoTemplate.count(new Query(Criteria.where("book_type").is(i)), Book.class);
             System.out.println("获取的类型总数为：" + bookTypeCount);
-            for (int j = 0; j < Math.ceil(bookTypeCount / 500); j++) {
+
+            int length = (int) Math.ceil(bookTypeCount / 500);
+            List<UpdateTask> updateTaskList = new ArrayList<>(length);
+            for (int j = 0; j < length; j++) {
                 if (j == 0) {
                     List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).limit(500), Book.class);
                     bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
-                    THREADPOOLEXECUTOR.execute(new UpdateTask(bookRepository, bookList));
+                    updateTaskList.add(new UpdateTask(bookRepository, bookList));
                 } else {
                     List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).skip(j * 500).limit(500), Book.class);
                     bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
-                    THREADPOOLEXECUTOR.execute(new UpdateTask(bookRepository, bookList));
+                    updateTaskList.add(new UpdateTask(bookRepository, bookList));
                 }
             }
+            THREADPOOLEXECUTOR.invokeAll(updateTaskList);
             System.out.println("类型为: " + i + "的数据更新完成");
         }
 
     }
 
     @Test
-    public void sleepTest(){
+    public void sleepTest() {
 
         TimeInterval timer = DateUtil.timer();
         AtomicInteger atomicInteger = new AtomicInteger(0);
         for (int i = 0; i < 10; i++) {
             THREADPOOLEXECUTOR.execute(new WaitTask(atomicInteger));
         }
-        System.out.println("获取的数据："+ atomicInteger.get());
+        System.out.println("获取的数据：" + atomicInteger.get());
         System.out.println("总共耗时：" + timer.intervalRestart());
-
     }
 
 }
