@@ -1,17 +1,18 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: mongodb
+  name: mongodb-deploy
+  labels:
+    name: mongodb-deploy
 spec:
   replicas: 1
-  serviceName: mongodb
   selector:
     matchLabels:
-      name: mongodb
+      name: mongodb-pod
   template:
     metadata:
       labels:
-        name: mongodb
+        name: mongodb-pod
     spec:
       containers:
         - name: mongodb
@@ -19,7 +20,7 @@ spec:
           command:
             - sh
             - -c
-            - "exec mongod -f /data/middleware-data/mongodb/conf/mongodb.conf"
+            - "exec mongod -f /data/mongodb/conf/mongodb.conf"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 27017
@@ -27,16 +28,16 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: mongodb-config
-              mountPath: /data/middleware-data/mongodb/conf/
+              mountPath: /data/mongodb/conf/
             - name: data
-              mountPath: /data/middleware-data/mongodb/
+              mountPath: /data/mongodb/
       volumes:
         - name: mongodb-config
           configMap:
             name: mongodb-conf
         - name: data
           hostPath:
-            path: /data/middleware-data/mongodb/
+            path: /data/mongodb/
 
 ---
 kind: Service
@@ -53,5 +54,5 @@ spec:
       targetPort: 27017
       nodePort: 27017
   selector:
-    name: mongodb
+    name: mongodb-pod
 

@@ -4,9 +4,9 @@ metadata:
   name: mongodb-conf
 data:
   mongodb.conf: |
-    dbpath=/data/middleware-data/mongodb
-    logpath=/data/middleware-data/mongodb/mongodb.log
-    pidfilepath=/data/middleware-data/mongodb/master.pid
+    dbpath=/data/mongodb
+    logpath=/data/mongodb/mongodb.log
+    pidfilepath=/data/mongodb/master.pid
     directoryperdb=true
     logappend=true
     bind_ip=0.0.0.0

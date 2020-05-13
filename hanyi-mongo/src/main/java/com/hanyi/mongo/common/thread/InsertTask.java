@@ -35,7 +35,7 @@ public class InsertTask implements Callable<String> {
         List<Book> bookList = new ArrayList<>(COUNT);
         for (int i = 0; i < COUNT; i++) {
             bookList.add(new Book(snowflake.nextId(), RandomUtil.randomString(15),
-                    RandomUtil.randomString(20), i , i, DateUtil.date()));
+                    RandomUtil.randomString(20), i % 100, i, DateUtil.date()));
         }
         mongoTemplate.insertAll(bookList);
         return "插入"+ COUNT+"条数据完成";

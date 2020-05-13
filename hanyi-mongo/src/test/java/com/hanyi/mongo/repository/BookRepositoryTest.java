@@ -52,16 +52,16 @@ public class BookRepositoryTest extends MongodbApplicationTests {
 
         TimeInterval timer = DateUtil.timer();
 
-        for (int j = 0; j < 700; j++) {
+        for (int j = 0; j < 2000; j++) {
 
-            List<InsertTask> insertTaskList = new ArrayList<>(20);
+            List<InsertTask> insertTaskList = new ArrayList<>(10);
 
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 10; i++) {
                 insertTaskList.add(new InsertTask(snowflake, mongoTemplate));
             }
 
             THREADPOOLEXECUTOR.invokeAll(insertTaskList);
-            log.info("插入一万条数据: " + j + "完成");
+            log.info("插入5000条数据: " + j + "完成");
         }
         System.out.println("插入一千万条数据总耗时：" + timer.intervalRestart());
     }

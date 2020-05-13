@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
@@ -62,6 +63,17 @@ public class MongoConfig {
     @Bean
     public MongoTemplate mongoTemplate() {
         return new MongoTemplate(mongoDbFactory());
+    }
+
+    /**
+     * MongoDB事务管理器
+     *
+     * @param factory
+     * @return
+     */
+    @Bean
+    public MongoTransactionManager transactionManager(MongoDbFactory factory) {
+        return new MongoTransactionManager(factory);
     }
 
 }
