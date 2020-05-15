@@ -68,7 +68,7 @@ public class BookRepositoryTest extends MongodbApplicationTests {
 
     @Test
     public void testDelete() {
-        mongoTemplate.remove(new Query().limit(4000), Book.class);
+        mongoTemplate.remove(new Query().limit(40000), Book.class);
     }
 
     @Test
@@ -110,6 +110,12 @@ public class BookRepositoryTest extends MongodbApplicationTests {
             System.out.println("类型为: " + i + "的数据更新完成");
         }
 
+    }
+
+    @Test
+    public void includeTest() {
+        List<Book> bookList = bookService.queryBookByInclude();
+        bookList.forEach(s-> System.out.println("获取的数据：" + s));
     }
 
     @Test

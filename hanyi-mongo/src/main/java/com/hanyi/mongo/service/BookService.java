@@ -1,5 +1,6 @@
 package com.hanyi.mongo.service;
 
+import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface BookService {
      */
     List<BookStatisticsGroupInfo> queryBookByAggregation();
 
+    /**
+     * 查询指定字段
+     *
+     * @return
+     */
+    List<Book> queryBookByInclude();
 }

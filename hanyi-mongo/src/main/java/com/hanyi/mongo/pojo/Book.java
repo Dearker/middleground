@@ -55,7 +55,7 @@ public class Book implements Serializable {
      * 书籍总数
      */
     @Field("book_total")
-    private int bookTotal;
+    private Integer bookTotal;
 
     /**
      * 书籍创建时间

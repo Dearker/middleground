@@ -1,5 +1,6 @@
 package com.hanyi.mongo.service.impl;
 
+import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +41,12 @@ public class BookServiceImpl implements BookService {
         AggregationResults<BookStatisticsGroupInfo> groupInfoAggregationResults = mongoTemplate.aggregate(aggregation, "tb_book", BookStatisticsGroupInfo.class);
 
         return groupInfoAggregationResults.getMappedResults();
+    }
+
+    @Override
+    public List<Book> queryBookByInclude() {
+        Query query = new Query(Criteria.where("book_type").is(0)).limit(10);
+        query.fields().include("book_title").include("book_name");
+        return mongoTemplate.find(query, Book.class);
     }
 }
