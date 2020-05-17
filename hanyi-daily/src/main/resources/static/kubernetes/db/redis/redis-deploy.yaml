@@ -19,7 +19,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
+  name: redis-deploy
   labels:
     app: redis
 spec:
@@ -62,15 +62,15 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           volumeMounts:
-            - name: data
-              mountPath: /data
+            #- name: data
+            #  mountPath: /data
             - name: config
               mountPath:  /usr/local/etc/redis/redis.conf
               subPath: redis.conf
       volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: redis
+        #- name: data
+        #  persistentVolumeClaim:
+        #    claimName: redis
         - name: config
           configMap:
             name: redis-config

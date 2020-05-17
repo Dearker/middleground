@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -82,7 +83,8 @@ public class ArticleRepositoryTest extends MongodbApplicationTests {
         articleRepo.findById(1L).ifPresent(article -> {
             article.setTitle(article.getTitle() + "更新之后的标题");
             article.setUpdateTime(DateUtil.date());
-            articleRepo.save(article);
+            Article save = articleRepo.save(article);
+            System.out.println("更新后的数据："+save);
             log.info("【article】= {}", JSONUtil.toJsonStr(article));
         });
     }
@@ -96,7 +98,7 @@ public class ArticleRepositoryTest extends MongodbApplicationTests {
         articleRepo.deleteById(1L);
 
         // 全部删除
-        articleRepo.deleteAll();
+        //articleRepo.deleteAll();
     }
 
     /**
@@ -153,5 +155,29 @@ public class ArticleRepositoryTest extends MongodbApplicationTests {
         List<Article> articles = articleRepo.findByTitleLike("更新");
         log.info("【articles】= {}", JSONUtil.toJsonStr(articles));
     }
+
+
+    @Test
+    public void pageTest() {
+        List<Article> all = articleRepo.findAll();
+        System.out.println("获取的总数："+ all.size());
+        Pageable pageable = PageRequest.of(2, 5);
+
+        Query query = new Query().with(pageable);
+        List<Article> articleList = mongoTemplate.find(query, Article.class);
+        articleList.forEach(s -> System.out.println("获取的数据: " + s));
+    }
+
+    @Test
+    public void likeTest(){
+        Criteria regex = Criteria.where("title").regex("1");
+        Query query = new Query(regex);
+        List<Article> articles = mongoTemplate.find(query, Article.class);
+
+        articles.forEach(s-> System.out.println("获取的数据："+s));
+
+    }
+
+
 
 }
