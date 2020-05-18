@@ -1,5 +1,6 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -13,6 +14,8 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -103,6 +106,31 @@ public class LoaderTest {
         } finally {
             System.out.println("2222");
         }
+    }
+
+    /**
+     * 将相同对象的不同属性进行复制
+     */
+    @Test
+    public void changeUser(){
+
+        User user = new User(1,"柯基",20);
+
+        User u = new User();
+        //u.setUserId(1);
+        //u.setUserName("哈士奇");
+        u.setUserAge(30);
+
+        Map<String, Object> objectMap = BeanUtil.beanToMap(u);
+        Map<String, Object> bean = BeanUtil.beanToMap(user);
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            if(Objects.isNull(entry.getValue())){
+                entry.setValue(bean.get(entry.getKey()));
+            }
+        }
+        User mapToBean = BeanUtil.mapToBean(objectMap, User.class, true);
+
+        System.out.println(mapToBean);
     }
 
 

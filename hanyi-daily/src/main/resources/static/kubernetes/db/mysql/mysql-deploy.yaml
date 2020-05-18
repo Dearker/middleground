@@ -20,6 +20,13 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
+          resources:
+            limits:
+              cpu: 250m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: mydata
