@@ -150,6 +150,10 @@
 
     docker run --privileged=true -d --name zookeeper --publish 2181:2181 -d zookeeper:3.5.6    
     
+5、sonarQube
+
+    docker run -d -p 9000:9000 -m 1024M --cpus=0.13 -e "SONARQUBE_JDBC_URL=jdbc:postgresql://114.67.102.137:5432/sonarDB" -e "SONARQUBE_JDBC_USERNAME=sonarUser" -e "SONARQUBE_JDBC_PASSWORD=123456" --name sonarqube sonarqube:lts
+    
 ### 使用kubernetes命令
  
 1、查看dashboard令牌(最高权限)

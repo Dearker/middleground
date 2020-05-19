@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube-deploy
+  labels:
+    app: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      initContainers:
+        - name: init-sysctl
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+      containers:
+        - name: sonarqube-lts
+          image: sonarqube:lts
+          ports:
+            - containerPort: 9000
+          env:
+            - name: SONARQUBE_JDBC_USERNAME
+              value: "sonarUser"
+            - name: SONARQUBE_JDBC_PASSWORD
+              value: "123456"
+            - name: SONARQUBE_JDBC_URL
+              value: "jdbc:postgresql://114.67.102.137:5432/sonarDB"
+          #livenessProbe:
+          #  httpGet:
+          #    path: /sessions/new
+          #    port: 9000
+          #  initialDelaySeconds: 60
+          #  periodSeconds: 30
+          #readinessProbe:
+          #  httpGet:
+          #    path: /sessions/new
+          #    port: 9000
+          #  initialDelaySeconds: 60
+          #  periodSeconds: 30
+          #  failureThreshold: 6
+          resources:
+            limits:
+              cpu: 250m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /opt/sonarqube/conf
+              name: data
+              subPath: conf
+            - mountPath: /opt/sonarqube/data
+              name: data
+              subPath: data
+            - mountPath: /opt/sonarqube/extensions
+              name: data
+              subPath: extensions
+      volumes:
+        - name: data
+          hostPath:
+            path: /opt/sonarqube
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube-service
+  labels:
+    app: sonarqube
+spec:
+  type: NodePort
+  ports:
+    - name: sonarqube
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+      nodePort: 9000
+  selector:
+    app: sonarqube
+
+
