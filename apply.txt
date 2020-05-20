@@ -1,0 +1,11 @@
+maven私服：
+http://10.5.24.143:8081/repository/filink-hosted/
+用户名 密码： admin admin123mysql
+8.0.20  10.5.24.236:3307 root Wistron@123  需要使用navicat15连接
+5.6     10.5.24.236:3306 root wistronits@123mongo：
+10.5.24.236:27017 redis
+10.5.24.236:6379  fastdfs
+10.5.24.236:10201 ftp
+10.5.24.236:2341  zookeeper
+10.5.24.236:2181  kafka
+10.5.24.236:9092
