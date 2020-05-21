@@ -14,13 +14,13 @@ spec:
       labels:
         app: sonarqube
     spec:
-      initContainers:
-        - name: init-sysctl
-          image: busybox
-          imagePullPolicy: IfNotPresent
-          command: ["sysctl", "-w", "vm.max_map_count=262144"]
-          securityContext:
-            privileged: true
+      #initContainers:
+      #  - name: init-sysctl
+      #    image: busybox
+      #    imagePullPolicy: IfNotPresent
+      #    command: ["sysctl", "-w", "vm.max_map_count=262144"]
+      #    securityContext:
+      #      privileged: true
       containers:
         - name: sonarqube-lts
           image: sonarqube:lts
@@ -32,7 +32,7 @@ spec:
             - name: SONARQUBE_JDBC_PASSWORD
               value: "123456"
             - name: SONARQUBE_JDBC_URL
-              value: "jdbc:postgresql://postgres-service:5432/sonarDB"
+              value: "jdbc:postgresql://114.67.102.137:5432/sonarDB"
           livenessProbe:
             httpGet:
               path: /sessions/new
@@ -53,20 +53,20 @@ spec:
             requests:
               cpu: 1000m
               memory: 1024Mi
-          volumeMounts:
-            - mountPath: /opt/sonarqube/conf
-              name: data
-              subPath: conf
-            - mountPath: /opt/sonarqube/data
-              name: data
-              subPath: data
-            - mountPath: /opt/sonarqube/extensions
-              name: data
-              subPath: extensions
-      volumes:
-        - name: data
-          hostPath:
-            path: /opt/sonarqube
+          #volumeMounts:
+          #  - mountPath: /opt/sonarqube/conf
+          #    name: data
+          #    subPath: conf
+          #  - mountPath: /opt/sonarqube/data
+          #    name: data
+          #    subPath: data
+          #  - mountPath: /opt/sonarqube/extensions
+          #    name: data
+          #    subPath: extensions
+     #volumes:
+     #  - name: data
+     #    hostPath:
+     #      path: /opt/sonarqube
 
 ---
 apiVersion: v1

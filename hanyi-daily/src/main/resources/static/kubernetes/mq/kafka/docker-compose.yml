@@ -7,6 +7,7 @@ services:
     volumes:
       - "/opt/k8s/application/zookeeper/data:/data"
       - "/opt/k8s/application/zookeeper/datalog:/datalog"
+    mem_limit: 256M
   kafka:
     image: wurstmeister/kafka
     volumes:
@@ -23,6 +24,7 @@ services:
       KAFKA_GROUP_MAX_SESSION_TIMEOUT_MS: 60000
       KAFKA_NUM_PARTITIONS: 3
       KAFKA_DELETE_RETENTION_MS: 1000
+    mem_limit: 512M
   kafka-manager:
     image: sheepkiller/kafka-manager                ## 镜像：开源的web管理kafka集群的界面
     environment:
