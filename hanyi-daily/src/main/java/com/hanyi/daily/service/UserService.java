@@ -3,9 +3,9 @@ package com.hanyi.daily.service;
 import com.hanyi.daily.mapper.one.PrimaryUserMapper;
 import com.hanyi.daily.mapper.two.SecondaryUserMapper;
 import com.hanyi.daily.pojo.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
+    @Resource
     private PrimaryUserMapper primaryUserMapper;
 
-    @Autowired
+    @Resource
     private SecondaryUserMapper secondaryUserMapper;
 
     public List<User> primary() {

@@ -2,9 +2,10 @@ package com.hanyi.daily.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.hanyi.daily.common.config.UserProperty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName: middleground com.hanyi.daily.controller DailyController
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DailyController {
 
-    @Autowired
+    @Resource
     private UserProperty userProperty;
 
     @GetMapping("/test")

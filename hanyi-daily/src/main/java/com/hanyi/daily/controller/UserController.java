@@ -3,12 +3,12 @@ package com.hanyi.daily.controller;
 import com.hanyi.daily.pojo.User;
 import com.hanyi.daily.service.UserService;
 import com.hanyi.framework.model.response.ResponseResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     @GetMapping("primary")

@@ -1,6 +1,6 @@
 package com.hanyi.daily.service.impl;
 
-import com.hanyi.daily.service.SearchDataService;
+import com.hanyi.daily.service.SearchService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,5 +11,10 @@ import org.springframework.stereotype.Service;
  * @Version: 1.0
  */
 @Service
-public class SearchDataServiceImpl implements SearchDataService {
+public class SearchDataServiceImpl implements SearchService {
+
+    @Override
+    public int work() {
+        return 1;
+    }
 }

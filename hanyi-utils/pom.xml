@@ -23,7 +23,7 @@
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.1.1</hutool.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>1.9.5</mockito.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencies>

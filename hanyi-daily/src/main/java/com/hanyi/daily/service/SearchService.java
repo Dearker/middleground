@@ -7,6 +7,11 @@ package com.hanyi.daily.service;
  * @CreateDate: 2020-03-05 23:08
  * @Version: 1.0
  */
-public interface SearchDataService {
+public interface SearchService {
+
+    /**
+     * @return 返回值
+     */
+    int work();
 
 }

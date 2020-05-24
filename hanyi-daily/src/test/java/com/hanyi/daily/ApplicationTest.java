@@ -2,7 +2,7 @@ package com.hanyi.daily;
 
 import com.hanyi.daily.common.aware.SpringAwareComponent;
 import com.hanyi.daily.property.PersonProperty;
-import com.hanyi.daily.service.SearchDataService;
+import com.hanyi.daily.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +53,7 @@ public class ApplicationTest {
     @Test
     public void targetInterfaceImplTest() {
 
-        Map<String, SearchDataService> implementor = springAwareComponent.getTargetInterfaceAllImplementor(SearchDataService.class);
+        Map<String, SearchService> implementor = springAwareComponent.getTargetInterfaceAllImplementor(SearchService.class);
 
         implementor.forEach((k, v) -> {
             System.out.println("获取的实现名称为：" + k);
@@ -61,9 +61,9 @@ public class ApplicationTest {
             System.out.println("获取的所有的接口列表：" + Arrays.asList(interfaces));
             System.out.println("获取的实现类为：" + v);
         });
-        SearchDataService searchDataService = applicationContext.getBean(SearchDataService.class);
-        System.out.println("获取的对象为："+searchDataService);
-        SearchDataService bean = beanFactory.getBean(SearchDataService.class);
+        SearchService searchService = applicationContext.getBean(SearchService.class);
+        System.out.println("获取的对象为："+ searchService);
+        SearchService bean = beanFactory.getBean(SearchService.class);
         System.out.println("获取的bean对象为："+ bean);
     }
 

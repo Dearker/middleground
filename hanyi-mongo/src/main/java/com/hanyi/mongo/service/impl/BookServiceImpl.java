@@ -3,7 +3,6 @@ package com.hanyi.mongo.service.impl;
 import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -12,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
 
-    @Autowired
+    @Resource
     private MongoTemplate mongoTemplate;
 
     @Override

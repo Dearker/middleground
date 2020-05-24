@@ -5,12 +5,17 @@ import com.hanyi.daily.pojo.Person;
 import com.hanyi.daily.service.PersonService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 
@@ -23,19 +28,26 @@ import static org.mockito.Mockito.*;
  * @author wenchangwei@wistronits.com
  * @since 15:31 2020/5/21
  */
+@RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
 
+    /**
+     * mock出来的为代理对象，不会调用真实对象的方法
+     */
+    @Mock
     private PersonDao mockDao;
+
+    /**
+     * InjectMocks出来的为真实的对象，会调用其真实的方法
+     */
+    @InjectMocks
     private PersonService personService;
 
     @Before
-    public void setUp() {
+    public void setup() {
         //模拟PersonDao对象
-        mockDao = mock(PersonDao.class);
         when(mockDao.getPerson(1)).thenReturn(new Person(1, "Person1"));
         when(mockDao.update(isA(Person.class))).thenReturn(true);
-
-        personService = new PersonService(mockDao);
     }
 
     @Test
@@ -92,12 +104,21 @@ public class PersonServiceTest {
         //设置桩
         when(mockedList.get(0)).thenReturn("first");
         when(mockedList.get(1)).thenThrow(new RuntimeException());
+        doThrow(RuntimeException.class).when(mockedList).clear();
+        doNothing().when(mockedList).clear();
+
+        //assertThat(mockedList.get(0),equalTo("first"));
+        try {
+            //这里会抛runtime exception
+            System.out.println(mockedList.get(1));
+            mockedList.clear();
+            fail();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //打印 "first"
         System.out.println(mockedList.get(0));
-
-        //这里会抛runtime exception
-        System.out.println(mockedList.get(1));
 
         //这里会打印 "null" 因为 get(999) 没有设置
         System.out.println(mockedList.get(999));
@@ -118,6 +139,41 @@ public class PersonServiceTest {
         verify(mockedList).get(anyInt());
         //此处测试将不通过，因为没调用get(33)
         verify(mockedList).get(eq(33));
+    }
+
+    @Test
+    public void answerTest(){
+
+        List mockList = mock(List.class);
+
+        assertThat(mockList.get(1),nullValue());
+
+        when(mockList.get(anyInt())).thenAnswer((Answer<String>) invocationOnMock -> {
+            Integer argumentAt = invocationOnMock.getArgumentAt(0, Integer.class);
+            return String.valueOf(argumentAt * 10);
+        });
+
+        assertThat(mockList.get(0),equalTo("0"));
+        assertThat(mockList.get(999),equalTo("9990"));
+    }
+
+    @Test
+    public void compareTest(){
+
+        int i = 10;
+
+        assertThat(i,equalTo(10));
+        assertThat(i,not(equalTo(20)));
+        assertThat(i,is(10));
+        assertThat(i,is(not(20)));
+
+        double price = 23.45;
+
+        assertThat(price,either(equalTo(23.45)).or(equalTo(23.54)));
+        assertThat(price,both(equalTo(23.45)).and(not(equalTo(23.54))));
+
+        assertThat(price,anyOf(is(23.54),is(23.45),is(25.34)));
+        assertThat(price,allOf(is(23.45),not(is(25.23))));
     }
 
 }

@@ -29,4 +29,8 @@ public class PersonService {
         return personDao.update(personUpdate);
     }
 
+    public int function(SearchService searchService){
+        return searchService.work();
+    }
+
 }
