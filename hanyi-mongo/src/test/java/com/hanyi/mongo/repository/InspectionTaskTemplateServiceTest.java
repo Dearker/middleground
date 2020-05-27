@@ -27,7 +27,7 @@ public class InspectionTaskTemplateServiceTest extends MongodbApplicationTests {
     private MongoTemplate mongoTemplate;
 
     @Test
-    public void insert(){
+    public void insert() {
 
         List<InspectionItem> inspectionItemList = new ArrayList<>(1);
         InspectionItem inspectionItem = InspectionItem.builder()
@@ -50,16 +50,16 @@ public class InspectionTaskTemplateServiceTest extends MongodbApplicationTests {
                 .template(template)
                 .build();
 
-        mongoTemplate.insert(inspectionTaskTemplate,"inspection_task_template");
+        mongoTemplate.insert(inspectionTaskTemplate, "inspection_task_template");
     }
 
     @Test
-    public void queryByIdTest(){
+    public void queryByIdTest() {
 
         Query query = new Query(Criteria.where("inspectionTaskId").is("1"));
         InspectionTaskTemplate inspectionTaskTemplate = mongoTemplate.findOne(query, InspectionTaskTemplate.class);
 
-        System.out.println("获取的数据："+inspectionTaskTemplate);
+        System.out.println("获取的数据：" + inspectionTaskTemplate);
 
     }
 
