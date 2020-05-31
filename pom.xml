@@ -35,6 +35,7 @@
         <module>hanyi-privoder</module>
         <module>hanyi-cache</module>
         <module>hanyi-mongo</module>
+        <module>hanyi-kafka</module>
     </modules>
     <packaging>pom</packaging>
 
