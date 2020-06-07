@@ -1,12 +1,15 @@
 package com.hanyi.daily.load;
 
-import java.util.*;
-
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.*;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -137,5 +140,20 @@ public class CollectionTest {
         //根据column获取信息Map<row,value>
         System.out.println(table.column("计算机"));
     }
+
+    /**
+     * 原子类增加和减少
+     */
+    @Test
+    public void AtomicLongTest(){
+
+        AtomicLong atomicLong = new AtomicLong();
+        atomicLong.set(100);
+        atomicLong.incrementAndGet();
+        atomicLong.decrementAndGet();
+
+        System.out.println(atomicLong.get());
+    }
+
 
 }

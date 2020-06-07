@@ -1,8 +1,15 @@
 package com.hanyi.mongo.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.thread.ThreadUtil;
+import com.hanyi.mongo.common.thread.QueryCountTask;
 import com.hanyi.mongo.pojo.Book;
+import com.hanyi.mongo.pojo.many.incloud.QueryStats;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
+import com.mongodb.BasicDBObject;
+import org.bson.conversions.Bson;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -12,7 +19,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @PackAge: middleground com.hanyi.mongo.service.impl
@@ -23,6 +33,8 @@ import java.util.List;
  */
 @Service
 public class BookServiceImpl implements BookService {
+
+    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(10, 10);
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -48,5 +60,91 @@ public class BookServiceImpl implements BookService {
         Query query = new Query(Criteria.where("book_type").is(0)).limit(10);
         query.fields().include("book_title").include("book_name");
         return mongoTemplate.find(query, Book.class);
+    }
+
+    /**
+     * 使用线程池统计
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats threadCount() {
+
+        TimeInterval timer = DateUtil.timer();
+
+        Query query;
+        List<QueryCountTask> queryCountTaskList = new ArrayList<>(2);
+
+        Bson bson = new BasicDBObject();
+
+        mongoTemplate.getCollection("tb_book").countDocuments();
+
+        for (int i = 0; i < 2; i++) {
+            query = new Query(Criteria.where("book_type").gte(i * 20).lt((i + 1) * 20));
+            queryCountTaskList.add(new QueryCountTask(query, mongoTemplate));
+        }
+        Long count = 0L;
+        try {
+            List<Future<Long>> invokeAll = THREADPOOLEXECUTOR.invokeAll(queryCountTaskList);
+            for (Future<Long> longFuture : invokeAll) {
+                count += longFuture.get();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new QueryStats(count,timer.intervalRestart());
+    }
+
+    /**
+     * 批量异步统计
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats countExecAsync() {
+
+        TimeInterval timer = DateUtil.timer();
+
+        Query query = new Query(Criteria.where("book_type").gte(0).lt(10));
+        Future<Long> longFuture = ThreadUtil.execAsync(new QueryCountTask(query, mongoTemplate));
+
+        Query query1 = new Query(Criteria.where("book_type").gte(10).lt(20));
+        Future<Long> longFuture1 = ThreadUtil.execAsync(new QueryCountTask(query1, mongoTemplate));
+
+        Query query2 = new Query(Criteria.where("book_type").gte(20).lt(30));
+        Future<Long> longFuture2 = ThreadUtil.execAsync(new QueryCountTask(query2, mongoTemplate));
+
+        Query query3 = new Query(Criteria.where("book_type").gte(30).lt(40));
+        Future<Long> longFuture3 = ThreadUtil.execAsync(new QueryCountTask(query3, mongoTemplate));
+
+        long count = 0L;
+        try {
+            Long l = longFuture.get();
+            Long l1 = longFuture1.get();
+            Long l2 = longFuture2.get();
+            Long l3 = longFuture3.get();
+
+            count = l + l1 + l2 + l3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new QueryStats(count,timer.intervalRestart());
+    }
+
+    /**
+     * 单线程统计
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats queryCount() {
+
+        TimeInterval timer = DateUtil.timer();
+        Query query = new Query(Criteria.where("book_type").gte(0).lt(40));
+
+        long count = mongoTemplate.count(query, Book.class);
+        return new QueryStats(count,timer.intervalRestart());
     }
 }

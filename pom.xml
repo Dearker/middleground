@@ -36,6 +36,7 @@
         <module>hanyi-cache</module>
         <module>hanyi-mongo</module>
         <module>hanyi-kafka</module>
+        <module>hanyi-hikaricp</module>
     </modules>
     <packaging>pom</packaging>
 

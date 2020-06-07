@@ -6,6 +6,7 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.thread.ThreadUtil;
 import com.hanyi.mongo.MongodbApplicationTests;
 import com.hanyi.mongo.common.thread.InsertTask;
+import com.hanyi.mongo.common.thread.QueryCountTask;
 import com.hanyi.mongo.common.thread.UpdateTask;
 import com.hanyi.mongo.common.thread.WaitTask;
 import com.hanyi.mongo.pojo.Book;
@@ -20,6 +21,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,6 +36,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BookRepositoryTest extends MongodbApplicationTests {
 
     private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(10, 10);
+
+    private static final TimeInterval timer = DateUtil.timer();
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -96,15 +100,15 @@ public class BookRepositoryTest extends MongodbApplicationTests {
             int length = (int) Math.ceil(bookTypeCount / 500);
             List<UpdateTask> updateTaskList = new ArrayList<>(length);
             for (int j = 0; j < length; j++) {
+                List<Book> bookList;
                 if (j == 0) {
-                    List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).limit(500), Book.class);
+                    bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).limit(500), Book.class);
                     bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
-                    updateTaskList.add(new UpdateTask(bookRepository, bookList));
                 } else {
-                    List<Book> bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).skip(j * 500).limit(500), Book.class);
+                    bookList = mongoTemplate.find(new Query(Criteria.where("book_type").is(i)).skip(j * 500).limit(500), Book.class);
                     bookList.forEach(s -> s.setBookType(s.getBookType() % 100));
-                    updateTaskList.add(new UpdateTask(bookRepository, bookList));
                 }
+                updateTaskList.add(new UpdateTask(bookRepository, bookList));
             }
             THREADPOOLEXECUTOR.invokeAll(updateTaskList);
             System.out.println("类型为: " + i + "的数据更新完成");
@@ -115,7 +119,7 @@ public class BookRepositoryTest extends MongodbApplicationTests {
     @Test
     public void includeTest() {
         List<Book> bookList = bookService.queryBookByInclude();
-        bookList.forEach(s-> System.out.println("获取的数据：" + s));
+        bookList.forEach(s -> System.out.println("获取的数据：" + s));
     }
 
     @Test
@@ -129,5 +133,53 @@ public class BookRepositoryTest extends MongodbApplicationTests {
         System.out.println("获取的数据：" + atomicInteger.get());
         System.out.println("总共耗时：" + timer.intervalRestart());
     }
+
+    @Test
+    public void countTest() {
+        TimeInterval timer = DateUtil.timer();
+        Query query = new Query(Criteria.where("book_type").is(0));
+
+        /*query.fields().include("id");
+        List<String> stringList = mongoTemplate.find(query, String.class, "tb_book");
+        //6.6s
+        System.out.println("获取的总数：" + stringList.size());*/
+
+        long count = mongoTemplate.count(query, Book.class);
+        System.out.println("获取的总数：" + count);
+        //4.3s
+        System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void countThreadTest() throws Exception {
+
+        TimeInterval timer = DateUtil.timer();
+        Query query;
+        List<QueryCountTask> queryCountTaskList = new ArrayList<>(7);
+        for (int i = 0; i < 7; i++) {
+            query = new Query(Criteria.where("book_type").gte(i * 10).lt((i + 1) * 10));
+            queryCountTaskList.add(new QueryCountTask(query, mongoTemplate));
+        }
+
+        List<Future<Long>> invokeAll = THREADPOOLEXECUTOR.invokeAll(queryCountTaskList);
+
+        Long count = 0L;
+        for (Future<Long> longFuture : invokeAll) {
+            count += longFuture.get();
+        }
+        System.out.println("获取的总数：" + count);
+        System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void betweenCountTest() {
+        Query query = new Query(Criteria.where("book_type").gte(0).lte(70));
+        long count = mongoTemplate.count(query, Book.class);
+        //7100000
+        System.out.println("获取的总数：" + count);
+        //10860
+        System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
 
 }

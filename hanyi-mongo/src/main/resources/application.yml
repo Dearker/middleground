@@ -4,9 +4,9 @@ server:
 spring:
   data:
     mongodb:
-      host: 114.67.102.163
+      host: localhost
       port: 27017
-      database: xc_cms
+      database: demo
     ##mongo连接池
       #每个host的最小TCP连接数
       min-connections-per-host: 10

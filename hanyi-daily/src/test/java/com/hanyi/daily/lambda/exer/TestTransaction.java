@@ -1,13 +1,13 @@
 package com.hanyi.daily.lambda.exer;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class TestTransaction {
 	
@@ -81,7 +81,7 @@ public class TestTransaction {
 		transactions.stream()
 					.map((t) -> t.getTrader().getName())
 					.flatMap(TestTransaction::filterCharacter)
-					.sorted((s1, s2) -> s1.compareToIgnoreCase(s2))
+					.sorted(String::compareToIgnoreCase)
 					.forEach(System.out::print);
 	}
 	
@@ -121,7 +121,7 @@ public class TestTransaction {
 	@Test
 	public void test7(){
 		Optional<Integer> max = transactions.stream()
-					.map((t) -> t.getValue())
+					.map(Transaction::getValue)
 					.max(Integer::compare);
 		
 		System.out.println(max.get());

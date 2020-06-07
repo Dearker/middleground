@@ -3,9 +3,10 @@ package com.hanyi.mongo.controller;
 import com.hanyi.mongo.pojo.CmsPage;
 import com.hanyi.mongo.service.PageService;
 import com.hanyi.mongo.vo.QueryPageRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @PackAge: middleground com.hanyi.mongo.controller
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CmsPageController {
 
-    @Autowired
+    @Resource
     private PageService pageService;
 
     @GetMapping("/list/{page}/{size}")

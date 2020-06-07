@@ -21,9 +21,9 @@ public class InsertTask implements Callable<String> {
 
     private static final int COUNT = 500;
 
-    private Snowflake snowflake;
+    private final Snowflake snowflake;
 
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     public InsertTask(Snowflake snowflake, MongoTemplate mongoTemplate) {
         this.snowflake = snowflake;

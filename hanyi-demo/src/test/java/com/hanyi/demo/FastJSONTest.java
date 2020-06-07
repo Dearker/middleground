@@ -171,7 +171,7 @@ public class FastJSONTest {
     public void removeIfTest(){
 
         List<String> stringList = new ArrayList<> ();
-        stringList.add("");
+        stringList.add(StrUtil.EMPTY);
         stringList.add("1");
 
         stringList.removeIf(StrUtil::isEmpty);
