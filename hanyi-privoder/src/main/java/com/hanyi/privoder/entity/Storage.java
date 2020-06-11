@@ -18,6 +18,8 @@ import java.io.Serializable;
 @TableName("storage_tbl")
 public class Storage implements Serializable {
 
+    private static final long serialVersionUID = 9193363886701084194L;
+
     private Long id;
     private String commodityCode;
     private Long count;

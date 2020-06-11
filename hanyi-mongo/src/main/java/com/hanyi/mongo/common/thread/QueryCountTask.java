@@ -1,6 +1,5 @@
 package com.hanyi.mongo.common.thread;
 
-import com.hanyi.mongo.pojo.Book;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -27,6 +26,6 @@ public class QueryCountTask implements Callable<Long> {
 
     @Override
     public Long call() {
-        return mongoTemplate.count(query, Book.class);
+        return mongoTemplate.count(query, "tb_book");
     }
 }

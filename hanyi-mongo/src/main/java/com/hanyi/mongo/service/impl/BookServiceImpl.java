@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(10, 10);
+    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(8, 8);
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -73,16 +73,17 @@ public class BookServiceImpl implements BookService {
         TimeInterval timer = DateUtil.timer();
 
         Query query;
-        List<QueryCountTask> queryCountTaskList = new ArrayList<>(2);
+        List<QueryCountTask> queryCountTaskList = new ArrayList<>(4);
 
         Bson bson = new BasicDBObject();
 
         mongoTemplate.getCollection("tb_book").countDocuments();
 
-        for (int i = 0; i < 2; i++) {
-            query = new Query(Criteria.where("book_type").gte(i * 20).lt((i + 1) * 20));
+        for (int i = 0; i < 4; i++) {
+            query = new Query(Criteria.where("book_type").gte(i * 10).lt((i + 1) * 10));
             queryCountTaskList.add(new QueryCountTask(query, mongoTemplate));
         }
+
         Long count = 0L;
         try {
             List<Future<Long>> invokeAll = THREADPOOLEXECUTOR.invokeAll(queryCountTaskList);
@@ -93,7 +94,9 @@ public class BookServiceImpl implements BookService {
             e.printStackTrace();
         }
 
-        return new QueryStats(count,timer.intervalRestart());
+        System.out.println("耗时：" + timer.interval());
+
+        return new QueryStats(count, timer.intervalRestart());
     }
 
     /**
@@ -130,7 +133,7 @@ public class BookServiceImpl implements BookService {
             e.printStackTrace();
         }
 
-        return new QueryStats(count,timer.intervalRestart());
+        return new QueryStats(count, timer.intervalRestart());
     }
 
     /**
@@ -145,6 +148,6 @@ public class BookServiceImpl implements BookService {
         Query query = new Query(Criteria.where("book_type").gte(0).lt(40));
 
         long count = mongoTemplate.count(query, Book.class);
-        return new QueryStats(count,timer.intervalRestart());
+        return new QueryStats(count, timer.intervalRestart());
     }
 }

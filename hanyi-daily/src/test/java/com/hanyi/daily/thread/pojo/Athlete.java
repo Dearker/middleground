@@ -1,6 +1,7 @@
 package com.hanyi.daily.thread.pojo;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author weiwenchang
@@ -8,16 +9,16 @@ import java.util.concurrent.Callable;
  */
 public class Athlete implements Callable<Integer> {
 
-    private Integer name;
+    private final Integer name;
 
-    public Athlete( Integer name) {
+    public Athlete(Integer name) {
         this.name = name;
     }
 
     @Override
     public Integer call() throws Exception {
-        System.out.println(Thread.currentThread().getName()+"柯基："+name+" 号" + "就位");
-        Thread.sleep(1000);
+        System.out.println(Thread.currentThread().getName() + "柯基：" + name + " 号" + "就位");
+        TimeUnit.SECONDS.sleep(1);
         return name;
     }
 }
