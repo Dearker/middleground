@@ -52,6 +52,18 @@ public class LoaderTest {
     }
 
     /**
+     * 获取CPU核心数
+     * <p>
+     * CPU 密集型：线程数量 = cpu核心数量
+     * IO 密集型：线程数量 = cpu核心数量 * 2
+     */
+    @Test
+    public void getCpuCountTest() {
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        System.out.println(availableProcessors);
+    }
+
+    /**
      * 根据字节码获取其对应的对象
      */
     @Test
@@ -72,7 +84,7 @@ public class LoaderTest {
 
         User person = new User();
         person.setUserAge(12);
-        List common = this.buildParams(person);
+        List<Serializable> common = this.buildParams(person);
 
         System.out.println(common);
     }
@@ -112,9 +124,9 @@ public class LoaderTest {
      * 将相同对象的不同属性进行复制
      */
     @Test
-    public void changeUser(){
+    public void changeUser() {
 
-        User user = new User(1,"柯基",20);
+        User user = new User(1, "柯基", 20);
 
         User u = new User();
         //u.setUserId(1);
@@ -124,7 +136,7 @@ public class LoaderTest {
         Map<String, Object> objectMap = BeanUtil.beanToMap(u);
         Map<String, Object> bean = BeanUtil.beanToMap(user);
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
-            if(Objects.isNull(entry.getValue())){
+            if (Objects.isNull(entry.getValue())) {
                 entry.setValue(bean.get(entry.getKey()));
             }
         }

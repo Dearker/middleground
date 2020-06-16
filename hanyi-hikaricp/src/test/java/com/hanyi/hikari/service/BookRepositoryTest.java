@@ -48,7 +48,7 @@ public class BookRepositoryTest extends ApplicationTest {
 
             List<BatchInsertTask> insertTaskList = new ArrayList<>(10);
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 11; i++) {
                 insertTaskList.add(new BatchInsertTask(snowflake, bookDao));
             }
 
