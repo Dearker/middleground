@@ -5,10 +5,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.thread.ThreadUtil;
 import com.hanyi.mongo.MongodbApplicationTests;
-import com.hanyi.mongo.common.thread.InsertTask;
-import com.hanyi.mongo.common.thread.QueryCountTask;
-import com.hanyi.mongo.common.thread.UpdateTask;
-import com.hanyi.mongo.common.thread.WaitTask;
+import com.hanyi.mongo.common.thread.*;
 import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
@@ -21,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -179,6 +177,53 @@ public class BookRepositoryTest extends MongodbApplicationTests {
         System.out.println("获取的总数：" + count);
         //10860
         System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void queryTest() {
+
+        Query query = new Query(Criteria.where("_id").is(1273431166254452737L));
+        query.fields().include("book_name");
+        List<Book> bookList = mongoTemplate.find(query, Book.class);
+        System.out.println(bookList);
+
+        List<String> stringList = mongoTemplate.find(query, String.class, "tb_book");
+        stringList.forEach(System.out::println);
+    }
+
+    @Test
+    public void queryListTest() {
+        TimeInterval timer = DateUtil.timer();
+        Query query = new Query(Criteria.where("book_type").gte(0).lte(1));
+
+        query.fields().include("_id");
+        List<String> stringList = mongoTemplate.find(query, String.class, "tb_book");
+        System.out.println("总数为：" + stringList.size());
+        //24224
+        System.out.println("消耗的时间：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void queryThreadTest() throws InterruptedException, ExecutionException {
+
+        TimeInterval timer = DateUtil.timer();
+        List<QueryTask> queryTaskList = new ArrayList<>(2);
+
+        Query query;
+        for (int i = 0; i < 2; i++) {
+            query = new Query(Criteria.where("book_type").is(i));
+            query.fields().include("_id");
+            queryTaskList.add(new QueryTask(query, mongoTemplate));
+        }
+
+        List<Future<List<String>>> futureList = THREADPOOLEXECUTOR.invokeAll(queryTaskList);
+
+        int count = 0;
+        for (Future<List<String>> listFuture : futureList) {
+            count += listFuture.get().size();
+        }
+        System.out.println("获取的总数：" + count);
+        System.out.println("消耗的时间：" + timer.intervalRestart());
     }
 
 

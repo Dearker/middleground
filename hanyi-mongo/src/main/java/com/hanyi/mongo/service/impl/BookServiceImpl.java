@@ -4,12 +4,11 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
 import com.hanyi.mongo.common.thread.QueryCountTask;
+import com.hanyi.mongo.common.thread.QueryTask;
 import com.hanyi.mongo.pojo.Book;
 import com.hanyi.mongo.pojo.many.incloud.QueryStats;
 import com.hanyi.mongo.service.BookService;
 import com.hanyi.mongo.vo.BookStatisticsGroupInfo;
-import com.mongodb.BasicDBObject;
-import org.bson.conversions.Bson;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -74,10 +73,6 @@ public class BookServiceImpl implements BookService {
 
         Query query;
         List<QueryCountTask> queryCountTaskList = new ArrayList<>(4);
-
-        Bson bson = new BasicDBObject();
-
-        mongoTemplate.getCollection("tb_book").countDocuments();
 
         for (int i = 0; i < 4; i++) {
             query = new Query(Criteria.where("book_type").gte(i * 10).lt((i + 1) * 10));
@@ -148,6 +143,53 @@ public class BookServiceImpl implements BookService {
         Query query = new Query(Criteria.where("book_type").gte(0).lt(40));
 
         long count = mongoTemplate.count(query, Book.class);
+        return new QueryStats(count, timer.intervalRestart());
+    }
+
+    /**
+     * 查询集合总数
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats queryList() {
+
+        TimeInterval timer = DateUtil.timer();
+        Query query = new Query(Criteria.where("book_type").gte(0).lte(1));
+
+        query.fields().include("_id");
+        List<String> stringList = mongoTemplate.find(query, String.class, "tb_book");
+
+        return new QueryStats(stringList.size(), timer.intervalRestart());
+    }
+
+    /**
+     * 多个线程查询总数
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats queryThread() {
+        TimeInterval timer = DateUtil.timer();
+        List<QueryTask> queryTaskList = new ArrayList<>(2);
+
+        Query query;
+        for (int i = 0; i < 2; i++) {
+            query = new Query(Criteria.where("book_type").is(i));
+            query.fields().include("_id");
+            queryTaskList.add(new QueryTask(query, mongoTemplate));
+        }
+
+        int count = 0;
+        try {
+            List<Future<List<String>>> futureList = THREADPOOLEXECUTOR.invokeAll(queryTaskList);
+            for (Future<List<String>> listFuture : futureList) {
+                count += listFuture.get().size();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return new QueryStats(count, timer.intervalRestart());
     }
 }

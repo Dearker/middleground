@@ -50,4 +50,18 @@ public interface BookService {
      * @return 返回总数
      */
     QueryStats queryCount();
+
+    /**
+     * 查询集合总数
+     *
+     * @return 返回总数
+     */
+    QueryStats queryList();
+
+    /**
+     * 多个线程查询总数
+     *
+     * @return 返回总数
+     */
+    QueryStats queryThread();
 }

@@ -38,5 +38,14 @@ public class BookController {
         return bookService.queryCount();
     }
 
+    @GetMapping("/queryList")
+    public QueryStats queryList(){
+        return bookService.queryList();
+    }
+
+    @GetMapping("/queryThread")
+    public QueryStats queryThread(){
+        return bookService.queryThread();
+    }
 
 }
