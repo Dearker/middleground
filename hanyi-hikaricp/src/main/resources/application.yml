@@ -34,5 +34,7 @@ mybatis-plus:
   # 原生配置
   configuration:
     map-underscore-to-camel-case: true
-    cache-enabled: true
+    #禁用一级缓存
+    cache-enabled: false
+    local-cache-scope: statement
 

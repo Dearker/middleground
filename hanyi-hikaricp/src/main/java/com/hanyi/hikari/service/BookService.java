@@ -2,6 +2,7 @@ package com.hanyi.hikari.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hanyi.hikari.pojo.Book;
+import com.hanyi.hikari.vo.QueryStats;
 
 import java.util.List;
 
@@ -22,4 +23,17 @@ public interface BookService extends IService<Book> {
      */
     List<Book> findBookList();
 
+    /**
+     * 统计查询
+     *
+     * @return 返回查询的结果
+     */
+    QueryStats queryCount();
+
+    /**
+     * 多线程统计
+     *
+     * @return 返回查询的结果
+     */
+    QueryStats queryThreadCount();
 }
