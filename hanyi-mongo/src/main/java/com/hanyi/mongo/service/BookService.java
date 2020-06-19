@@ -64,4 +64,18 @@ public interface BookService {
      * @return 返回总数
      */
     QueryStats queryThread();
+
+    /**
+     * 查询相同条件
+     *
+     * @return 返回总数
+     */
+    QueryStats queryCountSame();
+
+    /**
+     * 多线程查询相同条件
+     *
+     * @return 返回总数
+     */
+    QueryStats queryCountThreadSame();
 }

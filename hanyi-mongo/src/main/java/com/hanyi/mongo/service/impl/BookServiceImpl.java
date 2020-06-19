@@ -155,12 +155,15 @@ public class BookServiceImpl implements BookService {
     public QueryStats queryList() {
 
         TimeInterval timer = DateUtil.timer();
-        Query query = new Query(Criteria.where("book_type").gte(0).lte(1));
+        Query query = new Query(Criteria.where("book_type").is(0));
 
         query.fields().include("_id");
         List<String> stringList = mongoTemplate.find(query, String.class, "tb_book");
+        List<String> strings = mongoTemplate.find(query, String.class, "tb_book");
 
-        return new QueryStats(stringList.size(), timer.intervalRestart());
+        int count = stringList.size() + strings.size();
+
+        return new QueryStats(count, timer.intervalRestart());
     }
 
     /**
@@ -174,17 +177,66 @@ public class BookServiceImpl implements BookService {
         List<QueryTask> queryTaskList = new ArrayList<>(2);
 
         Query query;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             query = new Query(Criteria.where("book_type").is(i));
             query.fields().include("_id");
             queryTaskList.add(new QueryTask(query, mongoTemplate));
         }
+
+        Query type = new Query(Criteria.where("book_type").is(0));
+        type.fields().include("_id");
+        queryTaskList.add(new QueryTask(type, mongoTemplate));
+
 
         int count = 0;
         try {
             List<Future<List<String>>> futureList = THREADPOOLEXECUTOR.invokeAll(queryTaskList);
             for (Future<List<String>> listFuture : futureList) {
                 count += listFuture.get().size();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new QueryStats(count, timer.intervalRestart());
+    }
+
+    /**
+     * 查询相同条件
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats queryCountSame() {
+        TimeInterval timer = DateUtil.timer();
+        Query query = new Query(Criteria.where("book_type").is(0));
+        long count = mongoTemplate.count(query, Book.class);
+        long count1 = mongoTemplate.count(query, Book.class);
+
+        long total = count + count1;
+        return new QueryStats(total, timer.intervalRestart());
+    }
+
+    /**
+     * 多线程查询相同条件
+     *
+     * @return 返回总数
+     */
+    @Override
+    public QueryStats queryCountThreadSame() {
+        TimeInterval timer = DateUtil.timer();
+        List<QueryCountTask> queryCountTaskList = new ArrayList<>(2);
+
+        Query query = new Query(Criteria.where("book_type").is(0));
+        QueryCountTask queryCountTask = new QueryCountTask(query, mongoTemplate);
+        queryCountTaskList.add(queryCountTask);
+        queryCountTaskList.add(queryCountTask);
+
+        long count = 0L;
+        try {
+            List<Future<Long>> invokeAll = THREADPOOLEXECUTOR.invokeAll(queryCountTaskList);
+            for (Future<Long> longFuture : invokeAll) {
+                count += longFuture.get();
             }
         } catch (Exception e) {
             e.printStackTrace();

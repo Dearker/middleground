@@ -24,28 +24,38 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/threadCount")
-    public QueryStats threadCount(){
+    public QueryStats threadCount() {
         return bookService.threadCount();
     }
 
     @GetMapping("/countExecAsync")
-    public QueryStats countExecAsync(){
+    public QueryStats countExecAsync() {
         return bookService.countExecAsync();
     }
 
     @GetMapping("/queryCount")
-    public QueryStats queryCount(){
+    public QueryStats queryCount() {
         return bookService.queryCount();
     }
 
     @GetMapping("/queryList")
-    public QueryStats queryList(){
+    public QueryStats queryList() {
         return bookService.queryList();
     }
 
     @GetMapping("/queryThread")
-    public QueryStats queryThread(){
+    public QueryStats queryThread() {
         return bookService.queryThread();
+    }
+
+    @GetMapping("/queryCountSame")
+    public QueryStats queryCountSame() {
+        return bookService.queryCountSame();
+    }
+
+    @GetMapping("/queryCountThreadSame")
+    public QueryStats queryCountThreadSame() {
+        return bookService.queryCountThreadSame();
     }
 
 }
