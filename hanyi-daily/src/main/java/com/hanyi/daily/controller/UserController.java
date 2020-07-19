@@ -5,6 +5,7 @@ import com.hanyi.daily.service.UserService;
 import com.hanyi.framework.model.response.ResponseResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,6 +51,11 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseResult getUser(@Validated @RequestBody User user){
+        return ResponseResult.success(user);
+    }
+
+    @PostMapping("/save")
+    public ResponseResult saveUser(@RequestBody User user){
         return ResponseResult.success(user);
     }
 
