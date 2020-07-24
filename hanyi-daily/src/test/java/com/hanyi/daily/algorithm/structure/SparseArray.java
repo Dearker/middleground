@@ -1,4 +1,4 @@
-package com.hanyi.daily.algorithm;
+package com.hanyi.daily.algorithm.structure;
 
 import org.junit.Test;
 

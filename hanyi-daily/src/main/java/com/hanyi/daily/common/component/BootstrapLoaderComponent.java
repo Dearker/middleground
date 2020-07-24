@@ -1,5 +1,6 @@
 package com.hanyi.daily.common.component;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +11,13 @@ import org.springframework.stereotype.Component;
  * @CreateDate: 2020-03-01 11:41
  * @Version: 1.0
  */
+@Slf4j
 @Component
 public class BootstrapLoaderComponent implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        log.info("BootstrapLoaderComponent load finished");
     }
-
 
 }

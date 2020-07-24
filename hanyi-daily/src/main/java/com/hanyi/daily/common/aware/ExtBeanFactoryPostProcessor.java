@@ -1,5 +1,6 @@
 package com.hanyi.daily.common.aware;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -14,6 +15,7 @@ import java.util.Arrays;
  * @CreateDate: 2020-03-08 10:33
  * @Version: 1.0
  */
+@Slf4j
 @Component
 public class ExtBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
@@ -27,7 +29,7 @@ public class ExtBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
         int count = configurableListableBeanFactory.getBeanDefinitionCount();
         String[] names = configurableListableBeanFactory.getBeanDefinitionNames();
-        System.out.println("当前BeanFactory中有" + count + " 个Bean");
-        System.out.println(Arrays.asList(names));
+        log.info("当前BeanFactory中有" + count + " 个Bean");
+        log.info(Arrays.asList(names).toString());
     }
 }
