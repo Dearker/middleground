@@ -1,0 +1,20 @@
+server:
+  port: 8009
+  servlet:
+    context-path: /hanyi-ordinary
+
+#日志級別
+logging:
+  level:
+    root: info
+
+
+#开启自动配置的日志报告
+#debug: true
+
+#线程池配置
+business:
+  thread-pool-executor:
+    corePoolSize: 5
+    maxPoolSize: 5
+    threadNamePrefix: hanyi
