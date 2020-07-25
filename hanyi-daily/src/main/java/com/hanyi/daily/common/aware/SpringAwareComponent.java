@@ -1,5 +1,6 @@
 package com.hanyi.daily.common.aware;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @CreateDate: 2020-03-03 22:42
  * @Version: 1.0
  */
+@Slf4j
 @Component
 public class SpringAwareComponent implements ApplicationContextAware, BeanNameAware, EmbeddedValueResolverAware {
 
@@ -33,7 +35,7 @@ public class SpringAwareComponent implements ApplicationContextAware, BeanNameAw
      */
     @Override
     public void setBeanName(String s) {
-        System.out.println("获取当前组件的名称" + s);
+        log.info("获取当前组件的名称: {}", s);
     }
 
     /**
@@ -56,7 +58,7 @@ public class SpringAwareComponent implements ApplicationContextAware, BeanNameAw
     public void setEmbeddedValueResolver(StringValueResolver stringValueResolver) {
         this.stringValueResolver = stringValueResolver;
         String resolveStringValue = stringValueResolver.resolveStringValue("你好 ${os.name} 我是 #{20*18}");
-        System.out.println("解析的字符串：" + resolveStringValue);
+        log.info("解析的字符串：" + resolveStringValue);
     }
 
     /**
@@ -86,7 +88,7 @@ public class SpringAwareComponent implements ApplicationContextAware, BeanNameAw
      */
     @EventListener(classes = {ApplicationEvent.class})
     public void listener(ApplicationEvent event) {
-        System.out.println("SpringAwareComponent。。监听到的事件：" + event);
+        log.info("SpringAwareComponent。。监听到的事件：{}", event);
     }
 
 }

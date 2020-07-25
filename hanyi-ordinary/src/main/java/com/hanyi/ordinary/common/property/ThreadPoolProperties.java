@@ -1,4 +1,4 @@
-package com.hanyi.daily.common.property;
+package com.hanyi.ordinary.common.property;
 
 import lombok.Getter;
 import lombok.Setter;

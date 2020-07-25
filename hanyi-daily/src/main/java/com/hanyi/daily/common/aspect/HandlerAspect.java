@@ -1,5 +1,6 @@
 package com.hanyi.daily.common.aspect;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  * @CreateDate: 2020-02-04 15:32
  * @Version: 1.0
  */
+@Slf4j
 @Aspect
 @Component
 public class HandlerAspect {
@@ -27,16 +29,16 @@ public class HandlerAspect {
 
     @Around("methodPointCut() && requestMapping()")
     public Object handlerControllerMethod(ProceedingJoinPoint point) throws Throwable {
-        System.out.println("time aspect start");
+        log.info("time aspect start");
         long start = System.currentTimeMillis();
         Object[] args = point.getArgs();
         for (Object obj : args) {
-            System.out.println("arg is:"+obj);
+            log.info("arg is:"+obj);
         }
         //具体方法的返回值
         Object obj = point.proceed();
-        System.out.println("aspect 耗时："+(System.currentTimeMillis()-start));
-        System.out.println("time aspect end");
+        log.info("aspect 耗时："+(System.currentTimeMillis()-start));
+        log.info("time aspect end");
         return obj;
     }
 

@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * @ClassName: middleground com.hanyi.daily DailyApplication
- * @Author: weiwenchang
+ * @Author: weiwenchang 普通
  * @Description:
  * @CreateDate: 2020-02-04 15:23
  * @Version: 1.0

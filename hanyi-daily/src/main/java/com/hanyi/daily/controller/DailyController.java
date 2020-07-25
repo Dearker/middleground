@@ -2,6 +2,7 @@ package com.hanyi.daily.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.hanyi.daily.common.config.UserProperty;
+import com.hanyi.daily.pojo.Company;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,11 @@ public class DailyController {
     @GetMapping("/property")
     public Dict getProps(){
         return Dict.create().set("userProperty",userProperty);
+    }
+
+    @GetMapping("/name")
+    public Company getName(){
+        return new Company();
     }
 
 }
