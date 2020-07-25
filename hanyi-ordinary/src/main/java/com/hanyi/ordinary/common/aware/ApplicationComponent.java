@@ -42,4 +42,9 @@ public class ApplicationComponent implements ApplicationContextAware {
         return applicationContext.getBeansOfType(clazz);
     }
 
+    public ApplicationContext getApplicationContext(){
+        return applicationContext;
+    }
+
+
 }

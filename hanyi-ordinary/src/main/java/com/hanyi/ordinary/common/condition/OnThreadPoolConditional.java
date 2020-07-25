@@ -2,13 +2,19 @@ package com.hanyi.ordinary.common.condition;
 
 
 import cn.hutool.core.collection.CollUtil;
-import com.hanyi.ordinary.common.annotation.ConditionalOnThreadPool;
+import cn.hutool.core.util.ClassLoaderUtil;
+import cn.hutool.core.util.StrUtil;
+import com.hanyi.ordinary.common.annotation.EnableThreadPool;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.MultiValueMap;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,11 +33,28 @@ public class OnThreadPoolConditional implements Condition {
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+        for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
+            if (!StrUtil.contains(beanDefinitionName, StrUtil.DOT)) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+                String beanClassName = beanDefinition.getBeanClassName();
 
-        List<String> candidateList = this.getCandidates(metadata, ConditionalOnThreadPool.class);
+                Class<?> clazz = ClassLoaderUtil.loadClass(beanClassName);
 
-        if(CollUtil.isNotEmpty(candidateList)){
-            return true;
+                EnableThreadPool annotation = AnnotationUtils.findAnnotation(clazz, EnableThreadPool.class);
+                if (Objects.nonNull(annotation)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean includeAnnotation(Class<?> clazz, Annotation annotation) {
+        for (Annotation a : clazz.getAnnotations()) {
+            if (a.annotationType().equals(annotation.annotationType())) {
+                return true;
+            }
         }
         return false;
     }
@@ -47,12 +70,11 @@ public class OnThreadPoolConditional implements Condition {
     }
 
     private void addAll(List<String> list, List<Object> itemsToAdd) {
-        if (itemsToAdd != null) {
+        if (CollUtil.isNotEmpty(itemsToAdd)) {
             for (Object item : itemsToAdd) {
                 Collections.addAll(list, (String[]) item);
             }
         }
     }
-
 
 }

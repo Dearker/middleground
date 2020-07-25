@@ -1,7 +1,7 @@
 package com.hanyi.ordinary.common.selector;
 
 import cn.hutool.core.util.StrUtil;
-import com.hanyi.ordinary.pojo.ThreadPoolBean;
+import com.hanyi.ordinary.common.annotation.EnableThreadPool;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -19,8 +19,6 @@ import java.util.Set;
  */
 public class ThreadPoolConfigurationImportSelector implements ImportBeanDefinitionRegistrar {
 
-    private static final String ANNOTATION = "EnableThreadPool";
-
     /**
      * 向容器中注入bean对象
      *
@@ -30,14 +28,13 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
         Set<String> annotationTypes = annotationMetadata.getAnnotationTypes();
+        Class<ThreadPoolConfigurationImportSelector> clazz = ThreadPoolConfigurationImportSelector.class;
         annotationTypes.forEach(s -> {
-            if (s.contains(ANNOTATION)) {
-                Class<ThreadPoolBean> clazz = ThreadPoolBean.class;
-                //AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.rootBeanDefinition(clazz).getBeanDefinition();
+            if (s.contains(EnableThreadPool.class.getSimpleName())) {
                 RootBeanDefinition beanDefinition = new RootBeanDefinition(clazz);
                 beanDefinition.setSynthetic(true);
-                String simpleName = StrUtil.lowerFirst(clazz.getSimpleName());
-                registry.registerBeanDefinition(simpleName, beanDefinition);
+                String lowerFirst = StrUtil.lowerFirst(clazz.getSimpleName());
+                registry.registerBeanDefinition(lowerFirst, beanDefinition);
             }
         });
     }

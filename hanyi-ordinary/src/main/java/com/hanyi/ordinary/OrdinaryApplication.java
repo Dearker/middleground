@@ -1,5 +1,6 @@
 package com.hanyi.ordinary;
 
+import com.hanyi.ordinary.common.annotation.EnableThreadPool;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 10:51 下午 2020/7/24
  */
 @SpringBootApplication
-//@EnableThreadPool
+@EnableThreadPool
 public class OrdinaryApplication {
 
     public static void main(String[] args) {
