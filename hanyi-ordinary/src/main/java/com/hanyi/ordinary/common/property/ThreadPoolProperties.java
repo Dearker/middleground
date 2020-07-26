@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * <p>
- *
+ * 线程池属性配置类
  * </p>
  *
  * @author wenchangwei

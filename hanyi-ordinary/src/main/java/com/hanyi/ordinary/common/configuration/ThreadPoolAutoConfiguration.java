@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * <p>
- *
+ * 线程池自动配置类
  * </p>
  *
  * @author wenchangwei
@@ -27,6 +27,12 @@ import java.util.concurrent.ExecutorService;
 @EnableConfigurationProperties(ThreadPoolProperties.class)
 public class ThreadPoolAutoConfiguration {
 
+    /**
+     * 线程池bean对象
+     *
+     * @param threadPoolProperties 线程池属性
+     * @return 返回线程池对象
+     */
     @Bean
     @ConditionalOnMissingBean
     public ExecutorService executorService(ThreadPoolProperties threadPoolProperties) {

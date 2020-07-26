@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 
 /**
  * <p>
- *
+ * 线程池条件注解
  * </p>
  *
  * @author wenchangwei

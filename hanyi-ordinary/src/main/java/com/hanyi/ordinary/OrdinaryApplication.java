@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * <p>
- *
+ * 启动类
  * </p>
  *
  * @author wenchangwei

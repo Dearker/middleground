@@ -1,13 +1,13 @@
 package com.hanyi.ordinary.common.component;
 
 import com.hanyi.ordinary.common.aware.ApplicationComponent;
-import com.hanyi.ordinary.pojo.ThreadPoolBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @PackAge: middleground com.hanyi.daily.common.component
@@ -25,8 +25,8 @@ public class BootstrapComponent implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Map<String, ThreadPoolBean> implementor = applicationComponent.getTargetInterfaceAllImplementor(ThreadPoolBean.class);
-        System.out.println(implementor.values());
+        Map<String, ExecutorService> implementor = applicationComponent.getTargetInterfaceAllImplementor(ExecutorService.class);
+        log.info("implementor value is : {}", implementor.values().toString());
         log.info("BootstrapLoaderComponent load finished");
     }
 
