@@ -1,8 +1,4 @@
-package com.hanyi.daily.common.property;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+package com.hanyi.daily.pojo;
 
 /**
  * <p>
@@ -10,12 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * </p>
  *
  * @author wenchangwei
- * @since 10:02 下午 2020/7/24
+ * @since 11:48 下午 2020/8/1
  */
-@Getter
-@Setter
-@ConfigurationProperties(prefix = "business.thread-pool-executor")
-public class ThreadPoolProperties {
+public class ThreadPoolVO {
 
     /**
      * 表示线程池核心线程，正常情况下开启的线程数量
@@ -31,6 +24,12 @@ public class ThreadPoolProperties {
     /**
      * 线程名称前缀
      */
-    private String threadNamePrefix = "filink-thread-pool-business";
+    private String threadNamePrefix = "thread-pool-business";
 
+    public ThreadPoolVO(int corePoolSize, int maxPoolSize, String threadNamePrefix) {
+        this.corePoolSize = corePoolSize;
+        this.maxPoolSize = maxPoolSize;
+        this.threadNamePrefix = threadNamePrefix;
+
+    }
 }

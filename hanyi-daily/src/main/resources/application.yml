@@ -107,3 +107,15 @@ person:
 
 #开启自动配置的日志报告
 #debug: true
+
+business:
+  thread-pool-executor:
+    threadPools:
+      hanyi:
+        corePoolSize: 5
+        maxPoolSize: 5
+        threadNamePrefix: keji
+      keji:
+        corePoolSize: 5
+        maxPoolSize: 5
+        threadNamePrefix: hashiqi

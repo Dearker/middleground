@@ -357,4 +357,17 @@ public class CollectionTest {
         System.out.println(stringIntegerMap);
     }
 
+    @Test
+    public void removeMapTest(){
+
+        Map<String, Integer> stringIntegerMap = new HashMap<>();
+        stringIntegerMap.put("1", 2);
+        stringIntegerMap.put("2", 3);
+
+        stringIntegerMap.remove("1");
+        stringIntegerMap.remove("1", 2);
+        System.out.println(stringIntegerMap);
+
+    }
+
 }

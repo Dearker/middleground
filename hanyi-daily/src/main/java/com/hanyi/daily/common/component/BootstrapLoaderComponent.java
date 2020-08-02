@@ -1,8 +1,14 @@
 package com.hanyi.daily.common.component;
 
+import com.hanyi.daily.pojo.Person;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @PackAge: middleground com.hanyi.daily.common.component
@@ -15,8 +21,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class BootstrapLoaderComponent implements CommandLineRunner {
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private Person hanyi;
+
     @Override
     public void run(String... args) throws Exception {
+
+        System.out.println("获取的bean：" + hanyi);
+
+        Map<String, ThreadPoolExecutor> threadPoolExecutorMap = applicationContext.getBeansOfType(ThreadPoolExecutor.class);
+
+        Object hanyi = applicationContext.getBean("hanyi");
+
+        System.out.println("获取的数据：" + threadPoolExecutorMap);
         log.info("BootstrapLoaderComponent load finished");
     }
 

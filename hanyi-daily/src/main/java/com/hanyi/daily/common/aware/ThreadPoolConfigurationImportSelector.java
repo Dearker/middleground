@@ -1,6 +1,7 @@
 package com.hanyi.daily.common.aware;
 
 import cn.hutool.core.util.StrUtil;
+import com.hanyi.daily.pojo.Person;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -38,5 +39,12 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
                 registry.registerBeanDefinition(simpleName, beanDefinition);
             }
         });
+
+        AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
+                .addPropertyValue("id", 123)
+                .addPropertyValue("name", "哈士奇")
+                .getBeanDefinition();
+        registry.registerBeanDefinition("hanyi", beanDefinition);
+
     }
 }

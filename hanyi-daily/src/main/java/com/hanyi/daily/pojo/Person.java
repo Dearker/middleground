@@ -2,6 +2,7 @@ package com.hanyi.daily.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -12,11 +13,12 @@ import lombok.Data;
  * @since 15:24 2020/5/21
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class Person {
 
-    private final int id;
+    private int id;
 
-    private final String name;
+    private String name;
 
 }

@@ -1,21 +1,17 @@
-package com.hanyi.ordinary.common.property;
+package com.hanyi.daily.pojo;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.Data;
 
 /**
  * <p>
- * 线程池属性配置类
+ * 线程池实体类
  * </p>
  *
  * @author wenchangwei
- * @since 10:02 下午 2020/7/24
+ * @since 8:47 下午 2020/7/31
  */
-@Getter
-@Setter
-@ConfigurationProperties(prefix = "business.thread-pool-executor")
-public class ThreadPoolProperties {
+@Data
+public class BusinessThreadPool {
 
     /**
      * 表示线程池核心线程，正常情况下开启的线程数量
