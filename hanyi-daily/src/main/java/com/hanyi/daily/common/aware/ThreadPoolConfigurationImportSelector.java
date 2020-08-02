@@ -40,10 +40,16 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
             }
         });
 
-        AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
+        /*AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
                 .addPropertyValue("id", 123)
                 .addPropertyValue("name", "哈士奇")
+                .getBeanDefinition();*/
+
+        AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
+                .addConstructorArgValue(12345)
+                .addConstructorArgValue("哈士奇")
                 .getBeanDefinition();
+
         registry.registerBeanDefinition("hanyi", beanDefinition);
 
     }

@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -314,6 +315,14 @@ public class CollectionTest {
         studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(), Integer::sum));
 
         System.out.println(stringIntegerMap);
+
+        Map<String, IntSummaryStatistics> collectMap = studentList.stream()
+                .collect(Collectors.groupingBy(Student::getName, Collectors.summarizingInt(Student::getAge)));
+
+        Map<String, Long> nameMap = new HashMap<>();
+        collectMap.forEach((k, v) -> nameMap.put(k, v.getSum()));
+
+        System.out.println(nameMap);
     }
 
     /**
@@ -358,7 +367,7 @@ public class CollectionTest {
     }
 
     @Test
-    public void removeMapTest(){
+    public void removeMapTest() {
 
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("1", 2);
