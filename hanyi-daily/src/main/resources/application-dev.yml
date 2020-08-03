@@ -3,12 +3,12 @@ business:
   thread-pool-executor:
     threadPools:
       hanyi:
-        corePoolSize: 5
-        maxPoolSize: 5
+        corePoolSize: 10
+        maxPoolSize: 10
         threadNamePrefix: keji
       keji:
-        corePoolSize: 5
-        maxPoolSize: 5
+        corePoolSize: 10
+        maxPoolSize: 10
         threadNamePrefix: hashiqi
 
 

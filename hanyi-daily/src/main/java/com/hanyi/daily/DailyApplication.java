@@ -5,7 +5,6 @@ import com.hanyi.daily.common.annotation.EnableThreadPool;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
@@ -17,7 +16,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableExtConfigPackage
-@EnableCaching
 @EnableThreadPool
 @EnableAsync
 public class DailyApplication {

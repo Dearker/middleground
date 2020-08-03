@@ -1,10 +1,13 @@
 package com.hanyi.daily.common.aware;
 
-import cn.hutool.core.util.ArrayUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.reactive.context.StandardReactiveWebEnvironment;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.StandardServletEnvironment;
 
 /**
  * <p>
@@ -18,21 +21,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
-
+    /**
+     * 获取的系统环境属性
+     *
+     * @param environment 系统环境对象
+     */
     @Override
     public void setEnvironment(Environment environment) {
 
-        String[] activeProfiles = environment.getActiveProfiles();
+        if (environment instanceof StandardServletEnvironment) {
+            StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
+            MutablePropertySources propertySources = standardServletEnvironment.getPropertySources();
 
-        if(ArrayUtil.isNotEmpty(activeProfiles)){
+            for (PropertySource<?> propertySource : propertySources) {
+                String name = propertySource.getName();
+                log.info("propertySource 的名称：{}", name);
+            }
 
-            environment.getDefaultProfiles();
-
+            log.info(" StandardServletEnvironment 的属性来源：{} ", propertySources.toString());
         }
 
-        String[] defaultProfiles = environment.getDefaultProfiles();
+        if (environment instanceof StandardReactiveWebEnvironment) {
+            StandardReactiveWebEnvironment standardReactiveWebEnvironment = (StandardReactiveWebEnvironment) environment;
+            MutablePropertySources propertySources = standardReactiveWebEnvironment.getPropertySources();
 
-        System.out.println(activeProfiles);
+            log.info(propertySources.toString());
+        }
 
     }
 }

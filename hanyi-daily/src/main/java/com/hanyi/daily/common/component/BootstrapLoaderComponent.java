@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -21,12 +22,27 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 public class BootstrapLoaderComponent implements CommandLineRunner {
 
+    /**
+     * ioc容器
+     */
     @Autowired
     private ApplicationContext applicationContext;
 
+    /**
+     * 获取系统环境
+     */
+    @Autowired
+    private Environment environment;
+
+    /**
+     * person对象
+     */
     @Autowired
     private Person hanyi123;
 
+    /**
+     * 线程池
+     */
     @Autowired
     private ThreadPoolExecutor hanyi;
 
@@ -40,6 +56,9 @@ public class BootstrapLoaderComponent implements CommandLineRunner {
 
         log.info("获取的数据：" + threadPoolExecutorMap);
         log.info("BootstrapLoaderComponent load finished");
+
+        String serverPort = environment.getProperty("server.port");
+        log.info("serverPort is : {}", serverPort);
     }
 
 }
