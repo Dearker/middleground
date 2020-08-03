@@ -1,6 +1,7 @@
 package com.hanyi.daily.pojo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import lombok.Data;
  * @since 8:47 下午 2020/7/31
  */
 @Data
+@NoArgsConstructor
 public class BusinessThreadPool {
 
     /**

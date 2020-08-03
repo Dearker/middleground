@@ -25,18 +25,20 @@ public class BootstrapLoaderComponent implements CommandLineRunner {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private Person hanyi;
+    private Person hanyi123;
+
+    @Autowired
+    private ThreadPoolExecutor hanyi;
 
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("获取的bean：" + hanyi);
+        log.info("获取的bean：" + hanyi123);
+        log.info("获取的线程池bean：" + hanyi);
 
         Map<String, ThreadPoolExecutor> threadPoolExecutorMap = applicationContext.getBeansOfType(ThreadPoolExecutor.class);
 
-        Object hanyi = applicationContext.getBean("hanyi");
-
-        System.out.println("获取的数据：" + threadPoolExecutorMap);
+        log.info("获取的数据：" + threadPoolExecutorMap);
         log.info("BootstrapLoaderComponent load finished");
     }
 

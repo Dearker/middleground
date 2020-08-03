@@ -66,6 +66,8 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+  profiles:
+    active: dev
 
 #Mybatis配置
 mybatis:
@@ -119,3 +121,4 @@ business:
         corePoolSize: 5
         maxPoolSize: 5
         threadNamePrefix: hashiqi
+

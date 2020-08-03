@@ -1,6 +1,8 @@
 package com.hanyi.daily.load;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.thread.ExecutorBuilder;
+import cn.hutool.core.thread.NamedThreadFactory;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -143,6 +147,29 @@ public class LoaderTest {
         User mapToBean = BeanUtil.mapToBean(objectMap, User.class, true);
 
         System.out.println(mapToBean);
+    }
+
+    @Test
+    public void attributeToMap() {
+
+        NamedThreadFactory namedThreadFactory = new NamedThreadFactory("thread-pool-business", false);
+        ThreadPoolExecutor threadPoolExecutor = ExecutorBuilder.create().setThreadFactory(namedThreadFactory)
+                .setCorePoolSize(5)
+                .setMaxPoolSize(5).build();
+
+        List<Object> objectList = new ArrayList<>();
+        objectList.add(threadPoolExecutor.getCorePoolSize());
+        objectList.add(threadPoolExecutor.getMaximumPoolSize());
+        objectList.add(threadPoolExecutor.getKeepAliveTime(TimeUnit.NANOSECONDS));
+        objectList.add(threadPoolExecutor.getQueue());
+        objectList.add(threadPoolExecutor.getThreadFactory());
+        objectList.add(threadPoolExecutor.getRejectedExecutionHandler());
+
+        Map<String, Object> stringObjectMap = BeanUtil.beanToMap(threadPoolExecutor);
+        //stringObjectMap.forEach((k, v) -> System.out.println(k + "||" + v));
+
+        objectList.forEach(System.out::println);
+
     }
 
 
