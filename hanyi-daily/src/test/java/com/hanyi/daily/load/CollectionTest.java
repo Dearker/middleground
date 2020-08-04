@@ -379,4 +379,14 @@ public class CollectionTest {
 
     }
 
+    @Test
+    public void filterListTest(){
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("1");
+
+        List<String> collect = stringList.stream().filter(s -> s.equals("2")).collect(Collectors.toList());
+        System.out.println(collect);
+    }
+
 }
