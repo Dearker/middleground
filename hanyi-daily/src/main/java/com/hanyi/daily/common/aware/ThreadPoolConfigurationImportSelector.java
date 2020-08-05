@@ -9,8 +9,6 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.context.properties.bind.Binder;
-import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
-import org.springframework.boot.context.properties.source.ConfigurationPropertySources;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
@@ -77,9 +75,9 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
      */
     @Override
     public void setEnvironment(Environment environment) {
-        Iterable<ConfigurationPropertySource> sources = ConfigurationPropertySources.get(environment);
-        Binder binder = new Binder(sources);
-        this.businessThreadPoolProperties = binder.bind("business.thread-pool-executor", BusinessThreadPoolProperties.class).orElse(null);
+        this.businessThreadPoolProperties = Binder.get(environment)
+                .bind("business.thread-pool-executor", BusinessThreadPoolProperties.class)
+                .orElse(null);
     }
 
 

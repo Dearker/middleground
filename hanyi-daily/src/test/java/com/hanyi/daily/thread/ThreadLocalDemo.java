@@ -5,7 +5,7 @@ import com.hanyi.daily.thread.pojo.Res;
 
 public class ThreadLocalDemo extends Thread {
 
-    private Res res;
+    private final Res res;
 
     private ThreadLocalDemo(Res res) {
         this.res = res;

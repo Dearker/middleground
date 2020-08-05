@@ -9,7 +9,7 @@ package com.hanyi.daily.thread.pojo;
  */
 public class Res {
 
-    private static ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
+    private static final ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
 
     public Integer getNumber() {
         int count = threadLocal.get() + 1;

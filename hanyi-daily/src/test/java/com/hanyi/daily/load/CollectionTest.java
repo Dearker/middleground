@@ -366,6 +366,9 @@ public class CollectionTest {
         System.out.println(stringIntegerMap);
     }
 
+    /**
+     * 使用remove删除元素之后，如果集合中的元素已经为空，则后面的remove不会执行，返回一个空的集合
+     */
     @Test
     public void removeMapTest() {
 
@@ -379,14 +382,20 @@ public class CollectionTest {
 
     }
 
+    /**
+     * 使用filter过滤之后，如果没有匹配的数据，则返回一个空的数组
+     */
     @Test
-    public void filterListTest(){
+    public void filterListTest() {
 
         List<String> stringList = new ArrayList<>();
         stringList.add("1");
 
-        List<String> collect = stringList.stream().filter(s -> s.equals("2")).collect(Collectors.toList());
-        System.out.println(collect);
+        List<String> filterList = stringList.stream().filter(s -> s.equals("2")).collect(Collectors.toList());
+        List<String> collect = filterList.stream().map(String::toUpperCase).collect(Collectors.toList());
+
+        System.out.println(filterList);
+        System.out.println(collect.size());
     }
 
 }

@@ -114,7 +114,21 @@ public class StreamTest {
         List<CostInfo> collect = infoList.stream().peek(System.out::println).collect(Collectors.toList());
         System.out.println(collect);
 
+        //不会执行，forEach不是终止操作
         Stream.of("one", "two", "three").peek(String::toUpperCase).forEach(System.out::println);
+
+        List<CostInfo> costInfos = new ArrayList<>();
+
+        costInfos.add(new CostInfo(1, new BigDecimal("3.21")));
+        costInfos.add(new CostInfo(2, new BigDecimal("5.25")));
+
+        List<CostInfo> infos = costInfos.stream().peek(s -> {
+            if (s.getId() == 1) {
+                s.setId(3);
+            }
+        }).collect(Collectors.toList());
+
+        System.out.println("获取的数据：" + infos);
     }
 
 

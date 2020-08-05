@@ -1,16 +1,18 @@
 package com.hanyi.daily.common.aware;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.env.OriginTrackedMapPropertySource;
+import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.boot.web.reactive.context.StandardReactiveWebEnvironment;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.ServletContextPropertySource;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
+import javax.servlet.ServletContext;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * <p>
@@ -26,6 +28,7 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
     /**
      * 获取的系统环境属性
+     * 注：MapPropertySource为多个具体的propertySources的父类
      *
      * @param environment 系统环境对象
      */
@@ -36,19 +39,13 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
             StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
             MutablePropertySources propertySources = standardServletEnvironment.getPropertySources();
 
-            for (PropertySource<?> propertySource : propertySources) {
-                String name = propertySource.getName();
+            Map<String, Object> systemEnvironment = standardServletEnvironment.getSystemEnvironment();
+            Map<String, Object> systemProperties = standardServletEnvironment.getSystemProperties();
 
-                if(propertySource instanceof MapPropertySource){
+            log.info("获取的 systemEnvironment: " + systemEnvironment);
+            log.info("获取的 systemProperties ：" + systemProperties);
 
-                    MapPropertySource mapPropertySource = (MapPropertySource) propertySource;
-                    Map<String, Object> stringObjectMap = mapPropertySource.getSource();
-
-                    System.out.println(stringObjectMap);
-                }
-
-                log.info("propertySource 的名称：{}", name);
-            }
+            propertySources.forEach(this::buildSpecificPropertySource);
 
             log.info(" StandardServletEnvironment 的属性来源：{} ", propertySources.toString());
         }
@@ -61,4 +58,84 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
         }
 
     }
+
+    /**
+     * 将propertySource转换成具体的属性类
+     *
+     * @param propertySource 属性来源类
+     */
+    private void buildSpecificPropertySource(PropertySource<?> propertySource) {
+        //systemProperties
+        if (propertySource instanceof PropertiesPropertySource) {
+            PropertiesPropertySource propertiesPropertySource = (PropertiesPropertySource) propertySource;
+
+            String name = propertiesPropertySource.getName();
+            Map<String, Object> stringObjectMap = propertiesPropertySource.getSource();
+
+            log.info("propertiesPropertySource 的名称：" + name);
+            log.info("{}", stringObjectMap.toString());
+        }
+
+        //random
+        if (propertySource instanceof RandomValuePropertySource) {
+
+            RandomValuePropertySource randomValuePropertySource = (RandomValuePropertySource) propertySource;
+
+            String name = randomValuePropertySource.getName();
+            Random source = randomValuePropertySource.getSource();
+
+            log.info("randomValuePropertySource 的名称：" + name);
+            log.info(source.toString());
+        }
+
+        //servletConfigPropertySource
+        if (propertySource instanceof PropertySource.StubPropertySource) {
+
+            PropertySource.StubPropertySource servletConfigPropertySource = (PropertySource.StubPropertySource) propertySource;
+
+            String name = servletConfigPropertySource.getName();
+            Object source = servletConfigPropertySource.getSource();
+
+            log.info("servletConfigPropertySource 的名称：" + name);
+            log.info(source.toString());
+        }
+
+        //servletContextInitParams
+        if (propertySource instanceof ServletContextPropertySource) {
+
+            ServletContextPropertySource servletContextPropertySource = (ServletContextPropertySource) propertySource;
+
+            String name = servletContextPropertySource.getName();
+            ServletContext source = servletContextPropertySource.getSource();
+
+            log.info("ServletContextPropertySource 的名称：" + name);
+            log.info(source.toString());
+        }
+
+        //applicationConfig
+        if (propertySource instanceof OriginTrackedMapPropertySource) {
+
+            OriginTrackedMapPropertySource originTrackedMapPropertySource = (OriginTrackedMapPropertySource) propertySource;
+
+            String name = originTrackedMapPropertySource.getName();
+            Map<String, Object> source = originTrackedMapPropertySource.getSource();
+
+            log.info("OriginTrackedMapPropertySource 的名称：" + name);
+            log.info(source.toString());
+        }
+
+        //systemEnvironment
+        if (propertySource instanceof SystemEnvironmentPropertySource) {
+
+            SystemEnvironmentPropertySource systemEnvironmentPropertySource = (SystemEnvironmentPropertySource) propertySource;
+
+            String name = systemEnvironmentPropertySource.getName();
+            Map<String, Object> source = systemEnvironmentPropertySource.getSource();
+
+            log.info("systemEnvironmentPropertySource 的名称：" + name);
+            log.info(source.toString());
+        }
+    }
+
+
 }

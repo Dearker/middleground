@@ -1,6 +1,7 @@
 package com.hanyi.ordinary.common.component;
 
 import com.hanyi.ordinary.common.aware.ApplicationComponent;
+import com.hanyi.ordinary.export.ExportComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,16 @@ public class BootstrapComponent implements CommandLineRunner {
     @Resource
     private ApplicationComponent applicationComponent;
 
+    @Resource
+    private ExportComponent exportComponent;
+
     @Override
     public void run(String... args) throws Exception {
         Map<String, ExecutorService> implementor = applicationComponent.getTargetInterfaceAllImplementor(ExecutorService.class);
         log.info("implementor value is : {}", implementor.values().toString());
         log.info("BootstrapLoaderComponent load finished");
+
+        exportComponent.buildData();
     }
 
 }
