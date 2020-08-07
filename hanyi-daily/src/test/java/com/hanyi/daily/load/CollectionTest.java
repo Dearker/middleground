@@ -144,6 +144,29 @@ public class CollectionTest {
     }
 
     /**
+     * TreeMap 具有排序功能。它是基于红黑树数据结构实现的，每一个键值对<key, value>都是一个结点，
+     * 默认情况下按照key自然排序，另一种是可以通过传入定制的Comparator进行自定义规则排序
+     * <p>
+     * 底层使用了数组+红黑树实现，线程不安全
+     */
+    @Test
+    public void treeMapTest() {
+
+        TreeMap<Integer, String> treeMap = new TreeMap<>();
+
+        treeMap.put(2, "TWO");
+        treeMap.put(1, "ONE");
+        System.out.println(treeMap);
+
+        TreeMap<Integer, String> stringTreeMap = new TreeMap<>((a, b) -> Integer.compare(b, a));
+
+        stringTreeMap.put(2, "柯基");
+        stringTreeMap.put(1, "哈士奇");
+        System.out.println(stringTreeMap);
+    }
+
+
+    /**
      * 原子类增加和减少
      */
     @Test

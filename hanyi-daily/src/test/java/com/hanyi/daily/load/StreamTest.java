@@ -129,6 +129,22 @@ public class StreamTest {
         }).collect(Collectors.toList());
 
         System.out.println("获取的数据：" + infos);
+
+        //该peek操作不会生效
+        List<Integer> integerList = costInfos.stream().map(CostInfo::getId).peek(s -> {
+            if (s == 1) {
+                s = 4;
+            }
+        }).collect(Collectors.toList());
+
+        //修改方案
+        List<Integer> list = costInfos.stream().peek(s -> {
+            if (s.getId() == 3) {
+                s.setId(4);
+            }
+        }).map(CostInfo::getId).collect(Collectors.toList());
+
+        System.out.println("获取的integer集合：" + integerList + "||" + list);
     }
 
 
