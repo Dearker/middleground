@@ -7,11 +7,9 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Maps;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.hanyi.demo.entity.Address;
@@ -147,9 +145,9 @@ public class FastJSONTest {
         int i1 = i << 1;
         int i2 = i << 2;
         int i3 = i << 3;
-        System.out.println("左偏移1-->"+ i1);
-        System.out.println("左偏移2-->"+ i2);
-        System.out.println("左偏移3-->"+ i3);
+        System.out.println("左偏移1-->" + i1);
+        System.out.println("左偏移2-->" + i2);
+        System.out.println("左偏移3-->" + i3);
 
 
         int i4 = i >> 1;
@@ -165,56 +163,22 @@ public class FastJSONTest {
     }
 
     /**
-     * list的判断删除
-     */
-    @Test
-    public void removeIfTest(){
-
-        List<String> stringList = new ArrayList<> ();
-        stringList.add(StrUtil.EMPTY);
-        stringList.add("1");
-
-        stringList.removeIf(StrUtil::isEmpty);
-
-        stringList.forEach(System.out::println);
-
-    }
-
-    /**
-     * Map的merge方法，如果key存在，则相加，如果不存在，则向map中放入元素
-     */
-    @Test
-    public void MergeTest(){
-
-        Map<String,Integer> integerMap = Maps.newHashMap();
-
-        integerMap.put("1",2);
-
-        integerMap.merge("1",4,Integer::sum);
-
-        integerMap.forEach((k,v)-> System.out.println(k+"||"+ v));
-
-    }
-
-
-
-    /**
      * 对JSONArray中JSONObject对象进行排序
      */
     @Test
-    public void SortJSONTest(){
+    public void SortJSONTest() {
 
         JSONArray jsonArray = new JSONArray();
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("time","2019-10-20 19:50:00");
+        jsonObject.put("time", "2019-10-20 19:50:00");
         jsonArray.add(jsonObject);
 
         JSONObject json = new JSONObject();
-        json.put("time","2019-10-21 11:10:00");
+        json.put("time", "2019-10-21 11:10:00");
         jsonArray.add(json);
 
-        jsonArray.sort((a,b)->{
+        jsonArray.sort((a, b) -> {
             Date time = JSONObject.parseObject(a.toString()).getDate("time");
             Date time1 = JSONObject.parseObject(b.toString()).getDate("time");
             return time1.compareTo(time);

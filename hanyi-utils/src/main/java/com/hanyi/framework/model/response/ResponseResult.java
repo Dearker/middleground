@@ -24,28 +24,28 @@ public class ResponseResult implements Serializable {
     private Object data;
 
 
-    public static ResponseResult success(){
+    public static ResponseResult success() {
         return createResult(ResultCode.SUCCESS);
     }
 
-    public static ResponseResult success(Object object){
-        return createResult(ResultCode.SUCCESS,object);
+    public static ResponseResult success(Object object) {
+        return createResult(ResultCode.SUCCESS, object);
     }
 
-    public static ResponseResult failure(ResultCode resultCode){
+    public static ResponseResult failure(ResultCode resultCode) {
         return createResult(resultCode);
     }
 
-    public static ResponseResult failure(ResultCode resultCode, Object object){
-        return createResult(resultCode,object);
+    public static ResponseResult failure(ResultCode resultCode, Object object) {
+        return createResult(resultCode, object);
     }
 
 
-    private static ResponseResult createResult(ResultCode resultCode){
-        return createResult(resultCode,null);
+    private static ResponseResult createResult(ResultCode resultCode) {
+        return createResult(resultCode, null);
     }
 
-    private static ResponseResult createResult(ResultCode resultCode, Object object){
+    private static ResponseResult createResult(ResultCode resultCode, Object object) {
         return ResponseResult.builder().code(resultCode.getCode()).message(resultCode.getMessage()).data(object).build();
     }
 

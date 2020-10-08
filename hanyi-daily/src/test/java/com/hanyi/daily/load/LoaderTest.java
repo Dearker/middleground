@@ -1,6 +1,9 @@
 package com.hanyi.daily.load;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.StopWatch;
+import cn.hutool.core.lang.Console;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
 import cn.hutool.core.thread.NamedThreadFactory;
 import cn.hutool.core.util.ReflectUtil;
@@ -14,10 +17,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.Serializable;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -72,8 +72,8 @@ public class LoaderTest {
      */
     @Test
     public void genericTypeTest() {
-        Person person = getObject(Person.class);
-        Book book = getObject(Book.class);
+        Person person = this.getObject(Person.class);
+        Book book = this.getObject(Book.class);
     }
 
     private <T> T getObject(Class<T> clazz) {
@@ -170,6 +170,53 @@ public class LoaderTest {
 
         objectList.forEach(System.out::println);
 
+    }
+
+    /**
+     * ip转long类型
+     */
+    @Test
+    public void ipTest() {
+        long ipv4ToLong = NetUtil.ipv4ToLong(NetUtil.LOCAL_IP);
+        System.out.println(ipv4ToLong);
+    }
+
+    /**
+     * String的split方法时，传入的分隔字符串是正则表达式，则部分关键字（比如.[]()|等需要转义
+     * 如果去掉\\则返回的结果不是预期的效果
+     */
+    @Test
+    public void splitTest() {
+        String[] split = "a.ab.abc".split("\\.");
+        //[a, ab, abc]
+        System.out.println(Arrays.toString(split));
+        String[] split3 = "a|ab|abc".split("\\|");
+        //[a, ab, abc]
+        System.out.println(Arrays.toString(split3));
+    }
+
+    /**
+     * 用于存储一组任务的耗时时间，并一次性打印对比
+     *
+     * @throws InterruptedException 线程异常
+     */
+    @Test
+    public void stopWatchTest() throws InterruptedException {
+
+        StopWatch stopWatch = new StopWatch("任务名称");
+
+        // 任务1
+        stopWatch.start("任务一");
+        TimeUnit.SECONDS.sleep(1);
+        stopWatch.stop();
+
+        // 任务2
+        stopWatch.start("任务一");
+        TimeUnit.SECONDS.sleep(2);
+        stopWatch.stop();
+
+        // 打印出耗时
+        Console.log(stopWatch.prettyPrint());
     }
 
 

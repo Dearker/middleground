@@ -13,15 +13,13 @@
 
     <properties>
         <fastjson.version>1.2.58</fastjson.version>
-        <httpclient.version>4.5.3</httpclient.version>
         <crypto.version>4.2.3.RELEASE</crypto.version>
         <jwt.version>1.0.8.RELEASE</jwt.version>
-        <log4j.version>2.1.2.RELEASE</log4j.version>
         <lombok.version>1.18.8</lombok.version>
         <guava.version>28.1-jre</guava.version>
         <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
-        <hutool.version>5.1.1</hutool.version>
+        <hutool.version>5.4.3</hutool.version>
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
     </properties>
@@ -34,11 +32,6 @@
             <version>${fastjson.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
         <dependency>
             <groupId>org.springframework.security</groupId>

@@ -114,7 +114,6 @@
     参考文档地址：
         https://skywalking.apache.org/zh/    
        
-       
 ### maven 打包跳过测试命令
     
 1、方式一
@@ -177,4 +176,27 @@
     
     查看文档：https://blog.csdn.net/ujm097/article/details/90402158
     
+### 其他组件
+
+6、Arthas
+       
+    修改启动端口(默认3658): java -jar arthas-boot.jar --telnet-port 9998 --http-port -1    
+       
+7、Jmeter
+    
+    新增聚合报告：线程组->添加->监听器->聚合报告（Aggregate Report）            
+    lable: sampler的名称，接口名称            
+    Samples: 一共发出去多少请求,例如10个用户，循环10次，则是 100            
+    Average: 平均响应时间            
+    Median: 中位数，也就是 50％ 用户的响应时间            
+    90% Line : 90％ 用户的响应不会超过该时间,单位秒             
+    95% Line : 95％ 用户的响应不会超过该时间            
+    99% Line : 99％ 用户的响应不会超过该时间            
+    min : 最小响应时间            
+    max : 最大响应时间                 
+    Error%：错误的请求的数量/请求的总数            
+    Throughput： 吞吐量——默认情况下表示每秒完成的请求数（Request per Second) 可类比为qps            
+    KB/Sec: 每秒接收数据量
+    
+    注：并发数自定义，一般标准为异常率低于0.1%，且响应时间小于2秒
     

@@ -10,5 +10,9 @@ package com.hanyi.hikari.common.constant;
  */
 public interface HikariConstant {
 
+    /**
+     * 书籍类型字段
+     */
+    String BOOK_TYPE = "book_type";
 
 }

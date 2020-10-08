@@ -1,15 +1,19 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.pojo.CostInfo;
+import com.hanyi.daily.pojo.Person;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Comparator.comparingLong;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * <p>
@@ -85,7 +89,15 @@ public class StreamTest {
                     a.addAll(b);
                     return a;
                 });
+        //求和
+        BigDecimal bigDecimal = costInfoList.stream().map(CostInfo::getCost).reduce(BigDecimal.ZERO, BigDecimal::add);
+        //根据id去重
+        List<CostInfo> costInfos = costInfoList.stream().collect(collectingAndThen(
+                toCollection(() -> new TreeSet<>(comparingLong(CostInfo::getId))), ArrayList::new));
+
         System.out.println(infoList);
+        System.out.println(bigDecimal);
+        System.out.println(costInfos);
     }
 
     /**
@@ -147,5 +159,47 @@ public class StreamTest {
         System.out.println("获取的integer集合：" + integerList + "||" + list);
     }
 
+    /**
+     * 使用流拼接字符串
+     */
+    @Test
+    public void joiningTest() {
+        List<Person> personList = Arrays.asList(new Person(1, "柯基"), new Person(2, "哈士奇"));
+        String collect = personList.stream().map(Person::getName)
+                .filter(StrUtil::isNotBlank).collect(Collectors.joining(StrUtil.COMMA));
+        System.out.println(collect);
+    }
+
+    /**
+     * 分区,该key只能是boolean类型
+     */
+    @Test
+    public void partitioningTest() {
+        List<Person> personList = Arrays.asList(new Person(1, "柯基"), new Person(2, "哈士奇"));
+        Map<Boolean, List<Person>> listMap = personList.stream().collect(Collectors.partitioningBy(s -> s.getId() < 2));
+        System.out.println(listMap);
+    }
+
+    @Test
+    public void hashSetTest(){
+
+        Set<Person> personSet = new HashSet<>();
+
+        Person person = new Person(1, "柯基");
+        Person p = new Person(2,"哈士奇");
+
+        personSet.add(p);
+        personSet.add(person);
+
+        p.setId(3);
+        personSet.remove(p);
+
+        System.out.println(personSet);
+        //5秒
+        TimeUnit.SECONDS.toMillis(5);
+        //减法
+        int i = Math.subtractExact(3, 1);
+        System.out.println(i);
+    }
 
 }

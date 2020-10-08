@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class BookRepositoryTest extends ApplicationTest {
 
-    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(8, 8);
+    private static final ThreadPoolExecutor THREADPOOLEXECUTOR = ThreadUtil.newExecutor(Byte.SIZE, Byte.SIZE);
 
     @Resource
     private BookDao bookDao;

@@ -1,7 +1,6 @@
 package com.hanyi.mongo.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.hanyi.mongo.pojo.CmsPage;
 import com.hanyi.mongo.repository.CmsPageRepository;
 import com.hanyi.mongo.service.PageService;
@@ -16,7 +15,6 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -81,7 +79,6 @@ public class PageServiceImpl implements PageService {
         Pageable pageable = PageRequest.of(page, size);
         //实现自定义条件查询并且分页查询
         Page<CmsPage> all = cmsPageRepository.findAll(example, pageable);
-        System.out.println();
         log.info("数据列表：{}", all.getContent());
         log.info("数据总记录数:{}", all.getTotalElements());
         return all;

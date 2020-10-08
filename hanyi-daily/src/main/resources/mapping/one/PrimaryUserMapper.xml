@@ -4,8 +4,64 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hanyi.daily.mapper.one.PrimaryUserMapper">
 
+    <!-- 新增用户 -->
+    <insert id="insert" parameterType="com.hanyi.daily.pojo.User" keyProperty="id" useGeneratedKeys="true" >
+        insert into sys_user
+            (user_id,user_name,user_age)
+        values
+            (#{userId},#{userName},#{userAge})
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user (user_id,user_name,user_age)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.userId}, #{item.userName}, #{item.userAge})
+        </foreach>
+    </insert>
+
+    <!-- 查询所有用户信息 -->
     <select id="findAll" resultType="com.hanyi.daily.pojo.User">
         select * from sys_user;
     </select>
+
+    <!-- 分页查询用户 -->
+    <select id="findUserByPage" resultType="com.hanyi.daily.pojo.User">
+        select user_id,user_name,user_age from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name like concat('%',#{userName},'%')
+            </if>
+        </where>
+        <!-- mysql默认排序为asc,升序；desc为降序 -->
+        order by user_age desc limit #{startIndex},#{pageSize}
+    </select>
+
+    <!-- 根据用户名称统计查询 -->
+    <select id="countUserByUserName" resultType="java.lang.Long">
+        select count(1) from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                user_name like concat('%',#{userName},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 批量更新用户信息 -->
+    <update id="updateUserById">
+        update sys_user set user_name=#{userName} where user_id in
+        <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 根据对象批量更新用户 -->
+    <update id="updateBatchUser" parameterType="com.hanyi.daily.request.UpdateUserParam">
+        update sys_user set user_name=#{userName} where user_id in
+        <foreach collection="userIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
 </mapper>

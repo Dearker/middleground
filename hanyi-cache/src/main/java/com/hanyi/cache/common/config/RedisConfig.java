@@ -55,7 +55,7 @@ public class RedisConfig {
     /**
      * 使用Jackson2JsonRedisSerialize 替换默认序列化
      *
-     * @return
+     * @return 返回序列化对象
      */
     private Jackson2JsonRedisSerializer<Object> createJacksonRedisSerializer() {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
@@ -66,7 +66,6 @@ public class RedisConfig {
         jackson2JsonRedisSerializer.setObjectMapper(om);
         return jackson2JsonRedisSerializer;
     }
-
 
 
 }

@@ -47,7 +47,7 @@ public class DruidConfig {
     @Primary
     @Bean
     public DynamicDataSource dynamicDataSource(DataSource primaryDataSource, DataSource secondaryDataSource) {
-        Map<Object, Object> targetDataSources = new HashMap<>(2);
+        Map<Object, Object> targetDataSources = new HashMap<>(Short.BYTES);
         targetDataSources.put(DataType.PRIMARY, primaryDataSource);
         targetDataSources.put(DataType.SECONDARY, secondaryDataSource);
         return new DynamicDataSource(primaryDataSource, targetDataSources);
@@ -56,13 +56,13 @@ public class DruidConfig {
     /**
      * 配置一个监控Druid的后台的Servlet
      *
-     * @return
+     * @return 返回servlet对象
      */
     @Bean
-    public ServletRegistrationBean statViewServlet() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
+    public ServletRegistrationBean<StatViewServlet> statViewServlet() {
+        ServletRegistrationBean<StatViewServlet> bean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
 
-        Map<String, String> initParams = new HashMap<>(2);
+        Map<String, String> initParams = new HashMap<>(Short.BYTES);
         initParams.put("loginUsername", "admin");
         initParams.put("loginPassword", "admin");
         bean.setInitParameters(initParams);
@@ -73,11 +73,11 @@ public class DruidConfig {
     /**
      * 配置一个web监控的filter
      *
-     * @return
+     * @return 返回过滤器对象
      */
     @Bean
-    public FilterRegistrationBean webStatFilter() {
-        FilterRegistrationBean bean = new FilterRegistrationBean();
+    public FilterRegistrationBean<WebStatFilter> webStatFilter() {
+        FilterRegistrationBean<WebStatFilter> bean = new FilterRegistrationBean<>();
 
         bean.setFilter(new WebStatFilter());
         //添加不需要忽略的格式信息.

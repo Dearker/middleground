@@ -323,6 +323,7 @@ public class CollectionTest {
 
     /**
      * 第一个是所选map的key，第二个是需要合并的值，第三个是进行如何合并
+     * Map的merge方法，如果key存在，则相加，如果不存在，则向map中放入元素
      */
     @Test
     public void mapMergeTest() {
@@ -419,6 +420,38 @@ public class CollectionTest {
 
         System.out.println(filterList);
         System.out.println(collect.size());
+    }
+
+    /**
+     * 在foreach中创建对象的两种方式
+     */
+    @Test
+    public void foreachTest() {
+
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
+
+        List<Person> personList = new ArrayList<>();
+        AtomicReference<Person> personAtomicReference = new AtomicReference<>();
+        integerList.forEach(s -> {
+            personAtomicReference.set(new Person(s, "刚好"));
+            personList.add(personAtomicReference.get());
+        });
+
+        final Person[] person = new Person[1];
+        integerList.forEach(s -> {
+            person[0] = new Person(s, "还不错");
+            personList.add(person[0]);
+        });
+
+        final Person[] p = new Person[1];
+        integerList.forEach(s->{
+            p[0] = new Person();
+            p[0].setId(s);
+            p[0].setName("柯基");
+            personList.add(p[0]);
+        });
+
+        personList.forEach(System.out::println);
     }
 
 }

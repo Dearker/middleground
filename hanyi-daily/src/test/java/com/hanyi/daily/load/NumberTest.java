@@ -46,4 +46,20 @@ public class NumberTest {
         System.out.println(Double.MAX_EXPONENT);
     }
 
+    /**
+     * 计算测试
+     */
+    @Test
+    public void mathTest() {
+        //加法
+        System.out.println(Math.addExact(1, 3));
+        //减法
+        System.out.println(Math.subtractExact(3, 1));
+        //乘法
+        System.out.println(Math.multiplyExact(4, 2));
+        //除法
+        System.out.println(Math.floorDiv(4, 2));
+    }
+
+
 }

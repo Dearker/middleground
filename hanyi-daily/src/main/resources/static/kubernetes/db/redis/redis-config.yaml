@@ -11,5 +11,5 @@ data:
     bind 0.0.0.0
     appendonly yes
     protected-mode no
-    requirepass 123456
+    requirepass asdzxc789
     pidfile /data/redis-6379.pid
