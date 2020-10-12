@@ -2,6 +2,10 @@ package com.hanyi.daily.pojo;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hanyi.daily.common.util.LongJsonDeserializer;
+import com.hanyi.daily.common.util.LongJsonSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +33,8 @@ public class TimeInfo implements Serializable {
     /**
      * 主键id
      */
+    @JsonDeserialize(using = LongJsonDeserializer.class)
+    @JsonSerialize(using = LongJsonSerializer.class)
     private Long id;
 
     /**
