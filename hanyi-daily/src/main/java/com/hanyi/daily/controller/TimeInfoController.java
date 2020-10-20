@@ -2,10 +2,12 @@ package com.hanyi.daily.controller;
 
 import com.hanyi.daily.pojo.TimeInfo;
 import com.hanyi.daily.service.TimeInfoService;
+import com.hanyi.framework.enums.ResultCode;
 import com.hanyi.framework.model.response.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * <p>
@@ -44,6 +46,20 @@ public class TimeInfoController {
     @GetMapping("/findAll")
     public ResponseResult findAll() {
         return ResponseResult.success(timeInfoService.findAll());
+    }
+
+    /**
+     * 根据id查询时间详情
+     *
+     * @param id 详情id
+     * @return 返回时间对象
+     */
+    @GetMapping("/findById")
+    public ResponseResult findById(Long id) {
+        if (Objects.isNull(id)) {
+            return ResponseResult.failure(ResultCode.PARAM_IS_INVALID);
+        }
+        return ResponseResult.success(timeInfoService.findById(id));
     }
 
 }

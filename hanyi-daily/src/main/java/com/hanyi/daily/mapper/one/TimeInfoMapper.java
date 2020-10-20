@@ -28,4 +28,12 @@ public interface TimeInfoMapper {
      * @return 返回时间集合
      */
     List<TimeInfo> findAll();
+
+    /**
+     * 根据id查询时间详情
+     *
+     * @param id 详情id
+     * @return 返回时间对象
+     */
+    TimeInfo findById(Long id);
 }

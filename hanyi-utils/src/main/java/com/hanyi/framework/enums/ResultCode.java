@@ -1,5 +1,7 @@
 package com.hanyi.framework.enums;
 
+import lombok.Getter;
+
 /**
  * @ClassName: middleground com.hanyi.framework.enums ResultCode
  * @Author: weiwenchang
@@ -7,6 +9,7 @@ package com.hanyi.framework.enums;
  * @CreateDate: 2020-02-05 17:02
  * @Version: 1.0
  */
+@Getter
 public enum ResultCode {
 
     /**
@@ -18,21 +21,13 @@ public enum ResultCode {
     UPLOAD_FAILED(1003,"上传失败"),
     FAILED_TO_DELETE(1004,"删除失败");
 
-    private Integer code;
+    private final Integer code;
 
-    private String message;
+    private final String message;
 
     ResultCode(Integer code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
 }

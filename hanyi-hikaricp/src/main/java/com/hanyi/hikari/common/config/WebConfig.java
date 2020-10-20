@@ -6,12 +6,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -30,7 +31,6 @@ import java.util.List;
  * @since 5:05 下午 2020/10/5
  */
 @Configuration
-@ConditionalOnClass(WebMvcConfigurer.class)
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebConfig implements WebMvcConfigurer {
 
@@ -98,4 +98,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(Boolean.TRUE);
     }
 
+    /**
+     * 添加格式化
+     *
+     * @param registry 注册器
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new DateFormatter(DatePattern.NORM_DATETIME_PATTERN));
+    }
 }

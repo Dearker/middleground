@@ -17,5 +17,10 @@
         select * from sys_time
     </select>
 
+    <!-- 根据id查询时间对象 -->
+    <select id="findById" resultType="com.hanyi.daily.pojo.TimeInfo">
+        select * from sys_time where id=#{id}
+    </select>
+
 </mapper>
 

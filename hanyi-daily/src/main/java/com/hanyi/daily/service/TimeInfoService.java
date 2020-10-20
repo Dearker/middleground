@@ -54,4 +54,13 @@ public class TimeInfoService {
         return timeInfoMapper.findAll();
     }
 
+    /**
+     * 根据id查询时间详情
+     *
+     * @param id 详情id
+     * @return 返回时间对象
+     */
+    public TimeInfo findById(Long id) {
+        return timeInfoMapper.findById(id);
+    }
 }

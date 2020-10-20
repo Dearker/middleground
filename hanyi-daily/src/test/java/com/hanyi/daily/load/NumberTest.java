@@ -3,6 +3,7 @@ package com.hanyi.daily.load;
 import org.junit.Test;
 
 import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -47,19 +48,52 @@ public class NumberTest {
     }
 
     /**
-     * 计算测试
+     * 计算类测试
      */
     @Test
     public void mathTest() {
-        //加法
-        System.out.println(Math.addExact(1, 3));
-        //减法
-        System.out.println(Math.subtractExact(3, 1));
-        //乘法
-        System.out.println(Math.multiplyExact(4, 2));
-        //除法
-        System.out.println(Math.floorDiv(4, 2));
+        //加法 3
+        System.out.println(Math.addExact(1, 2));
+        //减法 1
+        System.out.println(Math.subtractExact(2, 1));
+        //乘法 12
+        System.out.println(Math.multiplyExact(3, 4));
+        //除法 3
+        System.out.println(Math.floorDiv(6, 2));
+        //加法 3
+        System.out.println(Integer.sum(1, 2));
     }
 
+    @Test
+    public void compareTest(){
+        List<Integer> integerList = Arrays.asList(1, 3, 0, 5);
+        Set<Integer> integerSet =new HashSet<>(integerList);
+
+        List<Integer> integers = new ArrayList<>();
+
+        System.out.println(integerSet.stream().min(Integer::compareTo).orElse(null));
+    }
+
+    @Test
+    public void integerTest(){
+
+        Integer integer = 35;
+        int i = 35;
+
+        if(integer.equals(i)){
+            System.out.println("相等");
+        }else{
+            System.out.println("不等");
+        }
+
+        Integer integer1 = null;
+
+        if(0 == integer1){
+            System.out.println("111");
+        }else{
+            System.out.println("222");
+        }
+
+    }
 
 }
