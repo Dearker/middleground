@@ -22,5 +22,10 @@
         select * from sys_time where id=#{id}
     </select>
 
+    <!-- 根据条件查询时间集合 -->
+    <select id="findByCondition" resultType="com.hanyi.daily.pojo.TimeInfo">
+        select * from sys_time where create_time <![CDATA[<= #{createTime}]]>
+    </select>
+
 </mapper>
 

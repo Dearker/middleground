@@ -1,5 +1,6 @@
 package com.hanyi.hikari;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 10:20 下午 2020/6/5
  */
 @SpringBootApplication
+@MapperScan(basePackages = {"com.hanyi.hikari.dao"})
 public class HikariApplication {
 
     public static void main(String[] args) {

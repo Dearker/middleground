@@ -38,3 +38,7 @@ mybatis-plus:
     cache-enabled: false
     local-cache-scope: statement
 
+#日志级别
+logging:
+  level:
+    com.hanyi.hikari: debug

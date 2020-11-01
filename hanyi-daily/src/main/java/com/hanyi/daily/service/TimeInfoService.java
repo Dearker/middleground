@@ -63,4 +63,14 @@ public class TimeInfoService {
     public TimeInfo findById(Long id) {
         return timeInfoMapper.findById(id);
     }
+
+    /**
+     * 根据条件查询时间集合
+     *
+     * @param timeInfo 查询对象
+     * @return 返回集合
+     */
+    public List<TimeInfo> findByCondition(TimeInfo timeInfo){
+        return timeInfoMapper.findByCondition(timeInfo);
+    }
 }

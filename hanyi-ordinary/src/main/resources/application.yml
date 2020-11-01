@@ -19,3 +19,9 @@ business:
     maxPoolSize: 5
     threadNamePrefix: hanyi
 
+spring:
+  jackson:
+    #该方式只适合日期格式为Date类型的，而且需要加8小时，LocalDateTime无效
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+

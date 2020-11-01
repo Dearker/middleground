@@ -36,4 +36,12 @@ public interface TimeInfoMapper {
      * @return 返回时间对象
      */
     TimeInfo findById(Long id);
+
+    /**
+     * 根据条件查询时间集合
+     *
+     * @param timeInfo 查询对象
+     * @return 返回集合
+     */
+    List<TimeInfo> findByCondition(TimeInfo timeInfo);
 }

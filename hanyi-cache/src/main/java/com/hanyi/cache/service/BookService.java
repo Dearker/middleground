@@ -42,4 +42,8 @@ public class BookService {
         return "fail";
     }
 
+    public String findCacheData(){
+        return stringRedisTemplate.opsForValue().get("1");
+    }
+
 }

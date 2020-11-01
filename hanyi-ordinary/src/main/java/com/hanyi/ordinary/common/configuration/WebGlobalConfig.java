@@ -3,7 +3,6 @@ package com.hanyi.ordinary.common.configuration;
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -28,7 +27,7 @@ public class WebGlobalConfig implements WebMvcConfigurer {
      *
      * @return 返回转换器
      */
-    @Bean
+    //@Bean
     public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = new ObjectMapper();
@@ -47,7 +46,7 @@ public class WebGlobalConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         //将我们定义的时间格式转换器添加到转换器列表中,
         //这样jackson格式化时候但凡遇到Date类型就会转换成我们定义的格式
-        converters.add(this.jackson2HttpMessageConverter());
+        //converters.add(this.jackson2HttpMessageConverter());
     }
 
 }

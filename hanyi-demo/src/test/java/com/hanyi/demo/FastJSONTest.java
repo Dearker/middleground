@@ -10,6 +10,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.hanyi.demo.entity.Address;
@@ -100,10 +101,13 @@ public class FastJSONTest {
         jsonObject.put("data", Address.builder().city("1").zip("2").street("3").build());
         jsonObject.put("db", Address.builder().city("1").zip("2").street("3").build());
 
-        Map map = JSONObject.parseObject(jsonObject.toJSONString(), Map.class);
+        Map<String, Address> map = JSONObject.parseObject(jsonObject.toJSONString(),
+                new TypeReference<Map<String, Address>>() {
+                });
         System.out.println("JSONObject转Map-->" + map);
 
-        List list = JSONObject.parseObject(jsonArray.toJSONString(), List.class);
+        List<Address> list = JSONObject.parseObject(jsonArray.toJSONString(), new TypeReference<List<Address>>() {
+        });
         System.out.println("JSONObject转list-->" + list);
     }
 

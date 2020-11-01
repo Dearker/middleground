@@ -7,6 +7,7 @@ import com.hanyi.framework.model.response.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -60,6 +61,17 @@ public class TimeInfoController {
             return ResponseResult.failure(ResultCode.PARAM_IS_INVALID);
         }
         return ResponseResult.success(timeInfoService.findById(id));
+    }
+
+    /**
+     * 根据条件查询时间集合
+     *
+     * @param timeInfo 查询对象
+     * @return 返回集合
+     */
+    @PostMapping("/condition")
+    public List<TimeInfo> findByCondition(@RequestBody TimeInfo timeInfo){
+        return timeInfoService.findByCondition(timeInfo);
     }
 
 }

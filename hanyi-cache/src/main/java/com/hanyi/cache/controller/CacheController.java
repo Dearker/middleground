@@ -1,12 +1,14 @@
 package com.hanyi.cache.controller;
 
 import com.hanyi.cache.entity.Book;
+import com.hanyi.cache.service.BookService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,12 @@ import java.util.List;
  */
 @RestController
 public class CacheController {
+
+    /**
+     * 书籍服务
+     */
+    @Resource
+    private BookService bookService;
 
     @GetMapping("/book")
     @Cacheable(cacheNames = "book-key")
@@ -35,8 +43,8 @@ public class CacheController {
     /**
      * 缓存名称(即分组)，缓存的key,返回的结果不为null才缓存
      *
-     * @param book
-     * @return
+     * @param book 参数对象
+     * @return 返回对象
      */
     @PostMapping("/list")
     @Cacheable(cacheNames = "Book", key = "#book.id + #book.name + #book.author", unless = "#result==null")
@@ -44,5 +52,9 @@ public class CacheController {
         return book;
     }
 
+    @GetMapping("/find")
+    public String find(){
+        return bookService.findCacheData();
+    }
 
 }

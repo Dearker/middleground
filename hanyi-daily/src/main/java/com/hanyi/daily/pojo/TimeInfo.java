@@ -48,7 +48,7 @@ public class TimeInfo implements Serializable {
     private Long timeExtent;
 
     /**
-     * 日期时间
+     * 日期时间,如果返回的类型为Date,则相差8小时，需要加上timezone = "GMT+8"
      */
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime createTime;

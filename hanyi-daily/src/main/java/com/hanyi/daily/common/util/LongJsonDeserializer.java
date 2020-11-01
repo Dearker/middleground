@@ -1,5 +1,6 @@
 package com.hanyi.daily.common.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -22,7 +23,7 @@ public class LongJsonDeserializer extends JsonDeserializer<Long> {
     public Long deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String value = jsonParser.getText();
         try {
-            return value == null ? null : Long.parseLong(value);
+            return StrUtil.isBlank(value) ? null : Long.parseLong(value);
         } catch (NumberFormatException e) {
             log.error("数据转换异常", e);
             return null;

@@ -38,6 +38,7 @@
         <module>hanyi-kafka</module>
         <module>hanyi-hikaricp</module>
         <module>hanyi-ordinary</module>
+        <module>hanyi-search</module>
     </modules>
     <packaging>pom</packaging>
 
