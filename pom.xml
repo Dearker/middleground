@@ -39,6 +39,7 @@
         <module>hanyi-hikaricp</module>
         <module>hanyi-ordinary</module>
         <module>hanyi-search</module>
+        <module>hanyi-redisson</module>
     </modules>
     <packaging>pom</packaging>
 

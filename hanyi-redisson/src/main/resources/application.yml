@@ -1,0 +1,9 @@
+server:
+  port: 8011
+
+spring:
+  redis:
+    #指定redisson配置文件
+    redisson:
+      config: classpath:redisson.yml
+
