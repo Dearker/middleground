@@ -1,0 +1,82 @@
+# 先创建授权
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-provisioner
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-provisioner-runner
+rules:
+  -  apiGroups: [""]
+     resources: ["persistentvolumes"]
+     verbs: ["get", "list", "watch", "create", "delete"]
+  -  apiGroups: [""]
+     resources: ["persistentvolumeclaims"]
+     verbs: ["get", "list", "watch", "update"]
+  -  apiGroups: ["storage.k8s.io"]
+     resources: ["storageclasses"]
+     verbs: ["get", "list", "watch"]
+  -  apiGroups: [""]
+     resources: ["events"]
+     verbs: ["watch", "create", "update", "patch"]
+  -  apiGroups: [""]
+     resources: ["services", "endpoints"]
+     verbs: ["get","create","list", "watch","update"]
+  -  apiGroups: ["extensions"]
+     resources: ["podsecuritypolicies"]
+     resourceNames: ["nfs-provisioner"]
+     verbs: ["use"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-nfs-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-provisioner
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: nfs-provisioner-runner
+  apiGroup: rbac.authorization.k8s.io
+---
+#vi nfs-deployment.yaml；创建nfs-client的授权
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-client-provisioner
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccount: nfs-provisioner
+      containers:
+        -  name: nfs-client-provisioner
+           image: lizhenliang/nfs-client-provisioner
+           volumeMounts:
+             -  name: nfs-client-root
+                mountPath:  /persistentvolumes
+           env:
+             -  name: PROVISIONER_NAME #供应者的名字
+                value: storage.pri/nfs #名字虽然可以随便起，以后引用要一致
+             -  name: NFS_SERVER
+                value: 192.168.0.3
+             -  name: NFS_PATH
+                value: /opt/k8s-data
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 192.168.0.3
+            path: /opt/k8s-data
+##这个镜像中volume的mountPath默认为/persistentvolumes，不能修改，否则运行时会报错

@@ -3,9 +3,12 @@ package com.hanyi.daily.thread;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.IdUtil;
+import com.hanyi.daily.pojo.TimeInfo;
 import com.hanyi.daily.thread.pojo.Athlete;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -159,7 +162,7 @@ public class ThreadDemo {
      * 1）、thenApply()方法：当一个线程依赖另一个线程时，获取上一个任务的返回结果，并返回当前任务的返回值
      * 2）、thenAccept()方法：接收任务的处理结果，并消费处理。无返回结果
      * 3）、thenRun()方法：只要上面的任务执行完成，就开始执行thenRun()，只是处理完任务后，执行thenRun的后续操作
-     *                    无法获取到上一步的返回结果
+     * 无法获取到上一步的返回结果
      * 注：不带Async后缀的都是拿到上一个执行任务的线程进行执行，带Async后缀的都会创建一个新的线程异步去执行任务
      */
     @Test
@@ -183,15 +186,26 @@ public class ThreadDemo {
      * 3）、runAfterBoth()方法：组合两个future，不需要获取future的结果，只需两个future处理完任务后，处理该任务
      */
     @Test
-    public void completableFutureBothTest() throws ExecutionException, InterruptedException {
+    public void completableFutureBothTest() throws Exception {
 
+        TimeInterval timer = DateUtil.timer();
         CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return 10 / 4;
         }, threadPoolExecutor);
 
         CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return "柯基";
         }, threadPoolExecutor);
 
@@ -201,14 +215,15 @@ public class ThreadDemo {
         }, threadPoolExecutor);
 
         System.out.println("获取的数据：" + thenCombine.get());
+        System.out.println("耗时：" + timer.intervalMs());
     }
 
     /**
      * 当两个任务中，任意一个future任务完成的时候，执行任务
-     *      1）、applyToEither()方法：两个任务中有一个执行完成，获取它的返回值，处理任务并有新的返回值
-     *      2）、acceptEither()方法：两个任务中有一个执行完成，获取它的返回值，处理任务，没有新的返回值
-     *      3）、runAfterEither()方法：两个任务中有一个执行完成，不需要获取future的结果，处理任务，也没有返回值
-     *  注：两个任务的返回类型需要兼容
+     * 1）、applyToEither()方法：两个任务中有一个执行完成，获取它的返回值，处理任务并有新的返回值
+     * 2）、acceptEither()方法：两个任务中有一个执行完成，获取它的返回值，处理任务，没有新的返回值
+     * 3）、runAfterEither()方法：两个任务中有一个执行完成，不需要获取future的结果，处理任务，也没有返回值
+     * 注：两个任务的返回类型需要兼容
      */
     @Test
     public void completableFutureEitherTest() throws ExecutionException, InterruptedException {
@@ -227,16 +242,16 @@ public class ThreadDemo {
             System.out.println();
             return result.toString() + "框架";
         }, threadPoolExecutor);
-        System.out.println("获取的返回数据："+ future.get());
+        System.out.println("获取的返回数据：" + future.get());
     }
 
     /**
      * 多任务组合
-     *      1)、allOf()方法：等待所有任务完成
-     *      2)、anyOf()方法：只要有一个任务完成
+     * 1)、allOf()方法：等待所有任务完成
+     * 2)、anyOf()方法：只要有一个任务完成
      */
     @Test
-    public void completableFutureOfTest(){
+    public void completableFutureOfTest() {
         CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
             return "小短腿";
@@ -251,5 +266,61 @@ public class ThreadDemo {
         System.out.println("获取的数据：" + stringList);
     }
 
+    /**
+     * 应用场景测试
+     */
+    @Test
+    public void applicationScenarioTest() throws ExecutionException, InterruptedException {
+        TimeInterval timer = DateUtil.timer();
+
+        TimeInfo timeInfo = new TimeInfo();
+        CompletableFuture<Long> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            long nextId = IdUtil.createSnowflake(1, 1).nextId();
+            timeInfo.setId(nextId);
+            return nextId;
+        }, threadPoolExecutor);
+
+        CompletableFuture<Void> thenAcceptAsync = future.thenAcceptAsync(result -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("根据主键id查询详情");
+            timeInfo.setTimeExtent(System.currentTimeMillis());
+        }, threadPoolExecutor);
+
+        CompletableFuture<Void> thenAcceptAsync2 = future.thenAcceptAsync(result -> {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("根据主键id查询日期格式");
+            timeInfo.setFormatName("日期格式转换");
+        }, threadPoolExecutor);
+
+        CompletableFuture<Void> runAsync = CompletableFuture.runAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("设置对象创建时间");
+            timeInfo.setCreateTime(LocalDateTime.now());
+        }, threadPoolExecutor);
+
+        //等待所有任务线程执行完成
+        CompletableFuture.allOf(thenAcceptAsync, thenAcceptAsync2, runAsync).get();
+
+        System.out.println("获取的数据：" + timeInfo);
+        //总共耗时3秒
+        System.out.println("耗时：" + timer.intervalMs());
+    }
 
 }

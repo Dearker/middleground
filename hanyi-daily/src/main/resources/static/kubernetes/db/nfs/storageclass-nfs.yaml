@@ -1,0 +1,23 @@
+#创建storageclass
+# vi storageclass-nfs.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: storage-nfs
+provisioner: storage.pri/nfs
+reclaimPolicy: Delete
+
+#扩展"reclaim policy"有三种方式：Retain、Recycle、Deleted。
+  #Retain
+  #保护被PVC释放的PV及其上数据，并将PV状态改成"released"，不将被其它PVC绑定。集群管理员手动通过如下步骤释放存储资源：
+  #手动删除PV，但与其相关的后端存储资源如(AWS EBS, GCE PD, Azure Disk, or Cinder volume)仍然存在。
+  #手动清空后端存储volume上的数据。
+  #手动删除后端存储volume，或者重复使用后端volume，为其创建新的PV。
+
+  #Delete
+  #删除被PVC释放的PV及其后端存储volume。对于动态PV其"reclaim policy"继承自其"storage class"，
+  #默认是Delete。集群管理员负责将"storage class"的"reclaim policy"设置成用户期望的形式，否则需要用
+  #户手动为创建后的动态PV编辑"reclaim policy"
+
+  #Recycle
+  #保留PV，但清空其上数据，已废弃
