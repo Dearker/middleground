@@ -1,6 +1,7 @@
 package com.hanyi.daily.load;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.net.NetUtil;
@@ -219,5 +220,14 @@ public class LoaderTest {
         Console.log(stopWatch.prettyPrint());
     }
 
+    /**
+     * 将字符串转换成base64编码格式
+     */
+    @Test
+    public void base64Test() {
+        String root = Base64.encode("root");
+        //cm9vdA==
+        System.out.println(root);
+    }
 
 }

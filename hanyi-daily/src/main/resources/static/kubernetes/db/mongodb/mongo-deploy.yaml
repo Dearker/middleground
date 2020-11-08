@@ -43,8 +43,8 @@ spec:
           configMap:
             name: mongodb-conf
         - name: data
-          hostPath:
-            path: /data/mongodb/
+          persistentVolumeClaim:
+            claimName: mongo-pvc
 
 ---
 kind: Service

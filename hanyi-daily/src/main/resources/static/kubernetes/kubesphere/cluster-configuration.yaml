@@ -1,3 +1,4 @@
+# 参考文档地址：https://www.yuque.com/leifengyang/kubesphere/grw8se
 ---
 apiVersion: installer.kubesphere.io/v1alpha1
 kind: ClusterConfiguration
@@ -37,7 +38,7 @@ spec:
   auditing:                # Whether to install KubeSphere audit log system. It provides a security-relevant chronological set of records，recording the sequence of activities happened in platform, initiated by different tenants.
     enabled: false
   devops:                  # (CPU: 0.47 Core, Memory: 8.6 G) Whether to install KubeSphere DevOps System. It provides out-of-box CI/CD system based on Jenkins, and automated workflow tools including Source-to-Image & Binary-to-Image.
-    enabled: true
+    enabled: false
     jenkinsMemoryLim: 256Mi      # Jenkins memory limit.
     jenkinsMemoryReq: 256Mi   # Jenkins memory request.
     jenkinsVolumeSize: 1Gi     # Jenkins volume size.
@@ -45,20 +46,20 @@ spec:
     jenkinsJavaOpts_Xmx: 256m
     jenkinsJavaOpts_MaxRAM: 1g
   events:                  # Whether to install KubeSphere events system. It provides a graphical web console for Kubernetes Events exporting, filtering and alerting in multi-tenant Kubernetes clusters.
-    enabled: true
+    enabled: false
     ruler:
-      enabled: true
+      enabled: false
       replicas: 2
   logging:                 # (CPU: 57 m, Memory: 2.76 G) Whether to install KubeSphere logging system. Flexible logging functions are provided for log query, collection and management in a unified console. Additional log collectors can be added, such as Elasticsearch, Kafka and Fluentd.
     enabled: false
     logsidecarReplicas: 2
   metrics_server:                    # (CPU: 56 m, Memory: 44.35 MiB) Whether to install metrics-server. IT enables HPA (Horizontal Pod Autoscaler).
     enabled: false
-  #monitoring:
-    # prometheusReplicas: 1            # Prometheus replicas are responsible for monitoring different segments of data source and provide high availability as well.
-    #prometheusMemoryRequest: 400Mi   # Prometheus request memory.
-    #prometheusVolumeSize: 2Gi       # Prometheus PVC size.
-    # alertmanagerReplicas: 1          # AlertManager Replicas.
+  monitoring:
+  #  prometheusReplicas: 1            # Prometheus replicas are responsible for monitoring different segments of data source and provide high availability as well.
+    prometheusMemoryRequest: 400Mi   # Prometheus request memory.
+    prometheusVolumeSize: 1Gi       # Prometheus PVC size.
+  #  alertmanagerReplicas: 1          # AlertManager Replicas.
   multicluster:
     clusterRole: none  # host | member | none  # You can install a solo cluster, or specify it as the role of host or member cluster.
   networkpolicy:       # Network policies allow network isolation within the same cluster, which means firewalls can be set up between certain instances (Pods).
@@ -69,5 +70,5 @@ spec:
   openpitrix:          # (2 Core, 3.6 G) Whether to install KubeSphere Application Store. It provides an application store for Helm-based applications, and offer application lifecycle management.
     enabled: false
   servicemesh:         # (0.3 Core, 300 MiB) Whether to install KubeSphere Service Mesh (Istio-based). It provides fine-grained traffic management, observability and tracing, and offer visualization for traffic topology.
-    enabled: true
+    enabled: false
   

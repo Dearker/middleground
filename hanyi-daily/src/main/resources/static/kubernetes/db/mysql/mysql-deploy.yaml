@@ -22,6 +22,11 @@ spec:
           #Never 只使用本地镜像，从不拉取，即使本地没有
           #如果省略imagePullPolicy  策略为always
           imagePullPolicy: IfNotPresent
+          # 新版本镜像有更新，需要使用下面的认证插件环境变量配置才会生效
+          args:
+            - --default_authentication_plugin=mysql_native_password
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
           ports:
             - containerPort: 3306
           resources:
@@ -39,8 +44,8 @@ spec:
               value: "root"
       volumes:
         - name: mydata
-          hostPath:
-            path: /opt/data/mysql
+          persistentVolumeClaim:
+            claimName: mysql-pvc
 
 ---
 apiVersion: v1
@@ -58,4 +63,7 @@ spec:
   selector:
     name: mysql-pod
 
+#授权root用户远程连接。进入容器中执行命令：
+# grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option;
+# flush privileges;
 

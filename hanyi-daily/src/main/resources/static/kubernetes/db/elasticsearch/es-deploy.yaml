@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-search-deploy
+  namespace: default
+  labels:
+    app: elastic-search-deploy
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubesphere.io/creator: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic-search-deploy
+  template:
+    metadata:
+      labels:
+        app: elastic-search-deploy
+      annotations:
+        kubesphere.io/containerSecrets: ''
+        logging.kubesphere.io/logsidecar-config: '{}'
+    spec:
+      containers:
+        - name: container-7qc0mf
+          image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
+          ports:
+            - name: tcp-9200
+              containerPort: 9200
+              protocol: TCP
+            - name: tcp-9300
+              containerPort: 9300
+              protocol: TCP
+          env:
+            - name: ES_JAVA_OPTS
+              value: -Xms64m -Xmx128m
+            - name: discovery.type
+              value: single-node
+            - name: http.cors.enabled
+              value: "true"
+            - name: http.cors.allow-origin
+              value: "*"
+          resources:
+            limits:
+              cpu: 350m
+              memory: 512Mi
+          volumeMounts:
+            - name: volume-no4gkj
+              mountPath: /usr/share/elasticsearch/data
+            - name: es-plugin
+              mountPath: /usr/share/elasticsearch/plugins
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      volumes:
+        - name: volume-no4gkj
+          persistentVolumeClaim:
+            claimName: elastic-search-pvc
+        - name: es-plugin
+          persistentVolumeClaim:
+            claimName: elastic-search-plugin-pvc
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      affinity: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+
+## Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-search-service
+  labels:
+    app: elastic-search-deploy
+spec:
+  type: NodePort
+  ports:
+    - name: elastic-search
+      port: 9200
+      nodePort: 9200
+      targetPort: 9200
+  selector:
+    app: elastic-search-deploy
+

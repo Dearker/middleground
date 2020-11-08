@@ -129,6 +129,8 @@
 
 ### docker 部署数据库及三方依赖
 
+    注：docker中强制删除未使用的镜像文件命令：docker image prune -a -f
+
 1、mysql
 
     docker run -p 3306:3306 --name mysql -v /opt/data/mysql/conf:/etc/mysql/conf.d -v /opt/data/mysql/logs:/logs -v /opt/data/mysql/data:/mysql_data -e MYSQL_ROOT_PASSWORD=root -d mysql:5.7
@@ -136,6 +138,8 @@
 2、mongo
 
     docker run -p 27017:27017 -v /opt/data/mongo/db:/data/db -v /opt/data/mongo:/data/configdb -d mongo:3.6
+
+    Mac本机mongo启动到mongo的bin路径下执行命令：./mongod
 
 3、redis
     
@@ -155,6 +159,34 @@
     
     参考文档地址：https://blog.csdn.net/wojiushiwo945you/article/details/100699885
     该项目maven检查命令：mvn sonar:sonar -Dsonar.projectKey=middleground -Dsonar.host.url=http://114.67.102.137:9000 -Dsonar.login=b991bccecb557e57d03b13193dfdb2dc0e4d5316
+    
+6、elasticSearch
+    
+    docker run --name elasticsearch -p 9200:9200 \
+     -p 9300:9300 \
+     -e "discovery.type=single-node" \
+     -e ES_JAVA_OPTS="-Xms64m -Xmx128m" \
+      -v /mydata/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
+     -v /mydata/elasticsearch/data:/usr/share/elasticsearch/data \
+     -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins \
+     -d elasticsearch:7.4.2
+    
+    参考文档地址：https://www.cnblogs.com/chinda/p/13125625.html
+    参数说明：
+        --name elasticsearch：将容器命名为 elasticsearch
+        -p 9200:9200：将容器的9200端口映射到宿主机9200端口
+        -p 9300:9300：将容器的9300端口映射到宿主机9300端口，目的是集群互相通信
+        -e "discovery.type=single-node"：单例模式
+        -e ES_JAVA_OPTS="-Xms64m -Xmx128m"：配置内存大小
+        -v /mydata/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml：将配置文件挂载到宿主机
+        -v /mydata/elasticsearch/data:/usr/share/elasticsearch/data：将数据文件夹挂载到宿主机
+        -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins：将插件目录挂载到宿主机(需重启)
+        -d elasticsearch:7.4.2 后台运行容器，并返回容器ID
+        elasticsearch.yml中定义的信息为http.host: 0.0.0.0
+    
+7、kibana
+    
+    docker run --name -e ELASTICSEARCH_HOSTS=http://192.168.0.3:9200 -p 5601:5601 -d kibana:7.4.2
     
 ### 使用kubernetes命令
  
@@ -199,4 +231,8 @@
     KB/Sec: 每秒接收数据量
     
     注：并发数自定义，一般标准为异常率低于0.1%，且响应时间小于2秒
+
+7、Mac连接Linux
+
+    命令：ssh root@服务器地址  ，然后输入密码
     

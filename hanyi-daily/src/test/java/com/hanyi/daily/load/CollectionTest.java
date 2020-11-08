@@ -84,6 +84,7 @@ public class CollectionTest {
 
         System.out.println(multiMap.get("hanyi"));
         System.out.println(multiMap.get("123"));
+
     }
 
     /**
@@ -444,7 +445,7 @@ public class CollectionTest {
         });
 
         final Person[] p = new Person[1];
-        integerList.forEach(s->{
+        integerList.forEach(s -> {
             p[0] = new Person();
             p[0].setId(s);
             p[0].setName("柯基");
@@ -452,6 +453,77 @@ public class CollectionTest {
         });
 
         personList.forEach(System.out::println);
+    }
+
+    /**
+     * Guava不可变集合
+     */
+    @Test
+    public void immutableSetTest() {
+
+        // 创建方式1：of
+        ImmutableSet<String> immutableSet = ImmutableSet.of("a", "b", "c");
+        immutableSet.forEach(System.out::println);
+
+        // 创建方式2：builder
+        ImmutableSet<String> immutableSet2 = ImmutableSet.<String>builder()
+                .add("hello")
+                .add("未读代码")
+                .build();
+        immutableSet2.forEach(System.out::println);
+
+        // 创建方式3：从其他集合中拷贝创建
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("www.wdbyte.com");
+        arrayList.add("https");
+        ImmutableSet<String> immutableSet3 = ImmutableSet.copyOf(arrayList);
+        immutableSet3.forEach(System.out::println);
+
+        // JDK Collections 创建不可变 List
+        List<String> list = Collections.unmodifiableList(arrayList);
+        list.forEach(System.out::println);
+
+    }
+
+    /**
+     * 创建集合
+     */
+    @Test
+    public void collectionNewTest() {
+        HashSet<Integer> integerHashSet = Sets.newHashSet(1, 2, 3);
+        ArrayList<Integer> arrayList = Lists.newArrayList(1, 2, 3);
+        System.out.println(integerHashSet);
+        System.out.println(arrayList);
+    }
+
+    /**
+     * 处理集合中的交并集
+     */
+    @Test
+    public void unionTest() {
+
+        Set<String> newHashSet1 = Sets.newHashSet("a", "a", "b", "c");
+        Set<String> newHashSet2 = Sets.newHashSet("b", "b", "c", "d");
+
+        // 交集
+        Sets.SetView<String> intersectionSet = Sets.intersection(newHashSet1, newHashSet2);
+        System.out.println(intersectionSet); // [b, c]
+
+        // 并集
+        Sets.SetView<String> unionSet = Sets.union(newHashSet1, newHashSet2);
+        System.out.println(unionSet); // [a, b, c, d]
+
+        // newHashSet1 中存在，newHashSet2 中不存在
+        Sets.SetView<String> setView = Sets.difference(newHashSet1, newHashSet2);
+        System.out.println(setView); // [a]
+
+    }
+
+    @Test
+    public void stringListTest(){
+        String str = ",a,,b,";
+        String[] splitArr = str.split(",");
+        Arrays.stream(splitArr).filter(StrUtil::isNotBlank).forEach(System.out::println);
     }
 
 }

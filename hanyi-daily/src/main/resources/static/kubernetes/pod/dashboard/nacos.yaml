@@ -1,0 +1,93 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nacos-deploy
+  namespace: default
+  labels:
+    app: nacos-deploy
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubesphere.io/creator: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nacos-deploy
+  template:
+    metadata:
+      labels:
+        app: nacos-deploy
+      annotations:
+        kubesphere.io/containerSecrets: ''
+        logging.kubesphere.io/logsidecar-config: '{}'
+    spec:
+      volumes:
+        - name: volume-r478d4
+          persistentVolumeClaim:
+            claimName: nacos-pvc
+      containers:
+        - name: container-0hoc91
+          image: 'nacos/nacos-server:1.1.4'
+          ports:
+            - name: tcp-8848
+              containerPort: 8848
+              protocol: TCP
+          env:
+            - name: MODE
+              value: standalone
+            # JVM最大可用内存
+            - name: JVM_XMX
+              value: 512m
+            # JVM最小可用内存
+            - name: JVM_XMS
+              value: 512m
+            # JVM年轻代内存
+            - name: JVM_XMN
+              value: 256m
+            # JVM老年代最大内存
+            - name: JVM_MMS
+              value: 128m
+          resources:
+            limits:
+              cpu: 350m
+              memory: 512Mi
+          volumeMounts:
+            - name: volume-r478d4
+              mountPath: /home/nacos/data
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      affinity: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+## Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nacos-service
+  labels:
+    app: nacos-deploy
+spec:
+  type: NodePort
+  ports:
+    - name: nacos
+      port: 8848
+      nodePort: 8848
+      targetPort: 8848
+  selector:
+    app: nacos-deploy

@@ -13,7 +13,7 @@
     <artifactId>hanyi-search</artifactId>
 
     <properties>
-        <elasticsearch.version>7.4.2</elasticsearch.version>
+        <elasticsearch.version>7.9.2</elasticsearch.version>
     </properties>
 
     <dependencies>

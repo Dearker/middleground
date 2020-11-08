@@ -1,0 +1,74 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: sentinel-dashboard-deploy
+  namespace: default
+  labels:
+    app: sentinel-dashboard-deploy
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+    kubesphere.io/creator: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sentinel-dashboard-deploy
+  template:
+    metadata:
+      labels:
+        app: sentinel-dashboard-deploy
+      annotations:
+        kubesphere.io/containerSecrets: ''
+    spec:
+      containers:
+        - name: container-qpvvxb
+          image: 'bladex/sentinel-dashboard:1.7.2'
+          ports:
+            - name: tcp-8719
+              containerPort: 8719
+              protocol: TCP
+            - name: tcp-8858
+              containerPort: 8858
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: default
+      serviceAccount: default
+      securityContext: {}
+      affinity: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+## Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: sentinel-service
+  labels:
+    app: sentinel-dashboard-deploy
+spec:
+  type: NodePort
+  ports:
+    - name: sentinal
+      port: 8858
+      nodePort: 8858
+      targetPort: 8858
+  selector:
+    app: sentinel-dashboard-deploy
+
