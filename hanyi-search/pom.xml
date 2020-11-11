@@ -12,10 +12,6 @@
     <groupId>com.hanyi.search</groupId>
     <artifactId>hanyi-search</artifactId>
 
-    <properties>
-        <elasticsearch.version>7.9.2</elasticsearch.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -33,7 +29,6 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>${elasticsearch.version}</version>
         </dependency>
     </dependencies>
 

@@ -169,7 +169,7 @@
       -v /mydata/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
      -v /mydata/elasticsearch/data:/usr/share/elasticsearch/data \
      -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins \
-     -d elasticsearch:7.4.2
+     -d elasticsearch:7.9.2
     
     参考文档地址：https://www.cnblogs.com/chinda/p/13125625.html
     参数说明：
@@ -181,12 +181,12 @@
         -v /mydata/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml：将配置文件挂载到宿主机
         -v /mydata/elasticsearch/data:/usr/share/elasticsearch/data：将数据文件夹挂载到宿主机
         -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins：将插件目录挂载到宿主机(需重启)
-        -d elasticsearch:7.4.2 后台运行容器，并返回容器ID
+        -d elasticsearch:7.9.2 后台运行容器，并返回容器ID
         elasticsearch.yml中定义的信息为http.host: 0.0.0.0
     
 7、kibana
     
-    docker run --name -e ELASTICSEARCH_HOSTS=http://192.168.0.3:9200 -p 5601:5601 -d kibana:7.4.2
+    docker run --name kibana -e ELASTICSEARCH_HOSTS=http://192.168.0.3:9200 -p 5601:5601 -d kibana:7.9.2
     
 ### 使用kubernetes命令
  

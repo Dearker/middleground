@@ -2,7 +2,7 @@ server:
   port: 8010
 
 elasticSearch:
-  hostname: localhost
+  hostname: 114.67.102.137
   port: 9200
   scheme: http
 

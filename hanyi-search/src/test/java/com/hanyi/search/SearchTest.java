@@ -2,6 +2,7 @@ package com.hanyi.search;
 
 import com.alibaba.fastjson.JSON;
 import com.hanyi.search.common.config.ElasticSearchConfig;
+import com.hanyi.search.common.constant.ElasticSearchConstant;
 import lombok.Data;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -82,7 +83,7 @@ public class SearchTest {
         // 创建检索请求
         SearchRequest searchRequest = new SearchRequest();
         // 指定索引
-        searchRequest.indices("bank");
+        searchRequest.indices(ElasticSearchConstant.PRODUCT_INDEX);
         // 构造查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 

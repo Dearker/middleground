@@ -8,8 +8,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
-
 /**
  * <p>
  * elasticSearch配置类
@@ -20,9 +18,6 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class ElasticSearchConfig {
-
-    @Resource
-    private ElasticSearchProperty elasticSearchProperty;
 
     public static final RequestOptions COMMON_OPTIONS;
 
@@ -41,7 +36,7 @@ public class ElasticSearchConfig {
      * @return 返回客户端对象
      */
     @Bean
-    public RestHighLevelClient restHighLevelClient() {
+    public RestHighLevelClient restHighLevelClient(ElasticSearchProperty elasticSearchProperty) {
         return new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost(elasticSearchProperty.getHostName(),

@@ -2,6 +2,8 @@ package com.hanyi.search.service;
 
 
 import com.hanyi.search.bo.SkuEsModel;
+import com.hanyi.search.request.SearchParam;
+import com.hanyi.search.vo.SearchResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,4 +25,12 @@ public interface ProductSaveService {
      * @throws IOException 异常
      */
     Boolean productStatusUp(List<SkuEsModel> esModels) throws IOException;
+
+    /**
+     * 去es检索需要的信息
+     * @param param 检索的所有参数
+     * @return 返回检索的结果,页面需要显示的所以数据
+     */
+    SearchResult search(SearchParam param);
+
 }

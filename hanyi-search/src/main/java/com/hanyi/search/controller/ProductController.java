@@ -3,6 +3,7 @@ package com.hanyi.search.controller;
 import com.hanyi.framework.enums.ResultCode;
 import com.hanyi.framework.model.response.ResponseResult;
 import com.hanyi.search.bo.SkuEsModel;
+import com.hanyi.search.request.SearchParam;
 import com.hanyi.search.service.ProductSaveService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/product")
-public class ProductSaveController {
+public class ProductController {
 
     @Resource
     private ProductSaveService productSaveService;
@@ -41,6 +42,17 @@ public class ProductSaveController {
         } catch (IOException e) {
             return ResponseResult.failure(ResultCode.FAILED);
         }
+    }
+
+    /**
+     * 根据查询条件查询数据
+     *
+     * @param param 参数参数
+     * @return 返回查询结果
+     */
+    @PostMapping("/search")
+    public ResponseResult search(@RequestBody SearchParam param) {
+        return ResponseResult.success(productSaveService.search(param));
     }
 
 }

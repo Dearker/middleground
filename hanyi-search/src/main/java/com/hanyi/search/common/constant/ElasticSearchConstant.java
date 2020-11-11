@@ -15,4 +15,9 @@ public class ElasticSearchConstant {
      */
     public static final String PRODUCT_INDEX = "product";
 
+    /**
+     * sku数据在es的索引
+     */
+    public static final Integer PRODUCT_PAGE_SIZE = 8;
+
 }
