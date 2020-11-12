@@ -26,7 +26,7 @@ spec:
             - name: POSTGRES_USER
               value: "sonarUser"
             - name: POSTGRES_PASSWORD
-              value: "123456"
+              value: "asdzxc789"
           resources:
             limits:
               cpu: 250m
@@ -39,8 +39,8 @@ spec:
               mountPath: /var/lib/postgresql/data
       volumes:
         - name: data
-          hostPath:
-            path: /opt/data/postgres
+          persistentVolumeClaim:
+            claimName: postgres-pvc
 
 ---
 apiVersion: v1

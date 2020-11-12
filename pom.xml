@@ -37,7 +37,7 @@
         <module>hanyi-mongo</module>
         <module>hanyi-kafka</module>
         <module>hanyi-hikaricp</module>
-        <module>hanyi-ordinary</module>
+        <module>hanyi-web</module>
         <module>hanyi-search</module>
         <module>hanyi-redisson</module>
     </modules>

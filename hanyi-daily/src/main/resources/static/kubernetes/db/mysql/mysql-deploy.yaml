@@ -41,7 +41,7 @@ spec:
               name: mydata
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "root"
+              value: asdzxc789
       volumes:
         - name: mydata
           persistentVolumeClaim:

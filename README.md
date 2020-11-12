@@ -155,7 +155,7 @@
     
 5、sonarQube
 
-    docker run -d -p 9000:9000 -m 2048M --cpus=0.3 -e "SONARQUBE_JDBC_URL=jdbc:postgresql://114.67.102.137:5432/sonarDB" -e "SONARQUBE_JDBC_USERNAME=sonarUser" -e "SONARQUBE_JDBC_PASSWORD=123456" --name sonarqube sonarqube:lts
+    docker run -d -p 9000:9000 -m 2048M --cpus=0.3 -e "SONARQUBE_JDBC_URL=jdbc:postgresql://114.67.102.137:5432/sonarDB" -e "SONARQUBE_JDBC_USERNAME=sonarUser" -e "SONARQUBE_JDBC_PASSWORD=asdzxc789" --name sonarqube sonarqube:lts
     
     参考文档地址：https://blog.csdn.net/wojiushiwo945you/article/details/100699885
     该项目maven检查命令：mvn sonar:sonar -Dsonar.projectKey=middleground -Dsonar.host.url=http://114.67.102.137:9000 -Dsonar.login=b991bccecb557e57d03b13193dfdb2dc0e4d5316
@@ -186,7 +186,7 @@
     
 7、kibana
     
-    docker run --name kibana -e ELASTICSEARCH_HOSTS=http://192.168.0.3:9200 -p 5601:5601 -d kibana:7.9.2
+    docker run --name kibana -m 1024M --cpus=0.3 -e ELASTICSEARCH_HOSTS=http://192.168.0.4:9200 -p 5601:5601 -d kibana:7.9.2
     
 ### 使用kubernetes命令
  

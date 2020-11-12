@@ -38,6 +38,11 @@ spec:
               mountPath: /data/mongodb/conf/
             - name: data
               mountPath: /data/mongodb/
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: admin
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: asdzxc789
       volumes:
         - name: mongodb-config
           configMap:
@@ -62,4 +67,3 @@ spec:
       nodePort: 27017
   selector:
     name: mongodb-pod
-

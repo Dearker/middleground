@@ -41,6 +41,9 @@ spec:
               value: "true"
             - name: http.cors.allow-origin
               value: "*"
+            #开启权限验证插件
+            - name: xpack.security.enabled
+              value: "true"
           resources:
             limits:
               cpu: 350m
@@ -95,3 +98,5 @@ spec:
   selector:
     app: elastic-search-deploy
 
+#开启权限验证文档查看地址：
+#     https://www.cnblogs.com/chenmu/p/12680739.html
