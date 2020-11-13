@@ -31,8 +31,8 @@ public class CountDownLatchTest {
     static class Athlete implements Runnable {
 
         private CyclicBarrier cyclicBarrier;
-        private String name;
-        private CountDownLatch countDownLatch;
+        private final String name;
+        private final CountDownLatch countDownLatch;
 
         /**
          * 起点运动员

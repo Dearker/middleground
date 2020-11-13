@@ -186,7 +186,20 @@
     
 7、kibana
     
-    docker run --name kibana -m 1024M --cpus=0.3 -e ELASTICSEARCH_HOSTS=http://192.168.0.4:9200 -p 5601:5601 -d kibana:7.9.2
+    docker run -d  --name kibana -m 1024M --cpus=0.3 -e ELASTICSEARCH_URL=http://192.168.0.4:9200  -e ELASTICSEARCH_USERNAME="elastic"  -e ELASTICSEARCH_PASSWORD="asdzxc789"   -p 5601:5601  kibana:7.9.2
+    docker run -d  --name kibana -m 1024M --cpus=0.3 -e ELASTICSEARCH_HOSTS=http://192.168.0.4:9200  -e ELASTICSEARCH_USERNAME="elastic"  -e ELASTICSEARCH_PASSWORD="asdzxc789"   -p 5601:5601  kibana:7.9.2
+    注：如果上述命令中指定的环境变量失效，则需要到容器中直接修改kibana.yml文件，配置内容如下：
+            server.name: kibana
+            server.host: "0"
+            elasticsearch.hosts: [ "http://192.168.0.4:9200" ]
+            monitoring.ui.container.elasticsearch.enabled: true
+            
+            elasticsearch.username: "elastic"
+            elasticsearch.password: "asdzxc789"
+            
+            i18n.locale: "zh-CN"
+            xpack.security.enabled: true
+        参考文档地址：https://blog.csdn.net/qq_41631365/article/details/109181240
     
 ### 使用kubernetes命令
  

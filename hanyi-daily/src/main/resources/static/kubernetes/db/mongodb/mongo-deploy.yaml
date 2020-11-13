@@ -40,7 +40,7 @@ spec:
               mountPath: /data/mongodb/
           env:
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: admin
+              value: root
             - name: MONGO_INITDB_ROOT_PASSWORD
               value: asdzxc789
       volumes:
@@ -67,3 +67,8 @@ spec:
       nodePort: 27017
   selector:
     name: mongodb-pod
+
+#mongo容器在创建之后默认无权限，使用Navicat连接之后再admin数据库中创建用户名和密码，命令如下：
+#db.createUser({ user:'admin',pwd:'asdzxc789',roles:[ { role:'userAdminAnyDatabase', db: 'admin'}]});
+#db.createUser({ user: "root" , pwd: "asdzxc789", roles: ["root"]});
+#创建用户完成之后，在configMap中加上auth=true属性之后，重新启动mongo容器即可完成授权
