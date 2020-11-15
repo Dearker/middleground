@@ -22,7 +22,7 @@
         <hutool.version>5.4.3</hutool.version>
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
-        <httpclient.version>4.2.1</httpclient.version>
+        <httpclient.version>4.3.6</httpclient.version>
     </properties>
 
     <dependencies>
