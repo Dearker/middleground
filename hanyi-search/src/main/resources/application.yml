@@ -5,4 +5,5 @@ elasticSearch:
   hostname: 114.67.102.137
   port: 9200
   scheme: http
-
+  userName: elastic
+  password: asdzxc789

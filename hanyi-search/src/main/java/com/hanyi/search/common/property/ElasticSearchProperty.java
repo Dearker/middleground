@@ -32,4 +32,14 @@ public class ElasticSearchProperty {
      */
     private String scheme;
 
+    /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
+     * 密码
+     */
+    private String password;
+
 }

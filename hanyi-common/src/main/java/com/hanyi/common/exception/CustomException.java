@@ -1,6 +1,7 @@
 package com.hanyi.common.exception;
 
 import com.hanyi.framework.enums.ResultCode;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -10,17 +11,12 @@ import lombok.Getter;
  * @create 2019-10-15
  **/
 @Getter
+@AllArgsConstructor
 public class CustomException extends RuntimeException {
 
     /**
      * 错误代码
      */
-    private ResultCode resultCode;
-
-    public CustomException(ResultCode resultCode){
-        this.resultCode = resultCode;
-    }
-
-    
+    private final ResultCode resultCode;
 
 }

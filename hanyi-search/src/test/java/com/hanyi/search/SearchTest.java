@@ -83,7 +83,7 @@ public class SearchTest {
         // 创建检索请求
         SearchRequest searchRequest = new SearchRequest();
         // 指定索引
-        searchRequest.indices(ElasticSearchConstant.PRODUCT_INDEX);
+        searchRequest.indices(ElasticSearchConstant.BANK_INDEX);
         // 构造查询条件
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 

@@ -2,6 +2,10 @@ package com.hanyi.search.common.config;
 
 import com.hanyi.search.common.property.ElasticSearchProperty;
 import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -37,11 +41,22 @@ public class ElasticSearchConfig {
      */
     @Bean
     public RestHighLevelClient restHighLevelClient(ElasticSearchProperty elasticSearchProperty) {
+        //初始化ES操作客户端
+        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        //es账号密码
+        credentialsProvider.setCredentials(AuthScope.ANY,
+                new UsernamePasswordCredentials(elasticSearchProperty.getUserName(),
+                        elasticSearchProperty.getPassword()));
+
         return new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost(elasticSearchProperty.getHostName(),
                                 elasticSearchProperty.getPort(),
-                                elasticSearchProperty.getScheme())));
+                                elasticSearchProperty.getScheme())
+                ).setHttpClientConfigCallback(httpClientBuilder -> {
+                    httpClientBuilder.disableAuthCaching();
+                    return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+                }));
     }
 
 }

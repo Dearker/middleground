@@ -1,7 +1,7 @@
 package com.hanyi.cache.controller;
 
 import com.hanyi.cache.entity.Book;
-import com.hanyi.cache.service.BookService;
+import com.hanyi.cache.service.impl.BookService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

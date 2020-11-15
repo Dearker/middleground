@@ -2,6 +2,7 @@ package com.hanyi.daily.load;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -62,6 +63,8 @@ public class NumberTest {
         System.out.println(Math.floorDiv(6, 2));
         //加法 3
         System.out.println(Integer.sum(1, 2));
+        //绝对值
+        System.out.println(Math.abs(-10));
     }
 
     @Test
@@ -74,26 +77,31 @@ public class NumberTest {
         System.out.println(integerSet.stream().min(Integer::compareTo).orElse(null));
     }
 
+    /**
+     * BigDecimal的加减乘除方法
+     */
     @Test
-    public void integerTest(){
+    public void bigDecimalTest(){
 
-        Integer integer = 35;
-        int i = 35;
+        BigDecimal bigNum1 = new BigDecimal("10");
+        BigDecimal bigNum2 = new BigDecimal("5");
 
-        if(integer.equals(i)){
-            System.out.println("相等");
-        }else{
-            System.out.println("不等");
-        }
+        System.out.println(BigDecimal.ZERO);
+        //加法 15
+        BigDecimal add = bigNum1.add(bigNum2);
+        System.out.println("求和：" + add);
 
-        Integer integer1 = null;
+        //减法 5
+        BigDecimal subtract = bigNum1.subtract(bigNum2);
+        System.out.println("减法：" + subtract);
 
-        if(0 == integer1){
-            System.out.println("111");
-        }else{
-            System.out.println("222");
-        }
+        //乘法 50
+        BigDecimal multiply = bigNum1.multiply(bigNum2);
+        System.out.println("乘法：" + multiply);
 
+        //除法 2
+        BigDecimal divide = bigNum1.divide(bigNum2);
+        System.out.println("除法：" + divide);
     }
 
 }

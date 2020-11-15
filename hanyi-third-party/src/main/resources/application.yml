@@ -1,0 +1,10 @@
+server:
+  port: 8011
+
+sms:
+  host: http://dingxin.market.alicloudapi.com
+  path: /dx/sendSms
+  appCode: 7752e489fc004f3884be9c8d0418c2fc
+  #模板id，即公司编号，需申请
+  tplId: TP1711063
+

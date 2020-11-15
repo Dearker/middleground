@@ -35,11 +35,14 @@
         <module>hanyi-privoder</module>
         <module>hanyi-cache</module>
         <module>hanyi-mongo</module>
-        <module>hanyi-kafka</module>
+        <module>hanyi-mq-kafka</module>
         <module>hanyi-hikaricp</module>
         <module>hanyi-web</module>
         <module>hanyi-search</module>
         <module>hanyi-redisson</module>
+        <module>hanyi-third-party</module>
+        <module>hanyi-session</module>
+        <module>hanyi-mq-rabbitmq</module>
     </modules>
     <packaging>pom</packaging>
 

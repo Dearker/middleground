@@ -35,7 +35,7 @@ public class ExceptionCatch {
     /**
      * 定义map的builder对象，去构建ImmutableMap
      */
-    private static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
+    private static final ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
 
     /**
      * 捕获CustomException此类异常

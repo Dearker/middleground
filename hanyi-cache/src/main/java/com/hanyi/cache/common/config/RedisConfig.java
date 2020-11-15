@@ -1,8 +1,12 @@
 package com.hanyi.cache.common.config;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanyi.cache.common.property.RedisProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +14,12 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.Duration;
 
@@ -23,6 +30,7 @@ import java.time.Duration;
  * @CreateDate: 2020-03-12 21:27
  * @Version: 1.0
  */
+@Slf4j
 @Configuration
 public class RedisConfig {
 
@@ -67,5 +75,40 @@ public class RedisConfig {
         return jackson2JsonRedisSerializer;
     }
 
+    /**
+     * 配置redis监听容器
+     *
+     * @param redisConnectionFactory redis连接工厂
+     * @return 返回redis的key监听器
+     */
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+        RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+        redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        return redisMessageListenerContainer;
+    }
+
+    /**
+     * 注入redis连接池
+     *
+     * @param redisProperty redis属性配置类
+     * @return 返回连接池
+     */
+    @Bean
+    public JedisPool redisPoolFactory(RedisProperty redisProperty) {
+        log.info("JedisPool注入成功！！");
+        log.info("redis地址：" + redisProperty.getHost() + ":" + redisProperty.getPort());
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxIdle(redisProperty.getMaxIdle());
+        jedisPoolConfig.setMaxWaitMillis(redisProperty.getMaxWaitMillis());
+
+        return new JedisPool(jedisPoolConfig, redisProperty.getHost(),
+                redisProperty.getPort(), redisProperty.getTimeout());
+    }
+
+    @Bean
+    public Snowflake snowflake(){
+        return IdUtil.createSnowflake(1, 1);
+    }
 
 }

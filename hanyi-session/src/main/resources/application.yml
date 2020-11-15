@@ -1,0 +1,13 @@
+server:
+  port: 8012
+
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  session:
+    store-type: redis
+    #springSession 过期时间
+    timeout: 30m
+

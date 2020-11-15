@@ -201,6 +201,10 @@
             xpack.security.enabled: true
         参考文档地址：https://blog.csdn.net/qq_41631365/article/details/109181240
     
+8、rabbitmq
+
+    docker run -d --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq:management    
+    
 ### 使用kubernetes命令
  
 1、查看dashboard令牌(最高权限)

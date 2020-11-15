@@ -1,0 +1,21 @@
+server:
+  port: 8013
+
+# RabbitMQ配置
+spring:
+  rabbitmq:
+    host: 114.67.102.117
+    port: 5672
+    # 虚拟主机配置
+    virtual-host: /
+    # 开启发送端消息抵达Broker确认
+    publisher-confirms: true
+    # 开启发送端消息抵达Queue确认
+    publisher-returns: true
+    # 只要消息抵达Queue，就会异步发送优先回调returnfirm
+    template:
+      mandatory: true
+    # 手动ack消息，不使用默认的消费端确认
+    listener:
+      simple:
+        acknowledge-mode: manual

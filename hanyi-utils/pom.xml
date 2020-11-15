@@ -22,6 +22,7 @@
         <hutool.version>5.4.3</hutool.version>
         <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
+        <httpclient.version>4.2.1</httpclient.version>
     </properties>
 
     <dependencies>
@@ -124,6 +125,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
 
     </dependencies>
