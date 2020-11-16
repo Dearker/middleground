@@ -18,4 +18,12 @@ public interface RabbitService {
      */
     int sendMessage(Integer number);
 
+    /**
+     * 发送死信队列
+     *
+     * @param number 消息条数
+     * @return 返回条数
+     */
+    int sendDeadMessage(Integer number);
+
 }

@@ -2,6 +2,7 @@ package com.hanyi.rabbit.service.impl;
 
 import com.hanyi.rabbit.bo.Person;
 import com.hanyi.rabbit.bo.PersonInfo;
+import com.hanyi.rabbit.common.constant.RabbitConstant;
 import com.hanyi.rabbit.service.RabbitService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,23 @@ public class RabbitServiceImpl implements RabbitService {
                 personInfo = new PersonInfo("哈士奇-" + i, i);
                 rabbitTemplate.convertAndSend("hello-java-exchange", "hello.java", personInfo);
             }
+        }
+        return number;
+    }
+
+    /**
+     * 发送死信消息
+     *
+     * @param number 消息条数
+     * @return 返回条数
+     */
+    @Override
+    public int sendDeadMessage(Integer number) {
+        Person person;
+        for (int i = 0; i < number; i++) {
+            person = new Person("柴犬-" + i, "456-" + i);
+            rabbitTemplate.convertAndSend(RabbitConstant.ORDER_EVENT_EXCHANGE,
+                    RabbitConstant.ORDER_CREATE_ORDER, person);
         }
         return number;
     }
