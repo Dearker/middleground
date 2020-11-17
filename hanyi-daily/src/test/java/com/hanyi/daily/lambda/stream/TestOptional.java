@@ -1,8 +1,8 @@
 package com.hanyi.daily.lambda.stream;
 
-import java.util.Optional;
-
 import org.junit.Test;
+
+import java.util.Optional;
 
 /*
  * 一、Optional 容器类：用于尽量避免空指针异常
@@ -41,15 +41,6 @@ public class TestOptional {
 		
 		Employee emp2 = op.orElseGet(() -> new Employee());
 		System.out.println(emp2);
-	}
-	
-	@Test
-	public void test2(){
-		/*Optional<Employee> op = Optional.ofNullable(null);
-		System.out.println(op.get());*/
-		
-//		Optional<Employee> op = Optional.empty();
-//		System.out.println(op.get());
 	}
 
 	@Test

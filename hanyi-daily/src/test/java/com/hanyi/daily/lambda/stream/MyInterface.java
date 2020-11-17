@@ -6,7 +6,7 @@ public interface MyInterface {
 		return "呵呵呵";
 	}
 	
-	public static void show(){
+	static void show(){
 		System.out.println("接口中的静态方法");
 	}
 

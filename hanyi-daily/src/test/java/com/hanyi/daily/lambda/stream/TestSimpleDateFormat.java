@@ -1,13 +1,10 @@
 package com.hanyi.daily.lambda.stream;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -67,15 +64,7 @@ public class TestSimpleDateFormat {
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 		
-		Callable<LocalDate> task = new Callable<LocalDate>() {
-
-			@Override
-			public LocalDate call() throws Exception {
-				LocalDate ld = LocalDate.parse("20161121", dtf);
-				return ld;
-			}
-			
-		};
+		Callable<LocalDate> task = () -> LocalDate.parse("20161121", dtf);
 
 		ExecutorService pool = Executors.newFixedThreadPool(10);
 		

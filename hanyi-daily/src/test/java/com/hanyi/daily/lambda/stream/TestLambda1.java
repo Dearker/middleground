@@ -1,34 +1,19 @@
 package com.hanyi.daily.lambda.stream;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
-
 import org.junit.Test;
+
+import java.util.*;
 
 public class TestLambda1 {
 	
 	//原来的匿名内部类
 	@Test
 	public void test1(){
-		Comparator<String> com = new Comparator<String>(){
-			@Override
-			public int compare(String o1, String o2) {
-				return Integer.compare(o1.length(), o2.length());
-			}
-		};
+		Comparator<String> com = Comparator.comparingInt(String::length);
 		
 		TreeSet<String> ts = new TreeSet<>(com);
 		
-		TreeSet<String> ts2 = new TreeSet<>(new Comparator<String>(){
-			@Override
-			public int compare(String o1, String o2) {
-				return Integer.compare(o1.length(), o2.length());
-			}
-			
-		});
+		TreeSet<String> ts2 = new TreeSet<>((o1, o2) -> Integer.compare(o1.length(), o2.length()));
 	}
 	
 	//现在的 Lambda 表达式

@@ -230,4 +230,13 @@ public class LoaderTest {
         System.out.println(root);
     }
 
+    /**
+     * 测试@Accessors(chain = true)注解
+     */
+    @Test
+    public void accessorsTest() {
+        User user = new User().setUserId(1).setUserName("哈士奇").setUserAge(12);
+        System.out.println(user);
+    }
+
 }

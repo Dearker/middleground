@@ -1,13 +1,9 @@
 package com.hanyi.daily.lambda.stream;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
 import org.junit.Test;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 /*
  * 一、Lambda 表达式的基础语法：Java8中引入了一个新的操作符 "->" 该操作符称为箭头操作符或 Lambda 操作符
@@ -51,12 +47,7 @@ public class TestLambda2 {
 	public void test1(){
 		int num = 0;//jdk 1.7 前，必须是 final
 		
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				System.out.println("Hello World!" + num);
-			}
-		};
+		Runnable r = () -> System.out.println("Hello World!" + num);
 		
 		r.run();
 		
@@ -84,21 +75,7 @@ public class TestLambda2 {
 	public void test4(){
 		Comparator<Integer> com = (x, y) -> Integer.compare(x, y);
 	}
-	
-	@Test
-	public void test5(){
-//		String[] strs;
-//		strs = {"aaa", "bbb", "ccc"};
-		
-		List<String> list = new ArrayList<>();
-		
-		show(new HashMap<>());
-	}
 
-	public void show(Map<String, Integer> map){
-		
-	}
-	
 	//需求：对一个数进行运算
 	@Test
 	public void test6(){

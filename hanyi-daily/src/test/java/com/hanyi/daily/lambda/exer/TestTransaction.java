@@ -3,10 +3,7 @@ package com.hanyi.daily.lambda.exer;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class TestTransaction {
@@ -54,7 +51,7 @@ public class TestTransaction {
 		transactions.stream()
 					.filter((t) -> t.getTrader().getCity().equals("Cambridge"))
 					.map(Transaction::getTrader)
-					.sorted((t1, t2) -> t1.getName().compareTo(t2.getName()))
+					.sorted(Comparator.comparing(Trader::getName))
 					.distinct()
 					.forEach(System.out::println);
 	}
@@ -131,7 +128,7 @@ public class TestTransaction {
 	@Test
 	public void test8(){
 		Optional<Transaction> op = transactions.stream()
-					.min((t1, t2) -> Integer.compare(t1.getValue(), t2.getValue()));
+					.min(Comparator.comparingInt(Transaction::getValue));
 		
 		System.out.println(op.get());
 	}
