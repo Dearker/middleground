@@ -28,7 +28,7 @@ public class RabbitController {
      * @return 返回条数
      */
     @GetMapping("/send")
-    public Integer sendMessage(Integer number) {
+    public Integer sendMessage(@RequestParam(defaultValue = "5") Integer number) {
         return rabbitService.sendMessage(number);
     }
 

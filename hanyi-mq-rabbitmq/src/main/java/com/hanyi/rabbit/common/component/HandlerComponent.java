@@ -51,4 +51,17 @@ public class HandlerComponent {
         log.info("获取到的用户详情对象：{}", personInfo);
     }
 
+    @RabbitHandler
+    public void stringHandler(String msg, Message message, Channel channel) {
+
+        log.info("获取的消息：{}", msg);
+        long deliveryTag = message.getMessageProperties().getDeliveryTag();
+        try {
+            //参数二表示是否批量签收消息
+            channel.basicAck(deliveryTag, Boolean.FALSE);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
 }
