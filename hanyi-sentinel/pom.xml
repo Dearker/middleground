@@ -9,9 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hanyi-third-party</artifactId>
+    <artifactId>hanyi-sentinel</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.github.hanyi</groupId>
             <artifactId>hanyi-utils</artifactId>
@@ -23,17 +24,22 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <!-- 流量卫兵 -->
         <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>4.9.28.ALL</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <!-- Endpoint 支持 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>hanyi-third-party</finalName>
+        <finalName>hanyi-sentinel</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -23,37 +23,48 @@ spec:
         logging.kubesphere.io/logsidecar-config: '{}'
     spec:
       volumes:
-        - name: volume-r478d4
+        - name: volume-zz3ens
           persistentVolumeClaim:
             claimName: nacos-pvc
       containers:
-        - name: container-0hoc91
-          image: 'nacos/nacos-server:1.1.4'
+        - name: container-vuw5bt
+          image: 'nacos/nacos-server:1.3.1'
           ports:
             - name: tcp-8848
               containerPort: 8848
               protocol: TCP
           env:
             - name: MODE
-              value: standalone
-            # JVM最大可用内存
-            - name: JVM_XMX
-              value: 512m
-            # JVM最小可用内存
-            - name: JVM_XMS
-              value: 512m
-            # JVM年轻代内存
-            - name: JVM_XMN
-              value: 256m
-            # JVM老年代最大内存
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-config
+                  key: MODE
             - name: JVM_MMS
-              value: 128m
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-config
+                  key: JVM_MMS
+            - name: JVM_XMN
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-config
+                  key: JVM_XMN
+            - name: JVM_XMS
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-config
+                  key: JVM_XMS
+            - name: JVM_XMX
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-config
+                  key: JVM_XMX
           resources:
             limits:
               cpu: 350m
               memory: 512Mi
           volumeMounts:
-            - name: volume-r478d4
+            - name: volume-zz3ens
               mountPath: /home/nacos/data
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File

@@ -1,0 +1,16 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nacos-config
+  namespace: default
+data:
+  # JVM老年代最大内存
+  JVM_MMS: 128m
+  # JVM年轻代内存
+  JVM_XMN: 256m
+  # JVM最小可用内存
+  JVM_XMS: 512m
+  # JVM最大可用内存
+  JVM_XMX: 512m
+  # 单机模式启动
+  MODE: standalone

@@ -65,7 +65,7 @@
 3、sentinel
 
     Mac/Linux/windows
-        启动：nohup java -Xms128m -Xmx128m -Dserver.port=8488 -Dcsp.sentinel.dashboard.server=114.67.102.117:8488 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.7.2.jar >/dev/null 2>&1 &   
+        启动：nohup java -Xms128m -Xmx128m -Dserver.port=8858 -Dcsp.sentinel.dashboard.server=114.67.102.117:8858 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.7.2.jar >/dev/null 2>&1 &   
     
     参考文档地址：
         https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D

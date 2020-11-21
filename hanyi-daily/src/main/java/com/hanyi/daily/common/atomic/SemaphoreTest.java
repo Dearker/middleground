@@ -17,7 +17,7 @@ public class SemaphoreTest {
         /**
          * 信号量
          */
-        private Semaphore semaphore;
+        private final Semaphore semaphore;
 
         Parking(int count) {
             semaphore = new Semaphore(count);
@@ -42,7 +42,7 @@ public class SemaphoreTest {
 
     @AllArgsConstructor
     static class Car extends Thread {
-        private Parking parking;
+        private final Parking parking;
 
         @Override
         public void run() {

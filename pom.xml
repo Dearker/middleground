@@ -43,6 +43,7 @@
         <module>hanyi-third-party</module>
         <module>hanyi-session</module>
         <module>hanyi-mq-rabbitmq</module>
+        <module>hanyi-sentinel</module>
     </modules>
     <packaging>pom</packaging>
 

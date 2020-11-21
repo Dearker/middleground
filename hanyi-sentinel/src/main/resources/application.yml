@@ -1,0 +1,24 @@
+server:
+  port: 8014
+
+spring:
+  application:
+    name: hanyi-sentinel
+  #sentinel配置
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        #dashboard: 114.67.102.163:8858
+        dashboard: localhost:8858
+
+#开启Endpoint 支持
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+

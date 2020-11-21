@@ -2,6 +2,7 @@ package com.hanyi.daily.common.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +29,9 @@ public class WebInterceptor implements HandlerInterceptor {
         log.info("controller object is {}", handlerMethod.getBean().getClass().getName());
         log.info("controller method is {}", handlerMethod.getMethod());*/
 
+        //配置路径匹配器，如果match为true则表示放行，主要用于解决feign调用需要登录等问题
+        boolean match = new AntPathMatcher().match("/order/**", request.getRequestURI());
+        log.info(String.valueOf(match));
         //需要返回true，否则请求不会被控制器处理
         return true;
     }

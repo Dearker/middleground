@@ -1,10 +1,36 @@
 server:
   port: 8011
 
+spring:
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+
 sms:
   host: http://dingxin.market.alicloudapi.com
   path: /dx/sendSms
   appCode: 7752e489fc004f3884be9c8d0418c2fc
   #模板id，即公司编号，需申请
   tplId: TP1711063
+
+# 支付宝支付配置
+# 在支付宝创建的应用的id
+alipay:
+  appId: 2016102200739236
+  # 商户私钥，您的PKCS8格式RSA2私钥
+  merchantPrivateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDLPyYZQeAfTvD6Iu0vKDXZcCW1PCG/DhGyoyFai/lUnopAr8+xuFypn2cE7wJy+uudMAjXX01JtfHPBCWy6TR5z5qecJ8Te26wDEUKF62qgBSwcSVE2lsAW40QADcmHJdtzkTZH3Xj8ITM5P+ivdWf9Kd2vblEdEkuPIlYj719axZTbvmrBE4usDwd4TxmQ7ITPCrD+Uy0LPf2p6WvXgkddOsjLnVMgM14DkhFft1SNdMhNAzGxh/8XVfR6Bq/gD34X5xmPpnqzyPSpRU7Lns7txpn1roqSkCWqHSRyhx+9Xdcu9cy77B6StpRsgYNsA1dap44CPG+b5Ykot/P4HEVAgMBAAECggEAT1+YB2Ecn916apVdP39amFIdx8t1+mEKNFNU4UGs24kWwPBoEiXHuk6QMvMMZ87qWPa7XTDQxCqUBp6+AkLkxXV4Esw0s60Oqx3/kFNy9RUT/1wQi/UieN9IFamf3/hmgvF9HbYVmjECC+qakvnEBbXL+KlbQwqO0cm+caGhBOsshysv1c3hm+Uuaof2v1df5SxstLJXNUKdxxNpjMb8VKQQfzSf6aui58Uz//4R0Hi2pUAL+IF3AcrkN5egKGZCWAMoOIPJE1B5QEtZTEiWONJTXFnFcGFqu4/gXHnra4SebFf+sVv99Z+sR6dqaSIbO0iiX6Ohy4RSuUQkxn3ZuQKBgQD3nfZV2H32EWIaQv6afBIzuCgmNMuMVX3KgrUA/vKdmpzKValOEGayVd0gfpqKzElyjwVnMIf3Lj4UnrEQLaEuTlg2vHhuas71rsVs4F27ssW5o/NsiDkxG9j8vzNNzQyv1q4y7TY6EhtfvHUeJxDFDkLRpYPv+Xkf+uZL4uUxxwKBgQDSIKOj1Ru0f5SQzcxk/MvlvAmoFh6wWZ/2ruPGCPmaKnCIUHrHluNEcv1n0ens9DQz8OCi5pZYTcDHvwyiQ95vAPlpWOpDMc6QHYvScsMetAHrh+wq3Qgq0PwKDaj+IbcRfcmD7mWrcXioLi1C9Oud4Bc9GJIn2MlEwWxrK3hGQwKBgAx8udSAc3G6VLEwWbiesyhKjDPJC87K7OoOh2RCdye9iVSm1z/pkdRCgkFGQTLotHeDgOlASEsN2PGfQxymwG8eYlJ4VLZ0ynUXWDtyYSe7Dz+aZgc+I2w3lEzCs6qjwZUIhYZp8gchrKG6Vkmr/KuDWZlK+IlckmArffuruJU3AoGAHk1cq+SwoSAA4bz769hU4yVx0w6VkGLsYZuo90cWD7htEAtjGWNWFOnsR0uLS4OP/6mOC4/rQIK9+VBA1ymoayOd1CZhah1Fp5zLLCcmokfdOwUX9rp3Ug1fO2fq5fMgvmIAbIk1mjq75qz6E/zT+al2UHY5pYtqwwKNywqyxpcCgYB2odRBnHhpOAxiDSRi3ytlXf7YGbhQoanjZQVkQoXHWi+so68yO9AchLhozNr07gKbLclQQo+ga4NgDCqf7/026xtr66rp0a+xx41TzSXwdMljIQTaVKBZPrwqTflYo9Kz7dWyhLyYM4CoUu5ZNM9frY/rjUT9e0ONtZDwT3LYnQ==
+  # 支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
+  aliPayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAradp9aVId8cbjHbH9XeN+cE2mXKqWSu6kKI9dej6tZyTBagqJiIu/FnElS0dtGtPgZ6eK1+fzyuUgS81+Ud6BLS9nQTdfPlbAPp+eNOhyRTu9a8RvQE4bStIQD2ZiXhN7LuBqrquHlaLkKtc5NwgCeM1YxPdh/XlOcial5iIGhrNnxFWdYQ50T4oZUEHPlNclJOOrBkOM4Y3RukXKMcnn7CJ6W7f16341bmbjv8X21Fmgg1hK4C5EcOjoHVm6gaLVq4z06AVPRUOxR+IfmoHbhlgmn4DAJULxiQvYrZIDkCYQUfo/6vhR9JRv1a+fEo0sUoZGtIIJnzyo1apVvXJ/QIDAQAB
+  # 服务器[异步通知]页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+  # 支付宝会悄悄的给我们发送一个请求，告诉我们支付成功的信息
+  notifyUrl: http://oytcfo4fj4.54http.tech/payed/notify
+  # 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+  # 同步通知，支付成功，一般跳转到成功页
+  returnUrl: http://member.gulimall.com/memberOrder.html
+  # 签名方式
+  signType: RSA2
+  # 字符编码格式
+  charset: utf-8
+  # 支付宝网关
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  timeoutExpress: 30m
 
