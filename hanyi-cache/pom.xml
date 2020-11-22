@@ -12,10 +12,6 @@
     <packaging>jar</packaging>
     <artifactId>hanyi-cache</artifactId>
 
-    <properties>
-        <jedis.version>2.9.0</jedis.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -45,7 +41,6 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
         </dependency>
 
     </dependencies>

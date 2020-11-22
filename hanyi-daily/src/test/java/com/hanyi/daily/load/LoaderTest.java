@@ -145,7 +145,7 @@ public class LoaderTest {
                 entry.setValue(bean.get(entry.getKey()));
             }
         }
-        User mapToBean = BeanUtil.mapToBean(objectMap, User.class, true);
+        User mapToBean = BeanUtil.toBean(objectMap, User.class);
 
         System.out.println(mapToBean);
     }

@@ -15,14 +15,10 @@
         <fastjson.version>1.2.58</fastjson.version>
         <crypto.version>4.2.3.RELEASE</crypto.version>
         <jwt.version>1.0.8.RELEASE</jwt.version>
-        <lombok.version>1.18.8</lombok.version>
         <guava.version>28.1-jre</guava.version>
-        <servlet.version>3.1.0</servlet.version>
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.4.3</hutool.version>
-        <junit.version>4.12</junit.version>
         <mockito.version>1.10.19</mockito.version>
-        <httpclient.version>4.2.1</httpclient.version>
     </properties>
 
     <dependencies>
@@ -50,7 +46,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
         </dependency>
 
         <dependency>
@@ -82,7 +77,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.version}</version>
         </dependency>
 
         <!-- 测试 -->
@@ -96,7 +90,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
         </dependency>
 
         <!-- google扩展数据结构 -->
@@ -130,7 +123,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
 
     </dependencies>

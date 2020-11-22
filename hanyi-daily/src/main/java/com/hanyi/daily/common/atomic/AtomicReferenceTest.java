@@ -22,7 +22,7 @@ public class AtomicReferenceTest {
         User u1 = new User("张三", 22);
         User u2 = new User("李四", 33);
 
-        AtomicReference ar = new AtomicReference(u1);
+        AtomicReference<User> ar = new AtomicReference<>(u1);
         ar.compareAndSet(u1, u2);
 
         System.out.println(ar.get());
@@ -55,7 +55,7 @@ public class AtomicReferenceTest {
 
         //和AtomicStampedReference效果一样，用于解决ABA的
         //区别是表示不是用的版本号，而只有true和false两种状态。相当于未修改和已修改
-        AtomicMarkableReference<User> amr = new AtomicMarkableReference(u1, true);
+        AtomicMarkableReference<User> amr = new AtomicMarkableReference<>(u1, true);
         amr.compareAndSet(u1, u2, false, true);
 
         System.out.println(amr.getReference());
@@ -147,11 +147,11 @@ public class AtomicReferenceTest {
         volatile int age;
     }
 
-    private static volatile int COUNT = 0;
+    private static volatile int count = 0;
 
     @AllArgsConstructor
     static class WriteDemo implements Runnable {
-        private ReentrantReadWriteLock lock;
+        private final ReentrantReadWriteLock lock;
 
         @Override
         public void run() {
@@ -163,7 +163,7 @@ public class AtomicReferenceTest {
                 }
 
                 lock.writeLock().lock();
-                COUNT++;
+                count++;
                 lock.writeLock().unlock();
             }
         }
@@ -172,7 +172,7 @@ public class AtomicReferenceTest {
     @AllArgsConstructor
     static class ReadDemo implements Runnable {
 
-        private ReentrantReadWriteLock lock;
+        private final ReentrantReadWriteLock lock;
 
         @Override
         public void run() {
@@ -184,7 +184,7 @@ public class AtomicReferenceTest {
                 }
 
                 lock.readLock().lock();
-                System.out.println(COUNT);
+                System.out.println(count);
                 lock.readLock().unlock();
             }
         }

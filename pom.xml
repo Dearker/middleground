@@ -44,6 +44,8 @@
         <module>hanyi-session</module>
         <module>hanyi-mq-rabbitmq</module>
         <module>hanyi-sentinel</module>
+        <module>hanyi-webflux</module>
+        <module>hanyi-canal</module>
     </modules>
     <packaging>pom</packaging>
 

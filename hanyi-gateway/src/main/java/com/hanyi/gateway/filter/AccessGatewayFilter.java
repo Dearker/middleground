@@ -6,7 +6,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,6 @@ import java.util.LinkedHashSet;
 public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
     private static final String GATE_WAY_PREFIX = "/api";
-
-    private static final String COMMA = ",";
 
     @Override
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
@@ -62,10 +59,7 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
         }
         ServerHttpRequest.Builder mutate = request.mutate();
         // 不进行拦截的地址
-        if (StrUtil.startWith(requestUri, COMMA)) {
-            ServerHttpRequest build = mutate.build();
-            return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
-        }
+        StrUtil.startWith(requestUri, StrUtil.COMMA);
         ServerHttpRequest build = mutate.build();
         return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
     }

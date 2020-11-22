@@ -12,7 +12,6 @@
     <artifactId>hanyi-hikaricp</artifactId>
 
     <properties>
-        <mysql.version>8.0.19</mysql.version>
         <mybatisplus.version>3.1.2</mybatisplus.version>
     </properties>
 
@@ -32,7 +31,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
 
         <!-- mybatis-plus 依赖 -->

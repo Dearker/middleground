@@ -77,7 +77,7 @@ public class KafkaConfiguration {
      */
     private void buildRecordInterceptor(ConcurrentKafkaListenerContainerFactory<String, String> factory){
         Map<String, RecordInterceptor> interceptorMap = applicationContext.getBeansOfType(RecordInterceptor.class);
-        interceptorMap.values().forEach(s->factory.setRecordInterceptor(s));
+        interceptorMap.values().forEach(factory::setRecordInterceptor);
     }
 
 }

@@ -133,7 +133,7 @@
 
 1、mysql
 
-    docker run -p 3306:3306 --name mysql -v /opt/data/mysql/conf:/etc/mysql/conf.d -v /opt/data/mysql/logs:/logs -v /opt/data/mysql/data:/mysql_data -e MYSQL_ROOT_PASSWORD=root -d mysql:5.7
+    docker run -p 3306:3306 --name mysql -v /opt/canal/mysql/conf:/etc/mysql/conf.d -v /opt/canal/mysql/logs:/logs -v /opt/canal/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=asdzxc789 -d mysql:5.7
 
 2、mongo
 
