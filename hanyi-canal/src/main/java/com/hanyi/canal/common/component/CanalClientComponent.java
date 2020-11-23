@@ -1,24 +1,27 @@
 package com.hanyi.canal.common.component;
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.CanalEntry.Entry;
 import com.alibaba.otter.canal.protocol.CanalEntry.EntryType;
 import com.alibaba.otter.canal.protocol.CanalEntry.RowChange;
-import com.alibaba.otter.canal.protocol.CanalEntry.RowData;
 import com.alibaba.otter.canal.protocol.Message;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.hanyi.canal.common.constant.RedisConstant;
+import com.hanyi.canal.common.util.EntryUtil;
 import com.hanyi.canal.dao.UserDao;
 import com.hanyi.canal.pojo.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -38,6 +41,9 @@ public class CanalClientComponent implements Runnable {
     @Resource
     private CanalConnector canalConnector;
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
     /**
      * canal入库方法
      */
@@ -50,11 +56,16 @@ public class CanalClientComponent implements Runnable {
         Message message = canalConnector.getWithoutAck(batchSize);
         long batchId = message.getId();
         try {
-            for (Entry entry : message.getEntries()) {
-                if (EntryType.ROWDATA == entry.getEntryType()) {
-                    this.dataHandle(entry);
+            List<Entry> entryList = message.getEntries();
+
+            if (batchId != -1 && CollUtil.isNotEmpty(entryList)) {
+                for (Entry entry : entryList) {
+                    if (EntryType.ROWDATA == entry.getEntryType()) {
+                        this.dataHandle(entry);
+                    }
                 }
             }
+
             canalConnector.ack(batchId);
         } catch (InvalidProtocolBufferException e) {
             log.error(e.getMessage());
@@ -71,13 +82,13 @@ public class CanalClientComponent implements Runnable {
         CanalEntry.EventType eventType = rowChange.getEventType();
         switch (eventType) {
             case INSERT:
-                this.saveInsertSql(entry);
+                this.saveInsertSql(rowChange);
                 break;
             case UPDATE:
-                this.saveUpdateSql(entry);
+                this.saveUpdateSql(rowChange);
                 break;
             case DELETE:
-                this.saveDeleteSql(entry);
+                this.saveDeleteSql(rowChange);
                 break;
             default:
                 break;
@@ -87,70 +98,49 @@ public class CanalClientComponent implements Runnable {
     /**
      * 保存更新语句
      *
-     * @param entry 数据库对象
+     * @param rowChange 数据库对象
      */
-    private void saveUpdateSql(Entry entry) {
-        try {
-            RowChange rowChange = RowChange.parseFrom(entry.getStoreValue());
-            List<RowData> rowDataList = rowChange.getRowDatasList();
-            for (RowData rowData : rowDataList) {
-                List<CanalEntry.Column> newColumnList = rowData.getAfterColumnsList();
-                Map<String, String> columnMap = newColumnList.stream().collect(Collectors.toMap(
-                        CanalEntry.Column::getName, CanalEntry.Column::getValue));
-
-                User user = BeanUtil.toBean(columnMap, User.class);
-                //暂时只支持单一主键
-                userDao.updateById(user);
+    private void saveUpdateSql(RowChange rowChange) {
+        List<User> userList = EntryUtil.entryToBean(rowChange, User.class);
+        if (CollUtil.isNotEmpty(userList)) {
+            //暂时只支持单一主键
+            Boolean hasKey = stringRedisTemplate.hasKey(RedisConstant.USER);
+            if(Objects.nonNull(hasKey) && hasKey){
+                stringRedisTemplate.opsForValue().set(RedisConstant.USER, userList.toString(), 10, TimeUnit.MINUTES);
             }
-        } catch (InvalidProtocolBufferException e) {
-            log.error(e.getMessage());
+            userList.forEach(user -> userDao.updateById(user));
         }
     }
 
     /**
      * 保存删除语句
      *
-     * @param entry 数据库对象
+     * @param rowChange 数据库对象
      */
-    private void saveDeleteSql(Entry entry) {
-        try {
-            RowChange rowChange = RowChange.parseFrom(entry.getStoreValue());
-            List<RowData> rowDataList = rowChange.getRowDatasList();
-            for (RowData rowData : rowDataList) {
-                List<CanalEntry.Column> columnList = rowData.getBeforeColumnsList();
-                for (CanalEntry.Column column : columnList) {
-                    if (column.getIsKey()) {
-                        //暂时只支持单一主键
-                        userDao.deleteById(column.getValue());
-                        break;
-                    }
-                }
+    private void saveDeleteSql(RowChange rowChange) {
+        List<String> keyList = new ArrayList<>(Short.SIZE);
+        rowChange.getRowDatasList().forEach(s -> s.getBeforeColumnsList().forEach(k -> {
+            if (k.getIsKey()) {
+                keyList.add(k.getValue());
             }
-        } catch (InvalidProtocolBufferException e) {
-            log.error(e.getMessage());
+        }));
+
+        if (CollUtil.isNotEmpty(keyList)) {
+            stringRedisTemplate.delete(RedisConstant.USER);
+            userDao.deleteBatchIds(keyList);
         }
     }
 
     /**
      * 保存插入语句
      *
-     * @param entry 数据库对象
+     * @param rowChange 数据库对象
      */
-    private void saveInsertSql(Entry entry) {
-        try {
-            RowChange rowChange = RowChange.parseFrom(entry.getStoreValue());
-            List<RowData> rowDataList = rowChange.getRowDatasList();
-            for (RowData rowData : rowDataList) {
-                List<CanalEntry.Column> columnList = rowData.getAfterColumnsList();
-
-                Map<String, String> columnMap = columnList.stream().collect(Collectors.toMap(
-                        CanalEntry.Column::getName, CanalEntry.Column::getValue));
-
-                User user = BeanUtil.toBean(columnMap, User.class);
-                userDao.insert(user);
-            }
-        } catch (InvalidProtocolBufferException e) {
-            log.error(e.getMessage());
+    private void saveInsertSql(RowChange rowChange) {
+        List<User> userList = EntryUtil.entryToBean(rowChange, User.class);
+        if (CollUtil.isNotEmpty(userList)) {
+            stringRedisTemplate.opsForValue().set(RedisConstant.USER, userList.toString(), 10, TimeUnit.MINUTES);
+            userDao.batchInsertUser(userList);
         }
     }
 

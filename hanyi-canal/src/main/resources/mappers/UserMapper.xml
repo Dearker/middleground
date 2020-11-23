@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanyi.canal.dao.UserDao">
+
+    <!-- 批量插入 -->
+    <insert id="batchInsertUser" parameterType="java.util.List">
+        insert into sys_user (user_id,user_name,user_age)
+        values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.userId}, #{item.userName}, #{item.userAge})
+        </foreach>
+    </insert>
+
+</mapper>
+
+

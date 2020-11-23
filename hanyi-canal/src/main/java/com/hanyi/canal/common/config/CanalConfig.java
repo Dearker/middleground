@@ -33,12 +33,7 @@ public class CanalConfig implements DisposableBean {
         if(Objects.isNull(canalProperty)){
             throw new BizException("error ,appConfig is null");
         }
-        String ip;
-        if (StrUtil.isEmpty(canalProperty.getIp())) {
-            ip = AddressUtils.getHostIp();
-        } else {
-            ip = canalProperty.getIp();
-        }
+        String ip = StrUtil.isBlank(canalProperty.getIp()) ? AddressUtils.getHostIp() : canalProperty.getIp();
         // 创建链接
         InetSocketAddress inetSocketAddress = new InetSocketAddress(ip, canalProperty.getPort());
         canalConnector = CanalConnectors.newSingleConnector(inetSocketAddress,
