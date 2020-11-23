@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,16 +56,14 @@ public class CanalClientComponent implements Runnable {
         long batchId = message.getId();
         try {
             List<Entry> entryList = message.getEntries();
-
             if (batchId != -1 && CollUtil.isNotEmpty(entryList)) {
                 for (Entry entry : entryList) {
                     if (EntryType.ROWDATA == entry.getEntryType()) {
                         this.dataHandle(entry);
                     }
                 }
+                canalConnector.ack(batchId);
             }
-
-            canalConnector.ack(batchId);
         } catch (InvalidProtocolBufferException e) {
             log.error(e.getMessage());
         }
@@ -105,7 +102,7 @@ public class CanalClientComponent implements Runnable {
         if (CollUtil.isNotEmpty(userList)) {
             //暂时只支持单一主键
             Boolean hasKey = stringRedisTemplate.hasKey(RedisConstant.USER);
-            if(Objects.nonNull(hasKey) && hasKey){
+            if(hasKey){
                 stringRedisTemplate.opsForValue().set(RedisConstant.USER, userList.toString(), 10, TimeUnit.MINUTES);
             }
             userList.forEach(user -> userDao.updateById(user));

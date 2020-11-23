@@ -11,6 +11,11 @@
 
     <artifactId>hanyi-web</artifactId>
 
+    <properties>
+        <easyexcel.version>2.2.6</easyexcel.version>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>com.github.hanyi</groupId>
@@ -22,6 +27,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
