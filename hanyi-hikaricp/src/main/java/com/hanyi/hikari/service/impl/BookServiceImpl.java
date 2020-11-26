@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hanyi.hikari.common.constant.HikariConstant;
 import com.hanyi.hikari.common.thread.QueryCountTask;
 import com.hanyi.hikari.dao.BookDao;
 import com.hanyi.hikari.pojo.Book;
@@ -54,8 +54,8 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
     public QueryStats queryCount() {
         TimeInterval timer = DateUtil.timer();
         QueryWrapper<Book> wrapper = new QueryWrapper<>();
-        wrapper.ge(HikariConstant.BOOK_TYPE, 0);
-        wrapper.le(HikariConstant.BOOK_TYPE, 1);
+        wrapper.lambda().ge(Book::getBookType, 0);
+        wrapper.lambda().le(Book::getBookType, 1);
         Integer integer = bookDao.selectCount(wrapper);
 
         return new QueryStats(integer, timer.intervalRestart());
@@ -72,11 +72,11 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
         TimeInterval timer = DateUtil.timer();
 
         List<QueryCountTask> queryCountTaskList = new ArrayList<>();
-        QueryWrapper<Book> wrapper;
+        LambdaQueryWrapper<Book> lambdaQueryWrapper;
         for (int i = 0; i < Short.BYTES; i++) {
-            wrapper = new QueryWrapper<>();
-            wrapper.eq(HikariConstant.BOOK_TYPE, i);
-            queryCountTaskList.add(new QueryCountTask(wrapper, bookDao));
+            lambdaQueryWrapper = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper.eq(Book::getBookType, i);
+            queryCountTaskList.add(new QueryCountTask(lambdaQueryWrapper, bookDao));
         }
 
         Integer count = 0;

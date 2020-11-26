@@ -1,6 +1,6 @@
 package com.hanyi.hikari.common.thread;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hanyi.hikari.dao.BookDao;
 import com.hanyi.hikari.pojo.Book;
 
@@ -16,11 +16,11 @@ import java.util.concurrent.Callable;
  */
 public class QueryCountTask implements Callable<Integer> {
 
-    private final QueryWrapper<Book> wrapper;
+    private final LambdaQueryWrapper<Book> wrapper;
 
     private final BookDao bookDao;
 
-    public QueryCountTask(QueryWrapper<Book> wrapper, BookDao bookDao) {
+    public QueryCountTask(LambdaQueryWrapper<Book> wrapper, BookDao bookDao) {
         this.wrapper = wrapper;
         this.bookDao = bookDao;
     }
