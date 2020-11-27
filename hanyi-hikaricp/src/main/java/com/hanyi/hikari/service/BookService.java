@@ -2,6 +2,9 @@ package com.hanyi.hikari.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hanyi.hikari.pojo.Book;
+import com.hanyi.hikari.request.BookQueryPageParam;
+import com.hanyi.hikari.request.BookQueryParam;
+import com.hanyi.hikari.vo.BookPageVo;
 import com.hanyi.hikari.vo.QueryStats;
 
 import java.util.List;
@@ -36,4 +39,20 @@ public interface BookService extends IService<Book> {
      * @return 返回查询的结果
      */
     QueryStats queryThreadCount();
+
+    /**
+     * 分页查询书籍集合
+     *
+     * @param bookQueryPageParam 查询对象
+     * @return 返回书籍集合
+     */
+    BookPageVo findBookListByPage(BookQueryPageParam bookQueryPageParam);
+
+    /**
+     * 根据条件查询书籍集合
+     *
+     * @param bookQueryParam 查询参数
+     * @return 返回书籍集合
+     */
+    List<Book> findBookListByCondition(BookQueryParam bookQueryParam);
 }

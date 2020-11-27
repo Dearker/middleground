@@ -45,3 +45,11 @@ feign:
     # 响应压缩
     response:
       enabled: true
+  client:
+    config:
+      # feign客户端配置，default为默认配置，可以将default修改成指定的feignClient
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        #loggerLevel: basic
+        #requestInterceptors: com.leparts.config.FeignBasicAuthRequestInterceptor
