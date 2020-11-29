@@ -130,7 +130,7 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
         LambdaQueryWrapper<Book> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         //查询条件
         lambdaQueryWrapper.ne(Book::getId, bookQueryParam.getId());
-        // AND ( (a.`name` = 'jack' AND a.category = 1) OR (a.phone = '13888888888' OR a.category = 2) )
+        // AND ( (a.`book_name` = 'jack' AND a.book_type = 1) OR (a.book_title = '13888888888' OR a.book_total = 2) )
         //多条件查询
         lambdaQueryWrapper.and(i -> (i.and(j -> j.eq(Book::getBookName, bookQueryParam.getBookName())
                 .eq(Book::getBookType, bookQueryParam.getBookType())))

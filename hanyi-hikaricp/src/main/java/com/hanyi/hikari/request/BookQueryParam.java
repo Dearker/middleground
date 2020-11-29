@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class BookQueryParam implements Serializable {
 
+    private static final long serialVersionUID = 8802569022306802637L;
+
     /**
      * 书籍id
      */

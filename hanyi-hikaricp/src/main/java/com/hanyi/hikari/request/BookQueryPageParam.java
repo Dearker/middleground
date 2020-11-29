@@ -13,6 +13,8 @@ import java.io.Serializable;
 @Data
 public class BookQueryPageParam implements Serializable {
 
+    private static final long serialVersionUID = -8760255577044289540L;
+
     /**
      * 书籍类型
      */

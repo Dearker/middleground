@@ -2,6 +2,7 @@ package com.hanyi.hikari.controller;
 
 import com.hanyi.hikari.pojo.Book;
 import com.hanyi.hikari.request.BookQueryPageParam;
+import com.hanyi.hikari.request.BookQueryParam;
 import com.hanyi.hikari.service.BookService;
 import com.hanyi.hikari.vo.BookPageVo;
 import com.hanyi.hikari.vo.QueryStats;
@@ -54,6 +55,17 @@ public class BookController {
     @PostMapping("/page")
     public BookPageVo findBookByPage(@RequestBody BookQueryPageParam bookQueryPageParam) {
         return bookService.findBookListByPage(bookQueryPageParam);
+    }
+
+    /**
+     * 根据多条件查询数据集合
+     *
+     * @param bookQueryParam 请求参数
+     * @return 返回集合
+     */
+    @PostMapping("/condition")
+    public List<Book> findBookByCondition(@RequestBody BookQueryParam bookQueryParam) {
+        return bookService.findBookListByCondition(bookQueryParam);
     }
 
 }
