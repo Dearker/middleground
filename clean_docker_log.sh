@@ -9,6 +9,8 @@ for log in $logs
                 cat /dev/null > $log
         done
 
+docker image prune -a -f
+
 echo "======== end clean docker containers logs ========"
 
 ##sh脚本创建之后，通过如下目录修改sh脚本的执行权限，再执行./clean_docker_log.sh

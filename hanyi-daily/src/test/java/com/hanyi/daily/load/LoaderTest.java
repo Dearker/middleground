@@ -243,24 +243,37 @@ public class LoaderTest {
      * StringJoiner测试方法
      */
     @Test
-    public void stringJoinerTest(){
+    public void stringJoinerTest() {
         //使用分隔符拼接
         StringJoiner stringJoiner = new StringJoiner(",");
         stringJoiner.add("哈士奇").add("柯基").add("柴犬");
         System.out.println(stringJoiner);
 
         //使用前缀、后缀、分隔符进行拼接
-        StringJoiner sj = new StringJoiner(",","[","]");
+        StringJoiner sj = new StringJoiner(",", "[", "]");
         sj.add("哈士奇1号").add("柯基1号").add("柴犬1号");
         System.out.println(sj);
 
         //设置默认空值
-        StringJoiner string = new StringJoiner(",","[","]");
+        StringJoiner string = new StringJoiner(",", "[", "]");
         string.setEmptyValue("哈哈");
         System.out.println(string);
 
         String join = String.join(",", Arrays.asList("1", "2", "3"));
         System.out.println(join);
+    }
+
+    /**
+     * 使用try catch后出现异常会打印异常信息，然后继续执行
+     */
+    @Test
+    public void exceptionTest() {
+        try {
+            System.out.println(10 / 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("哈哈哈");
     }
 
 }

@@ -2,13 +2,13 @@ package com.hanyi.cache.common.component;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
 
-
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     public RedisKeyExpirationListener(RedisMessageListenerContainer listenerContainer) {

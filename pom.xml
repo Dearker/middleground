@@ -47,6 +47,7 @@
         <module>hanyi-sentinel</module>
         <module>hanyi-webflux</module>
         <module>hanyi-canal</module>
+        <module>hanyi-sharding-jdbc</module>
     </modules>
     <packaging>pom</packaging>
 

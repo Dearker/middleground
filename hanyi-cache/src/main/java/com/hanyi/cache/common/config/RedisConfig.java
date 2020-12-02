@@ -18,10 +18,12 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.Duration;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @PackAge: middleground com.hanyi.cache.common.config
@@ -49,14 +51,12 @@ public class RedisConfig {
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
-
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 //过期时间
                 .entryTtl(Duration.ofSeconds(10))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(this.createJacksonRedisSerializer()))
                 .disableCachingNullValues();
-
         return RedisCacheManager.builder(factory).cacheDefaults(config).build();
     }
 
@@ -83,8 +83,25 @@ public class RedisConfig {
      */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory) {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+
+        executor.setCorePoolSize(100);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(100);
+        executor.setKeepAliveSeconds(3600);
+        executor.setThreadNamePrefix("redis");
+
+        // rejection-policy：当pool已经达到max size的时候，如何处理新任务
+        // CALLER\_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        executor.initialize();
+
         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+        // 设置Redis的连接工厂
         redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
+        // 设置监听使用的线程池
+        redisMessageListenerContainer.setTaskExecutor(executor);
+
         return redisMessageListenerContainer;
     }
 
