@@ -26,11 +26,20 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 4958893400046869582L;
 
-    private Integer id;
+    /**
+     * 用户id
+     */
+    private Long id;
 
+    /**
+     * 用户名称
+     */
     @NotBlank(message = "用户名称不能为空")
     private String name;
 
+    /**
+     * 用户年龄
+     */
     @NotNull(message = "用户年龄不能为空")
     private Integer age;
 

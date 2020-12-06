@@ -6,41 +6,85 @@ spring:
   main:
     allow-bean-definition-overriding: true
   shardingsphere:
-      datasource:
-        # 数据源 db0,db1
-        names: db0,db1
-        # 第一个数据库
-        db0:
-          type: com.zaxxer.hikari.HikariDataSource
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          jdbc-url: jdbc:mysql://127.0.0.1:3306/testdatasource1?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-          username: root
-          password:
-        # 第二个数据库
-        db1:
-          type: com.zaxxer.hikari.HikariDataSource
-          driver-class-name: com.mysql.cj.jdbc.Driver
-          jdbc-url: jdbc:mysql://127.0.0.1:3306/testdatasource2?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-          username: root
-          password:
-      # 打印执行的数据库以及语句
-      props:
-        sql:
-          show: true
-        # 水平拆分的数据库（表） 配置分库 + 分表策略 行表达式分片策略
-        # 分库策略
-      sharding:
-        default-database-strategy:
-          inline:
-            sharding-column: id
-            algorithm-expression: db$->{id % 2}
-        # 分表策略 其中user为逻辑表 分表主要取决于age行
-        tables:
-          user:
-            actual-data-nodes: db$->{0..1}.user_$->{0..1}
-            table-strategy:
-              inline:
-                sharding-column: age
-                algorithm-expression: user_$->{age % 2}
+    datasource:
+      # 数据源 db0,db1
+      names: db0,db1
+      # 第一个数据库
+      db0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/testdatasource1?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        username: root
+        password:
+      # 第二个数据库
+      db1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/testdatasource2?useUnicode=true&characterEncoding=utf-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        username: root
+        password:
+    # 打印执行的数据库以及语句
+    props:
+      sql:
+        show: true
+      # 水平拆分的数据库（表） 配置分库 + 分表策略 行表达式分片策略
+    sharding:
+      #公共表,即广播表，多个库中存在同一张表，当在一张表中修改数据后同步到其他库中
+      broadcast-tables: dict
+      # 分库策略
+      default-database-strategy:
+        inline:
+          sharding-column: id
+          algorithm-expression: db$->{id % 2}
+      # 分表策略 其中user为逻辑表 分表主要取决于age行
+      tables:
+        user:
+          # 指定主键生成策略,如果已经自己设置了id，则不会使用该策略，如果id未设置则会使用该策略
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+          actual-data-nodes: db$->{0..1}.user_$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: age
+              # age取模最后会和前面的user进行拼接组成表名
+              algorithm-expression: user_$->{age % 2}
+        #指定公共表的组件生成策略
+        dict:
+          # 指定主键生成策略,如果已经自己设置了id，则不会使用该策略，如果id未设置则会使用该策略
+          key-generator:
+            column: id
+            type: SNOWFLAKE
 
+
+#mybatis plus配置
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.hanyi.sharding.pojo
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: INPUT
+      #驼峰下划线转换
+      table-underline: true
+      #是否开启大写命名，默认不开启
+      #capital-mode: true
+      #逻辑删除配置
+      #logic-delete-value: 1
+      #logic-not-delete-value: 0
+    #刷新mapper 调试神器
+    refresh: true
+  # 原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    #call-setters-on-nulls: true
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#日志级别
+logging:
+  level:
+    com.hanyi.sharding: debug
 

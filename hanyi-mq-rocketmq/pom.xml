@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hanyi-sharding-jdbc</artifactId>
+    <artifactId>hanyi-mq-rocketmq</artifactId>
 
     <properties>
-        <sharding-jdbc.version>4.1.1</sharding-jdbc.version>
+        <rocketmq-client.version>4.7.1</rocketmq-client.version>
     </properties>
 
     <dependencies>
@@ -27,30 +27,17 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!--mysql-->
+        <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <!--Mybatis-Plus-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <!--sharding-sphere start-->
-
-        <!-- for spring boot -->
-        <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
-            <version>${sharding-jdbc.version}</version>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${rocketmq-client.version}</version>
         </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>hanyi-sharding-jdbc</finalName>
+        <finalName>hanyi-rocketmq</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -68,6 +55,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

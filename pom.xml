@@ -48,6 +48,7 @@
         <module>hanyi-webflux</module>
         <module>hanyi-canal</module>
         <module>hanyi-sharding-jdbc</module>
+        <module>hanyi-mq-rocketmq</module>
     </modules>
     <packaging>pom</packaging>
 

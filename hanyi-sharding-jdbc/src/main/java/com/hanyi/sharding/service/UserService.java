@@ -2,6 +2,8 @@ package com.hanyi.sharding.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hanyi.sharding.pojo.User;
+import com.hanyi.sharding.request.UserQueryPageParam;
+import com.hanyi.sharding.vo.PageVo;
 
 import java.util.List;
 
@@ -29,4 +31,12 @@ public interface UserService extends IService<User> {
      * @return 返回是否新增成功
      */
     int insert(User user);
+
+    /**
+     * 根据分页查询数据
+     *
+     * @param userQueryPageParam 分页条件
+     * @return 返回查询结果
+     */
+    PageVo<User> findUserByPage(UserQueryPageParam userQueryPageParam);
 }

@@ -1,7 +1,9 @@
 package com.hanyi.sharding.controller;
 
 import com.hanyi.sharding.pojo.User;
+import com.hanyi.sharding.request.UserQueryPageParam;
 import com.hanyi.sharding.service.UserService;
+import com.hanyi.sharding.vo.PageVo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,5 +47,15 @@ public class UserController {
         return userService.insert(user);
     }
 
+    /**
+     * 分页查询用户数据
+     *
+     * @param queryPageParam 查询条件
+     * @return 返回分页结果
+     */
+    @PostMapping("/page")
+    public PageVo<User> findUserByPage(@RequestBody UserQueryPageParam queryPageParam) {
+        return userService.findUserByPage(queryPageParam);
+    }
 
 }
