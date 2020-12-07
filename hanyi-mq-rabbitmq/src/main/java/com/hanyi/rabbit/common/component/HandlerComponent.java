@@ -25,13 +25,21 @@ import java.io.IOException;
 public class HandlerComponent {
 
     @RabbitHandler
-    public void personHandler(Person person, Message message, Channel channel) {
+    public void personHandler(Person person, Message message, Channel channel) throws IOException {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
 
         try {
+            //开启事务模式
+            channel.txSelect();
+
             //参数二表示是否批量签收消息
             channel.basicAck(deliveryTag, Boolean.FALSE);
+
+            //提交事务
+            channel.txCommit();
         } catch (IOException e) {
+            //回滚
+            channel.txRollback();
             log.error(e.getMessage());
         }
 

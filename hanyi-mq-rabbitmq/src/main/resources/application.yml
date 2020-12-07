@@ -19,3 +19,5 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
+        #预抓取的消息数量
+        prefetch: 300

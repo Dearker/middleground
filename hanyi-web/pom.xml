@@ -15,7 +15,6 @@
         <easyexcel.version>2.2.6</easyexcel.version>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>com.github.hanyi</groupId>

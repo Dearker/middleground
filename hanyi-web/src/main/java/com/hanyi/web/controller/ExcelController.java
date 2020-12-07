@@ -1,8 +1,12 @@
 package com.hanyi.web.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.alibaba.excel.EasyExcel;
 import com.hanyi.web.bo.Student;
+import com.hanyi.web.bo.User;
 import com.hanyi.web.bo.UserExcelModel;
 import com.hanyi.web.common.constant.ExcelConstant;
 import com.hanyi.web.common.listener.ModelExcelListener;
@@ -15,6 +19,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -125,6 +130,43 @@ public class ExcelController {
             log.error(e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * 使用HuTool工具类导出
+     *
+     * @param response 响应对象
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) {
+        List<User> list = new ArrayList<>();
+        list.add(new User("哈士奇", "1231", DateUtil.date()));
+        list.add(new User("哈士奇1", "1232", DateUtil.date()));
+        list.add(new User("哈士奇2", "1233", DateUtil.date()));
+        list.add(new User("哈士奇3", "1234", DateUtil.date()));
+        list.add(new User("哈士奇4", "1235", DateUtil.date()));
+        list.add(new User("哈士奇5", "1236", DateUtil.date()));
+        // 通过工具类创建writer，默认创建xls格式
+        ExcelWriter writer = ExcelUtil.getWriter();
+        //自定义标题别名
+        writer.addHeaderAlias("name", "姓名");
+        writer.addHeaderAlias("age", "年龄");
+        writer.addHeaderAlias("birthDay", "生日");
+        // 合并单元格后的标题行，使用默认标题样式
+        writer.merge(2, "申请人员信息");
+        // 一次性写出内容，使用默认样式，强制输出标题
+        writer.write(list, true);
+        //out为OutputStream，需要写出到的目标流
+        //response为HttpServletResponse对象
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //test.xls是弹出下载对话框的文件名，不能为中文，中文请自行编码
+        String name = "test";
+        response.setHeader("Content-Disposition", "attachment;filename=" + name + ".xls");
+        try (ServletOutputStream out = response.getOutputStream()) {
+            writer.flush(out, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

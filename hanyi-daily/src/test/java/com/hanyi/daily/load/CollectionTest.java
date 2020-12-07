@@ -404,8 +404,22 @@ public class CollectionTest {
         stringIntegerMap.remove("1");
         stringIntegerMap.remove("1", 2);
         System.out.println(stringIntegerMap);
-
     }
+
+    /**
+     * 如果key的value不存在则将value放到map中，如果存在则将value返回
+     */
+    @Test
+    public void putIfAbsentMapTest() {
+
+        Map<String, Integer> stringIntegerMap = new HashMap<>();
+        stringIntegerMap.put("1", 2);
+        stringIntegerMap.putIfAbsent("2", 3);
+        stringIntegerMap.putIfAbsent("2", 4);
+
+        System.out.println(stringIntegerMap);
+    }
+
 
     /**
      * 使用filter过滤之后，如果没有匹配的数据，则返回一个空的数组
@@ -520,7 +534,7 @@ public class CollectionTest {
     }
 
     @Test
-    public void stringListTest(){
+    public void stringListTest() {
         String str = ",a,,b,";
         String[] splitArr = str.split(",");
         Arrays.stream(splitArr).filter(StrUtil::isNotBlank).forEach(System.out::println);
