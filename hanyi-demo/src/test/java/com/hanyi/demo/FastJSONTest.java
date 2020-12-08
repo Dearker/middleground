@@ -11,9 +11,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.hanyi.demo.entity.Address;
+import com.hanyi.demo.entity.User;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -189,6 +191,43 @@ public class FastJSONTest {
         });
 
         jsonArray.forEach(System.out::println);
+    }
+
+    /**
+     * json序列化
+     */
+    @Test
+    public void serializableTest() {
+
+        User user = new User();
+        user.setId(1000);
+        user.setName("柯基小短腿");
+        user.setCreateDate(new Date());
+
+        Map<Integer, Integer> dataMap = new HashMap<>();
+        dataMap.put(1, 100);
+        dataMap.put(2, 200);
+        user.setDataMap(dataMap);
+
+        System.out.println("默认序列化结果：\n" + JSON.toJSONString(user));
+        //如果key不为String，则转换为String
+        System.out.println("指定WriteNonStringKeyAsString序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteNonStringKeyAsString));
+        //如果value不为String，则转换为String
+        System.out.println("指定WriteNonStringValueAsString序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteNonStringValueAsString));
+        //输出为空的字段
+        System.out.println("指定WriteMapNullValue序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteMapNullValue));
+        //String为null时输出""
+        System.out.println("指定WriteNullStringAsEmpty序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteNullStringAsEmpty));
+        //number为null时输出0
+        System.out.println("指定WriteNullNumberAsZero序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteNullNumberAsZero));
+        //修改日期格式,yyyy-MM-dd
+        System.out.println("指定WriteDateUseDateFormat序列化结果：\n" +
+                JSON.toJSONString(user, SerializerFeature.WriteDateUseDateFormat));
     }
 
 }
