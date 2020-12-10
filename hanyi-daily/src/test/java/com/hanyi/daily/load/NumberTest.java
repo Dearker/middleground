@@ -3,6 +3,7 @@ package com.hanyi.daily.load;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -102,6 +103,11 @@ public class NumberTest {
         //除法 2
         BigDecimal divide = bigNum1.divide(bigNum2);
         System.out.println("除法：" + divide);
+
+        //保留2位小数，并且四舍五入
+        BigDecimal bigDecimal = new BigDecimal("1.325");
+        System.out.println(bigDecimal.setScale(2, RoundingMode.HALF_UP).doubleValue());
     }
+
 
 }
