@@ -1,5 +1,6 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.util.NumberUtil;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -69,9 +70,9 @@ public class NumberTest {
     }
 
     @Test
-    public void compareTest(){
+    public void compareTest() {
         List<Integer> integerList = Arrays.asList(1, 3, 0, 5);
-        Set<Integer> integerSet =new HashSet<>(integerList);
+        Set<Integer> integerSet = new HashSet<>(integerList);
 
         List<Integer> integers = new ArrayList<>();
 
@@ -82,7 +83,7 @@ public class NumberTest {
      * BigDecimal的加减乘除方法
      */
     @Test
-    public void bigDecimalTest(){
+    public void bigDecimalTest() {
 
         BigDecimal bigNum1 = new BigDecimal("10");
         BigDecimal bigNum2 = new BigDecimal("5");
@@ -100,13 +101,45 @@ public class NumberTest {
         BigDecimal multiply = bigNum1.multiply(bigNum2);
         System.out.println("乘法：" + multiply);
 
-        //除法 2
-        BigDecimal divide = bigNum1.divide(bigNum2);
+        //除法,如果无法除尽则会报错，需要设置保留的小数位数，保留2位小数，并四舍五入 2.00
+        BigDecimal divide = bigNum1.divide(bigNum2, 2, RoundingMode.HALF_UP);
         System.out.println("除法：" + divide);
 
         //保留2位小数，并且四舍五入
         BigDecimal bigDecimal = new BigDecimal("1.325");
         System.out.println(bigDecimal.setScale(2, RoundingMode.HALF_UP).doubleValue());
+    }
+
+    /**
+     * 使用工具类进行运算
+     */
+    @Test
+    public void numberTest() {
+
+        List<BigDecimal> bigDecimalList = new ArrayList<>();
+        bigDecimalList.add(new BigDecimal("3.5"));
+        bigDecimalList.add(new BigDecimal("-1.5"));
+        bigDecimalList.add(new BigDecimal("5.5"));
+
+        BigDecimal[] bigDecimals = bigDecimalList.toArray(new BigDecimal[0]);
+
+        //加法
+        BigDecimal add = NumberUtil.add(bigDecimals);
+        System.out.println("加法：" + add);
+
+        //减法
+        BigDecimal sub = NumberUtil.sub(bigDecimals);
+        System.out.println("减法：" + sub);
+
+        //乘法
+        BigDecimal mul = NumberUtil.mul(bigDecimals);
+        System.out.println("乘法：" + mul);
+
+        //除法
+        BigDecimal bigDecimal = new BigDecimal("10");
+        BigDecimal decimal = new BigDecimal("2");
+        BigDecimal div = NumberUtil.div(bigDecimal, decimal, 2, RoundingMode.HALF_UP);
+        System.out.println("除法：" + div);
     }
 
 
