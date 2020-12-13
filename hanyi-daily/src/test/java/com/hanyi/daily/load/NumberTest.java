@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * <p>
- *
+ * 数字计算测试类
  * </p>
  *
  * @author wenchangwei
@@ -142,5 +142,24 @@ public class NumberTest {
         System.out.println("除法：" + div);
     }
 
+    /**
+     * 百分比测试方法
+     */
+    @Test
+    public void percentageTest() {
+        double score = 0.32568;
+        String decimalFormat = NumberUtil.decimalFormat("#.##%", score);
+        //32.57%
+        System.out.println(decimalFormat);
+
+        BigDecimal bigDecimal = new BigDecimal("0.45687");
+        String format = NumberUtil.decimalFormat("#.##%", bigDecimal);
+        //45.69%
+        System.out.println(format);
+
+        String percent = NumberUtil.formatPercent(score, 3);
+        //32.568%
+        System.out.println(percent);
+    }
 
 }

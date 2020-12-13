@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RocketMQMessageListener(consumerGroup = "shop-order", topic = "test-topic-1")
+@RocketMQMessageListener(consumerGroup = "shop-order", topic = "test-topic-1" ,selectorExpression = "tag1 || tag2")
 public class MessageComponent implements RocketMQListener<String> {
 
     @Override

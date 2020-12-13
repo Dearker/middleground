@@ -2,12 +2,15 @@ package com.hanyi.rocket;
 
 import cn.hutool.core.util.IdUtil;
 import com.hanyi.rocket.pojo.UserInfo;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,6 +30,9 @@ public class RocketAppTest {
 
     @Resource
     private RocketMQTemplate rocketMQTemplate;
+
+    @Resource
+    private DefaultMQProducer defaultMQProducer;
 
     /**
      * 发送同步消息
@@ -88,5 +94,42 @@ public class RocketAppTest {
                         .setHeader("txId", IdUtil.fastSimpleUUID()).build(), userInfo);
     }
 
+    /**
+     * 延迟消息
+     * 默认messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+     * 配置项从1级开始各级延时的时间，如1表示延时1s，2表示延时5s，14表示延时10m，
+     * 时间单位支持：s、m、h、d，分别表示秒、分、时、天；可手工调整指定级别的延时时间同时需要修改时间对应的level级别的值
+     */
+    @Test
+    public void delayTimeTest() {
+        Message<String> message = MessageBuilder.withPayload("这是一个延迟消息").build();
+        SendResult sendResult = rocketMQTemplate.syncSend("test-topic-1", message, 200, 3);
+        System.out.println(sendResult);
+    }
+
+    /**
+     * 使用tag过滤消息
+     */
+    @Test
+    public void filterMessageTest(){
+        Message<String> message = MessageBuilder.withPayload("这是一个tag消息").build();
+        SendResult sendResult = rocketMQTemplate.syncSend("test-topic-1:tag1", message, 200);
+        System.out.println(sendResult);
+    }
+
+    /**
+     * 使用sql语法进行消息过滤
+     */
+    @Test
+    public void sqlMessageTest() throws Exception {
+        for (int i = 0; i < 3; i++) {
+            org.apache.rocketmq.common.message.Message message = new
+                    org.apache.rocketmq.common.message.Message("TopicTest",
+                    ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
+            message.putUserProperty("a", String.valueOf(i));
+            SendResult sendResult = defaultMQProducer.send(message);
+            System.out.println(sendResult);
+        }
+    }
 
 }

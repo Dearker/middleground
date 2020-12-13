@@ -31,7 +31,7 @@ public class ThreadDemo {
     /**
      * join 子线程先执行，执行完成后再执行主线程
      *
-     * @throws InterruptedException
+     * @throws InterruptedException 抛出线程异常
      */
     @Test
     public void joinTest() throws InterruptedException {
@@ -87,9 +87,10 @@ public class ThreadDemo {
 
     /**
      * 定时线程池,设置守护线程，当JVM的用户线程退出时，守护线程会舍弃掉任务直接退出
+     * 定时每5秒执行一次
      */
     @Test
-    public void scheduledExecutorServiceTest() {
+    public void scheduledExecutorServiceTest() throws InterruptedException {
         TimeInterval timer = DateUtil.timer();
 
         AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -102,8 +103,25 @@ public class ThreadDemo {
             return thread;
         });
 
-        executorService.schedule(() -> System.out.println(Thread.currentThread().getName()), 2, TimeUnit.MILLISECONDS);
+        //线程号：scheduled_1，启动2秒后开始每5秒执行一次
+        executorService.scheduleAtFixedRate(() ->
+                        System.out.println(Thread.currentThread().getName() + ":" + DateUtil.date()),
+                2, 5, TimeUnit.SECONDS);
+
+        //线程号：scheduled_2，启动2秒后开始每3秒执行一次
+        executorService.scheduleAtFixedRate(() ->
+                        System.out.println(Thread.currentThread().getName() + "---" + DateUtil.date()),
+                2, 3, TimeUnit.SECONDS);
+
         System.out.println("消耗时间：" + timer.intervalMs());
+
+        //注册JVM钩子函数代码,当JVM退出时调用线程池的关闭方法
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->{
+            executorService.shutdown();
+            System.out.println("关闭executorService线程池");
+        }));
+
+        TimeUnit.SECONDS.sleep(10);
     }
 
     /**
