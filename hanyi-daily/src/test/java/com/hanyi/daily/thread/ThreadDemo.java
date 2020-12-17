@@ -5,6 +5,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdUtil;
 import com.hanyi.daily.pojo.TimeInfo;
+import com.hanyi.daily.thread.pojo.Accumulator;
 import com.hanyi.daily.thread.pojo.Athlete;
 import org.junit.Test;
 
@@ -61,7 +62,6 @@ public class ThreadDemo {
     @Test
     public void multithreadedAsyncCallback() throws Exception {
 
-
         System.out.println("当前线程总数：" + threadPoolExecutor.getMaximumPoolSize());
         TimeInterval timer = DateUtil.timer();
         int length = 32;
@@ -82,7 +82,30 @@ public class ThreadDemo {
         System.out.println("获取的数组为：" + integerList);
         int sum = integerList.stream().mapToInt(Integer::intValue).sum();
         System.out.println("总数为：" + sum);
+    }
 
+    /**
+     * 使用并行流进行多个线程异步执行，并汇总执行的结果
+     */
+    @Test
+    public void multithreadedParallelStream() {
+
+        TimeInterval timer = DateUtil.timer();
+
+        int length = 5;
+        List<Accumulator> accumulatorList = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) {
+            accumulatorList.add(new Accumulator(i));
+        }
+        //并行流
+        int sum = accumulatorList.parallelStream().mapToInt(Accumulator::getNumber).sum();
+        System.out.println("并行流耗时：" + timer.intervalRestart());
+        System.out.println("并行流总数：" + sum);
+
+        //串行流
+        int total = accumulatorList.stream().mapToInt(Accumulator::getNumber).sum();
+        System.out.println("串行流耗时：" + timer.intervalRestart());
+        System.out.println("串行流总数：" + total);
     }
 
     /**
@@ -116,7 +139,7 @@ public class ThreadDemo {
         System.out.println("消耗时间：" + timer.intervalMs());
 
         //注册JVM钩子函数代码,当JVM退出时调用线程池的关闭方法
-        Runtime.getRuntime().addShutdownHook(new Thread(() ->{
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             executorService.shutdown();
             System.out.println("关闭executorService线程池");
         }));

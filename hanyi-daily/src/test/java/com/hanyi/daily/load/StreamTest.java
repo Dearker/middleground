@@ -5,12 +5,12 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.pojo.CostInfo;
 import com.hanyi.daily.pojo.Person;
+import com.hanyi.daily.thread.pojo.Accumulator;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -261,35 +261,24 @@ public class StreamTest {
      */
     @Test
     public void parallelTest() {
-
+        TimeInterval timer = DateUtil.timer();
         //并行流
         long count = LongStream.rangeClosed(1, 10).parallel().reduce(Long::sum).orElse(0);
         System.out.println(count);
+        System.out.println("并行流计算耗时：" + timer.intervalRestart());
 
         long begin = 10;
         Accumulator accumulator = new Accumulator();
         //串行流
         LongStream.rangeClosed(1, begin).forEach(accumulator::add);
-        System.out.println(accumulator.total);
+        System.out.println(accumulator.getTotal());
+        System.out.println("串行流耗时：" + timer.intervalRestart());
 
         accumulator.clear();
         //并行流会出现数据不一致的情况
         LongStream.rangeClosed(1, begin).parallel().forEach(accumulator::add);
-        System.out.println(accumulator.total);
-
-    }
-
-    public static class Accumulator {
-
-        private final AtomicLong total = new AtomicLong(0);
-
-        public void add(long value) {
-            total.addAndGet(value);
-        }
-
-        public void clear() {
-            total.set(0);
-        }
+        System.out.println(accumulator.getTotal());
+        System.out.println("并行流耗时：" + timer.intervalRestart());
     }
 
 }
