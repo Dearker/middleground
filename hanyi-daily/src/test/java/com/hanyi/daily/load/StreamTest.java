@@ -1,5 +1,7 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.pojo.CostInfo;
 import com.hanyi.daily.pojo.Person;
@@ -8,7 +10,9 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparingLong;
@@ -180,18 +184,22 @@ public class StreamTest {
         System.out.println(listMap);
     }
 
+    /**
+     * 内存泄漏
+     */
     @Test
-    public void hashSetTest(){
+    public void hashSetTest() {
 
         Set<Person> personSet = new HashSet<>();
 
         Person person = new Person(1, "柯基");
-        Person p = new Person(2,"哈士奇");
+        Person p = new Person(2, "哈士奇");
 
         personSet.add(p);
         personSet.add(person);
 
         p.setId(3);
+        //修改了p对象的属性，则无法再删除该对象
         personSet.remove(p);
 
         System.out.println(personSet);
@@ -200,6 +208,88 @@ public class StreamTest {
         //减法
         int i = Math.subtractExact(3, 1);
         System.out.println(i);
+    }
+
+    /**
+     * 并行流和串行流，并行流会为每一个元素创建一线程去进行处理，底层使用ForkJoinPool线程池
+     * 并行流的弊端：
+     * 1、对于iterate来说，每次应用这个函数都要依赖于前一次应用的结果，而且需要拆装箱，所以会出现性能较低的情况
+     * 2、无法解决多线程之间共享变量的修改问题
+     * 3、集合元素中如果出现当前元素运算需要依赖上一次应用的结果的情况，无法明显的提高效率，即无法拆分任务
+     * <p>
+     * 尽量使用LongStream/IntStream/DoubleStream等原始数据流代替Stream来处理数字，以避免频繁拆装箱带来的额外开销
+     */
+    @Test
+    public void parallelStreamTest() {
+
+        TimeInterval timer = DateUtil.timer();
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(new Person(1, "哈士奇"));
+        personList.add(new Person(2, "柯基"));
+        personList.add(new Person(3, "柴犬"));
+
+        //串行流
+        personList.forEach(s -> {
+            s.setId(s.getId() * 100);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        System.out.println("串行流的数据：" + personList);
+        //耗时：3042
+        System.out.println("串行流耗时：" + timer.intervalRestart());
+
+        //并行流
+        personList.parallelStream().forEach(s -> {
+            s.setId(s.getId() * 100);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        System.out.println("并行流的数据：" + personList);
+        //耗时：1548
+        System.out.println("并行流耗时：" + timer.intervalRestart());
+    }
+
+    /**
+     * 并行流计算，使用volatile关键字也无法解决多线程之间共享变量的修改问题，使用原子类可解决
+     */
+    @Test
+    public void parallelTest() {
+
+        //并行流
+        long count = LongStream.rangeClosed(1, 10).parallel().reduce(Long::sum).orElse(0);
+        System.out.println(count);
+
+        long begin = 10;
+        Accumulator accumulator = new Accumulator();
+        //串行流
+        LongStream.rangeClosed(1, begin).forEach(accumulator::add);
+        System.out.println(accumulator.total);
+
+        accumulator.clear();
+        //并行流会出现数据不一致的情况
+        LongStream.rangeClosed(1, begin).parallel().forEach(accumulator::add);
+        System.out.println(accumulator.total);
+
+    }
+
+    public static class Accumulator {
+
+        private final AtomicLong total = new AtomicLong(0);
+
+        public void add(long value) {
+            total.addAndGet(value);
+        }
+
+        public void clear() {
+            total.set(0);
+        }
     }
 
 }
