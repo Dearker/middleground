@@ -420,7 +420,6 @@ public class CollectionTest {
         System.out.println(stringIntegerMap);
     }
 
-
     /**
      * 使用filter过滤之后，如果没有匹配的数据，则返回一个空的数组
      */
@@ -538,6 +537,48 @@ public class CollectionTest {
         String str = ",a,,b,";
         String[] splitArr = str.split(",");
         Arrays.stream(splitArr).filter(StrUtil::isNotBlank).forEach(System.out::println);
+    }
+
+    /**
+     * 将动态数组中的容量调整为数组中的元素个数
+     * ensureCapacity(): 用于指定集合的容量大小，以减少扩容的次数
+     */
+    @Test
+    public void trimToSizeTest(){
+        // 创建一个动态数组
+        ArrayList<String> sites = new ArrayList<>();
+
+        sites.add("Google");
+        sites.add("Runoob");
+        sites.add("Taobao");
+
+        System.out.println("ArrayList : " + sites + "---" + sites.size());
+
+        // 调整容量为3
+        sites.trimToSize();
+        sites.ensureCapacity(3);
+        System.out.println("ArrayList 大小: " + sites.size());
+    }
+
+    @Test
+    public void linkedListTest(){
+
+        LinkedList<String> linkedList = new LinkedList<>();
+
+
+
+    }
+
+    @Test
+    public void concurrentHashMap01Test(){
+
+        ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
+
+    }
+
+    @Test
+    public void treeMap01Test(){
+
     }
 
 }
