@@ -1,12 +1,18 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.NumberUtil;
 import org.junit.Test;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * <p>
@@ -81,6 +87,17 @@ public class NumberTest {
 
     /**
      * BigDecimal的加减乘除方法
+     *
+     * <p>
+     * RoundingMode模式：
+     * UP: 若舍入位为非零，则对舍入部分的前一位数字加1；若舍入位为零，则直接舍弃。即为向外取整模式
+     * DOWN: 不论舍入位是否为零，都直接舍弃。即为向内取整模式
+     * CEILING：向上取整
+     * FLOOR: 向下取整
+     * HALF_UP：四舍五入
+     * HALF_DOWN: 五舍六入
+     * HALF_EVEN: 整数位若是奇数则四舍五入，若是偶数则五舍六入
+     * UNNECESSARY: 断言请求的操作具有精确的结果，因此不需要舍入。如果对获得精确结果的操作指定此舍入模式，则抛出ArithmeticException
      */
     @Test
     public void bigDecimalTest() {
@@ -106,8 +123,56 @@ public class NumberTest {
         System.out.println("除法：" + divide);
 
         //保留2位小数，并且四舍五入
-        BigDecimal bigDecimal = new BigDecimal("1.325");
+        BigDecimal bigDecimal = new BigDecimal("1.322");
+        //1.32
         System.out.println(bigDecimal.setScale(2, RoundingMode.HALF_UP).doubleValue());
+
+        //1.33
+        System.out.println(bigDecimal.setScale(2, RoundingMode.UP).doubleValue());
+    }
+
+    /**
+     * 使用BigDecimal.valueOf()用于构建BigDecimal对象
+     *
+     * @throws InterruptedException 线程异常
+     */
+    @Test
+    public void valueOfTest() throws InterruptedException {
+
+        TimeInterval timer = DateUtil.timer();
+
+        TimeUnit.SECONDS.sleep(1);
+        List<Integer> integerList = new ArrayList<>();
+        IntStream.range(0, 10).forEach(integerList::add);
+
+        System.out.println(integerList);
+
+        long intervalMs = timer.intervalMs();
+        BigDecimal div = NumberUtil.div(new BigDecimal(Long.toString(intervalMs)), new BigDecimal("1000"), 3, RoundingMode.FLOOR);
+        System.out.println(div);
+
+        BigDecimal bigDecimal = NumberUtil.div(BigDecimal.valueOf(intervalMs), BigDecimal.valueOf(1000), 3, RoundingMode.FLOOR);
+        System.out.println(bigDecimal);
+        System.out.println(intervalMs);
+    }
+
+    /**
+     * compareTo的返回值为0则表示相等，1表示大于，-1表示小于
+     */
+    @Test
+    public void compareToTest(){
+
+        BigDecimal bigDecimal = new BigDecimal("12");
+        BigDecimal decimal = new BigDecimal("11");
+
+        if(bigDecimal.compareTo(decimal) > 0){
+            System.out.println("大于");
+        }else{
+            System.out.println("小于");
+        }
+
+        int compareTo = BigDecimal.valueOf(0).compareTo(BigDecimal.ZERO);
+        System.out.println(compareTo);
     }
 
     /**
@@ -160,6 +225,20 @@ public class NumberTest {
         String percent = NumberUtil.formatPercent(score, 3);
         //32.568%
         System.out.println(percent);
+    }
+
+    /**
+     * 获取泛型的类型，对于Object、接口和原始类型返回null，对于数 组class则是返回Object.class
+     */
+    @Test
+    public void typeTest(){
+        List<String> stringList = new ArrayList<>();
+        stringList.add("1");
+
+        Type genericSuperclass = stringList.getClass().getGenericSuperclass();
+        Type type = ((ParameterizedType)genericSuperclass).getActualTypeArguments()[0];
+        //E
+        System.out.println(type.getTypeName());
     }
 
 }

@@ -473,7 +473,6 @@ public class CollectionTest {
      */
     @Test
     public void immutableSetTest() {
-
         // 创建方式1：of
         ImmutableSet<String> immutableSet = ImmutableSet.of("a", "b", "c");
         immutableSet.forEach(System.out::println);
@@ -495,7 +494,6 @@ public class CollectionTest {
         // JDK Collections 创建不可变 List
         List<String> list = Collections.unmodifiableList(arrayList);
         list.forEach(System.out::println);
-
     }
 
     /**
@@ -514,7 +512,6 @@ public class CollectionTest {
      */
     @Test
     public void unionTest() {
-
         Set<String> newHashSet1 = Sets.newHashSet("a", "a", "b", "c");
         Set<String> newHashSet2 = Sets.newHashSet("b", "b", "c", "d");
 
@@ -529,56 +526,13 @@ public class CollectionTest {
         // newHashSet1 中存在，newHashSet2 中不存在
         Sets.SetView<String> setView = Sets.difference(newHashSet1, newHashSet2);
         System.out.println(setView); // [a]
-
     }
 
     @Test
     public void stringListTest() {
         String str = ",a,,b,";
-        String[] splitArr = str.split(",");
+        String[] splitArr = str.split(StrUtil.COMMA);
         Arrays.stream(splitArr).filter(StrUtil::isNotBlank).forEach(System.out::println);
-    }
-
-    /**
-     * 将动态数组中的容量调整为数组中的元素个数
-     * ensureCapacity(): 用于指定集合的容量大小，以减少扩容的次数
-     */
-    @Test
-    public void trimToSizeTest(){
-        // 创建一个动态数组
-        ArrayList<String> sites = new ArrayList<>();
-
-        sites.add("Google");
-        sites.add("Runoob");
-        sites.add("Taobao");
-
-        System.out.println("ArrayList : " + sites + "---" + sites.size());
-
-        // 调整容量为3
-        sites.trimToSize();
-        sites.ensureCapacity(3);
-        System.out.println("ArrayList 大小: " + sites.size());
-    }
-
-    @Test
-    public void linkedListTest(){
-
-        LinkedList<String> linkedList = new LinkedList<>();
-
-
-
-    }
-
-    @Test
-    public void concurrentHashMap01Test(){
-
-        ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
-
-    }
-
-    @Test
-    public void treeMap01Test(){
-
     }
 
 }
