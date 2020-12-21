@@ -1,13 +1,23 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.FIFOCache;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.lang.Console;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
 import cn.hutool.core.thread.NamedThreadFactory;
+import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.TypeUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.hanyi.daily.pojo.User;
@@ -17,12 +27,12 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -47,7 +57,6 @@ public class LoaderTest {
         File file = new File(pathname);
         JSONObject jsonObject = JSONUtil.readJSONObject(file, Charset.defaultCharset());
         System.out.println(jsonObject);
-
     }
 
     /**
@@ -282,14 +291,67 @@ public class LoaderTest {
      * 获取泛型的类型，对于Object、接口和原始类型返回null，对于数 组class则是返回Object.class
      */
     @Test
-    public void typeTest(){
-        List<String> stringList = new ArrayList<>();
-        stringList.add("1");
+    public void typeTest() {
+        Stream.of(ReflectUtil.getFields(Person.class)).forEach(s -> {
+            Type list = TypeUtil.getFieldType(Person.class, s.getName());
+            System.out.println(list.getTypeName() + " || " + s.getName());
+        });
+    }
 
-        Type genericSuperclass = stringList.getClass().getGenericSuperclass();
-        Type type = ((ParameterizedType)genericSuperclass).getActualTypeArguments()[0];
-        //E
-        System.out.println(type.getTypeName());
+    /**
+     * 身份证测试方法
+     */
+    @Test
+    public void idCardTest() {
+
+        String idCard = "321083197812162119";
+
+        //获取生日：19781216
+        String birthByIdCard = IdcardUtil.getBirthByIdCard(idCard);
+        System.out.println(birthByIdCard);
+
+        //格式化日期：1978-12-16
+        String format = DateUtil.format(IdcardUtil.getBirthDate(idCard), DatePattern.NORM_DATE_PATTERN);
+        System.out.println(format);
+
+        //年龄: 42
+        System.out.println(IdcardUtil.getAgeByIdCard(idCard));
+
+        //省份: 江苏
+        System.out.println(IdcardUtil.getProvinceByIdCard(idCard));
+
+    }
+
+    /**
+     * 树结构测试
+     */
+    @Test
+    public void treeTest() {
+
+        // 构建node列表
+        List<TreeNode<String>> nodeList = CollUtil.newArrayList();
+
+        nodeList.add(new TreeNode<>("1", "0", "系统管理", 5));
+        nodeList.add(new TreeNode<>("11", "1", "用户管理", 222222));
+        nodeList.add(new TreeNode<>("111", "11", "用户添加", 0));
+        nodeList.add(new TreeNode<>("2", "0", "店铺管理", 1));
+        nodeList.add(new TreeNode<>("21", "2", "商品管理", 44));
+        nodeList.add(new TreeNode<>("221", "2", "商品管理2", 2));
+
+        // 0表示最顶层的id是0
+        List<Tree<String>> treeList = TreeUtil.build(nodeList, "0");
+        System.out.println(treeList);
+    }
+
+    /**
+     * 缓存测试
+     */
+    @Test
+    public void cacheTest() {
+        FIFOCache<String, Integer> fifoCache = CacheUtil.newFIFOCache(Byte.SIZE, 5000);
+        fifoCache.put("aaa", 1);
+
+        fifoCache.forEach(System.out::println);
     }
 
 }
