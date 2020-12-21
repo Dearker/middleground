@@ -5,8 +5,6 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.util.NumberUtil;
 import org.junit.Test;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -225,20 +223,6 @@ public class NumberTest {
         String percent = NumberUtil.formatPercent(score, 3);
         //32.568%
         System.out.println(percent);
-    }
-
-    /**
-     * 获取泛型的类型，对于Object、接口和原始类型返回null，对于数 组class则是返回Object.class
-     */
-    @Test
-    public void typeTest(){
-        List<String> stringList = new ArrayList<>();
-        stringList.add("1");
-
-        Type genericSuperclass = stringList.getClass().getGenericSuperclass();
-        Type type = ((ParameterizedType)genericSuperclass).getActualTypeArguments()[0];
-        //E
-        System.out.println(type.getTypeName());
     }
 
 }

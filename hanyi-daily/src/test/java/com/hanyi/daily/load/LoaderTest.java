@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -274,6 +276,20 @@ public class LoaderTest {
             e.printStackTrace();
         }
         System.out.println("哈哈哈");
+    }
+
+    /**
+     * 获取泛型的类型，对于Object、接口和原始类型返回null，对于数 组class则是返回Object.class
+     */
+    @Test
+    public void typeTest(){
+        List<String> stringList = new ArrayList<>();
+        stringList.add("1");
+
+        Type genericSuperclass = stringList.getClass().getGenericSuperclass();
+        Type type = ((ParameterizedType)genericSuperclass).getActualTypeArguments()[0];
+        //E
+        System.out.println(type.getTypeName());
     }
 
 }
