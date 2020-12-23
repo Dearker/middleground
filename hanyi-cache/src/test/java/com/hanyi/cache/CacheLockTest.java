@@ -23,15 +23,10 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CacheTest {
+public class CacheLockTest {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
-
-    @Test
-    public void buildDataTest() {
-        stringRedisTemplate.opsForValue().set("1", "哈哈哈", 1, TimeUnit.HOURS);
-    }
 
     /**
      * 测试redis的setNX和expire命令的原子性
