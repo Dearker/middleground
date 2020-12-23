@@ -73,13 +73,38 @@ public class NumberTest {
         System.out.println(Math.abs(-10));
     }
 
+    /**
+     * ceil: 向上取整
+     * floor: 向下取整，非四舍五入
+     * rint: 方法返回最接近参数的整数值,四舍五入
+     * pow：用于返回第一个参数的第二个参数次方
+     * round：四舍五入
+     * sqrt: 正平方根
+     * abs：绝对值
+     *round(double a)：返回参数中最接近的long类型之，四舍五入
+     */
+    @Test
+    public void math01Test() {
+        //2.0
+        System.out.println(Math.ceil(1.2));
+        //1.0
+        System.out.println(Math.floor(1.5));
+        //1.0
+        System.out.println(Math.rint(1.4));
+        //2.0
+        System.out.println(Math.rint(1.5));
+        //次方：8.0
+        System.out.println("pow: " + Math.pow(2, 3));
+        //正平方根：2.0
+        System.out.println("sqrt: "+Math.sqrt(4));
+
+        System.out.println(Math.toIntExact(30L));
+    }
+
     @Test
     public void compareTest() {
         List<Integer> integerList = Arrays.asList(1, 3, 0, 5);
         Set<Integer> integerSet = new HashSet<>(integerList);
-
-        List<Integer> integers = new ArrayList<>();
-
         System.out.println(integerSet.stream().min(Integer::compareTo).orElse(null));
     }
 
