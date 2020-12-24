@@ -8,10 +8,12 @@ import org.junit.Test;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @PackAge: middleground com.hanyi.daily.load
@@ -27,20 +29,24 @@ public class CollectionTest {
      */
     @Test
     public void stringAndListConvertTest() {
-
         List<String> stringList = Arrays.asList("111", "222", "333");
         String join = StrUtil.join(StrUtil.COMMA, stringList);
 
         List<String> strings = Arrays.asList(StrUtil.split(join, StrUtil.COMMA));
         strings.forEach(System.out::println);
+
+        System.out.println("----------------------");
+
+        String stringJoin = String.join(StrUtil.COMMA, stringList);
+        Stream.of(stringJoin.split(StrUtil.COMMA)).forEach(System.out::println);
     }
 
     /**
      * ConcurrentHashMap允许一边更新、一边遍历，其他的map实现类则不行
+     * ConcurrentMap接口扩展了map的功能，主要实现以ConcurrentHashMap为主
      */
     @Test
     public void concurrentHashMapTest() {
-
         Map<String, Integer> integerMap = new ConcurrentHashMap<>();
         integerMap.put("a", 1);
         integerMap.put("b", 2);
@@ -51,6 +57,53 @@ public class CollectionTest {
             integerMap.remove(entry.getKey());
         }
         System.out.println(integerMap.size());
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(new Person(1, "哈士奇"));
+        personList.add(new Person(2, "柯基"));
+
+        ConcurrentMap<Integer, String> concurrentMap = personList.stream().collect(
+                Collectors.toConcurrentMap(Person::getId, Person::getName));
+        System.out.println(concurrentMap);
+    }
+
+    /**
+     * map的key中存在多个value
+     */
+    @Test
+    public void multiMapTest() {
+        List<Person> personList = new ArrayList<>();
+        personList.add(new Person(1, "哈士奇"));
+        personList.add(new Person(2, "柯基"));
+        personList.add(new Person(1, "柴犬"));
+
+        //key中出现多个value，使用后面的值覆盖之前的值
+        Map<Integer, String> stringMap = personList.stream().collect(Collectors.toMap(Person::getId, Person::getName,
+                (oldValue, newValue) -> newValue));
+        System.out.println(stringMap);
+
+        //key中出现多个value，将多个value的值进行合并
+        Map<Integer, String> map = personList.stream().collect(Collectors.toMap(Person::getId, Person::getName,
+                (oldValue, newValue) -> oldValue + StrUtil.COLON + newValue));
+        System.out.println(map);
+
+        Person person = new Person();
+        person.setId(3);
+        personList.add(person);
+
+        //如果map的value值为null则指定特定的值
+        Map<Integer, String> idMap = personList.stream().filter(s -> s.getId() != 1)
+                .collect(Collectors.toMap(Person::getId, s -> StrUtil.emptyIfNull(s.getName())));
+        System.out.println(idMap);
+
+        Map<Integer, String> collect = personList.stream().filter(s -> s.getId() != 1)
+                .collect(Collectors.toMap(Person::getId, s -> Optional.ofNullable(s.getName()).orElse(StrUtil.EMPTY)));
+        System.out.println(collect);
+
+        //使用该方式可以在value中存储null值
+        Map<Integer, String> hashMap = personList.stream().filter(s -> s.getId() != 1)
+                .collect(HashMap::new, (m, s) -> m.put(s.getId(), s.getName()), Map::putAll);
+        System.out.println(hashMap);
     }
 
     /**
@@ -58,8 +111,7 @@ public class CollectionTest {
      */
     @Test
     public void multisetTest() {
-
-        Multiset<String> multiset = HashMultiset.create();
+        Multiset<String> multiset = HashMultiset.create(5);
         multiset.add("a");
         multiset.add("a");
         multiset.add("b");
@@ -75,7 +127,6 @@ public class CollectionTest {
      */
     @Test
     public void multimapTest() {
-
         Multimap<String, String> multiMap = ArrayListMultimap.create();
 
         multiMap.put("hanyi", "柯基");
@@ -84,7 +135,6 @@ public class CollectionTest {
 
         System.out.println(multiMap.get("hanyi"));
         System.out.println(multiMap.get("123"));
-
     }
 
     /**
@@ -93,7 +143,6 @@ public class CollectionTest {
      */
     @Test
     public void biMapTest() {
-
         BiMap<String, String> biMap = HashBiMap.create();
 
         biMap.put("柯基", "柯基小短腿");
@@ -103,6 +152,7 @@ public class CollectionTest {
         System.out.println(biMap.inverse().get("柯基小短腿"));
         //通过key获取value
         System.out.println(biMap.get("柯基"));
+        System.out.println(biMap.get(null));
     }
 
     /**
@@ -110,7 +160,6 @@ public class CollectionTest {
      */
     @Test
     public void tableTest() {
-
         Table<String, String, Integer> table = HashBasedTable.create();
         table.put("张三", "计算机", 80);
         table.put("张三", "数学", 90);
@@ -152,7 +201,6 @@ public class CollectionTest {
      */
     @Test
     public void treeMapTest() {
-
         TreeMap<Integer, String> treeMap = new TreeMap<>();
 
         treeMap.put(2, "TWO");
@@ -172,7 +220,6 @@ public class CollectionTest {
      */
     @Test
     public void atomicLongTest() {
-
         AtomicLong atomicLong = new AtomicLong();
         atomicLong.set(100);
         atomicLong.incrementAndGet();
@@ -184,7 +231,6 @@ public class CollectionTest {
     //算法
     @Test
     public void mapToBean() {
-
         Map<Integer, String> stringMap = new HashMap<>();
         stringMap.put(1, "柯基");
         stringMap.put(2, "哈士奇");
@@ -202,7 +248,6 @@ public class CollectionTest {
 
     @Test
     public void finalTest() {
-
         List<Integer> integerList = new ArrayList<>();
 
         final int length = integerList.size();
@@ -224,7 +269,6 @@ public class CollectionTest {
 
     @Test
     public void listTest() {
-
         List<Integer> integerList = new ArrayList<>();
 
         integerList.add(1);
@@ -251,7 +295,6 @@ public class CollectionTest {
      */
     @Test
     public void mapComputeIfAbsentTest() {
-
         Map<String, Integer> stringMap = new HashMap<>();
         stringMap.put("3", 1);
         stringMap.put("4", 2);
@@ -288,7 +331,6 @@ public class CollectionTest {
      */
     @Test
     public void mapComputeIfPresentTest() {
-
         Map<String, String> stringMap = new HashMap<>();
         stringMap.put("1", "3");
         stringMap.put("2", "4");
@@ -310,7 +352,6 @@ public class CollectionTest {
      */
     @Test
     public void mapComputeTest() {
-
         List<String> stringList = Arrays.asList("1", "2", "3", "1", "4", "1", "2");
 
         Map<String, Integer> stringIntegerMap = new HashMap<>();
@@ -328,7 +369,6 @@ public class CollectionTest {
      */
     @Test
     public void mapMergeTest() {
-
         List<Student> studentList = new ArrayList<>();
         studentList.add(new Student("张三", "男", 18));
         studentList.add(new Student("李四", "男", 20));
@@ -355,7 +395,6 @@ public class CollectionTest {
      */
     @Test
     public void mapGetOrDefaultTest() {
-
         Map<String, Integer> map = new HashMap<>(3);
         map.put("john", null);
         map.put("jack", 180);
@@ -379,7 +418,6 @@ public class CollectionTest {
      */
     @Test
     public void mapReplaceTest() {
-
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("1", 3);
 
@@ -396,7 +434,6 @@ public class CollectionTest {
      */
     @Test
     public void removeMapTest() {
-
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("1", 2);
         stringIntegerMap.put("2", 3);
@@ -411,7 +448,6 @@ public class CollectionTest {
      */
     @Test
     public void putIfAbsentMapTest() {
-
         Map<String, Integer> stringIntegerMap = new HashMap<>();
         stringIntegerMap.put("1", 2);
         stringIntegerMap.putIfAbsent("2", 3);
@@ -425,7 +461,6 @@ public class CollectionTest {
      */
     @Test
     public void filterListTest() {
-
         List<String> stringList = new ArrayList<>();
         stringList.add("1");
 
@@ -441,7 +476,6 @@ public class CollectionTest {
      */
     @Test
     public void foreachTest() {
-
         List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
 
         List<Person> personList = new ArrayList<>();

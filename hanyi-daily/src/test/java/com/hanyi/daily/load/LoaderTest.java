@@ -20,6 +20,7 @@ import cn.hutool.core.thread.NamedThreadFactory;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -377,6 +378,21 @@ public class LoaderTest {
         System.out.println(tableMap.getKeys(111));
         //[111, 222]
         System.out.println(tableMap.getValues("aaa"));
+    }
+
+    @Test
+    public void optionalTest(){
+        Person person = new Person();
+        String orElse = Optional.ofNullable(person).map(Person::getName).orElse(StrUtil.EMPTY_JSON);
+        System.out.println("空：" + orElse);
+
+        person.setName("哈士奇");
+        String s = Optional.ofNullable(person).map(Person::getName).orElse(StrUtil.EMPTY_JSON);
+        System.out.println("name: " + s);
+
+        Person p = null;
+        String anElse = Optional.ofNullable(p).map(Person::getName).orElse(null);
+        System.out.println(anElse);
     }
 
 }
