@@ -23,4 +23,11 @@ public interface UserService extends IService<UserEntity> {
      */
     Page<UserEntity> findUserByCondition(UserQueryPageParam userQueryPageParam);
 
+    /**
+     * 分页查询用户信息
+     *
+     * @param userQueryPageParam 查询对象
+     * @return 返回分页结果
+     */
+    Page<UserEntity> findUserByPage(UserQueryPageParam userQueryPageParam);
 }

@@ -1,6 +1,7 @@
 package com.hanyi.hikari.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hanyi.hikari.dao.UserDao;
@@ -68,5 +69,23 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         page.setRecords(userByCondition);
 
         return page;
+    }
+
+    /**
+     * 分页查询用户信息
+     *
+     * @param userQueryPageParam 查询对象
+     * @return 返回分页结果
+     */
+    @Override
+    public Page<UserEntity> findUserByPage(UserQueryPageParam userQueryPageParam) {
+        // 参数一：当前页; 参数二：页面大小
+        Page<UserEntity> userPage = new Page<>(userQueryPageParam.getCurrentPage(),userQueryPageParam.getPageSize());
+
+        IPage<UserEntity> entityPage = baseMapper.selectPage(userPage, null);
+        userPage.setTotal(entityPage.getTotal());
+        userPage.setRecords(entityPage.getRecords());
+
+        return userPage;
     }
 }

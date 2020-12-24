@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -22,13 +22,12 @@ public class CommonFieldHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         log.info("start insert fill ....");
-        this.setFieldValByName("createTime", new Date(), metaObject);
-        this.setFieldValByName("lastUpdateTime", new Date(), metaObject);
+        this.setFieldValByName("gmtCreate", LocalDateTime.now(), metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
-        this.setFieldValByName("lastUpdateTime", new Date(), metaObject);
+        this.setFieldValByName("gmtModified", LocalDateTime.now(), metaObject);
     }
 }
