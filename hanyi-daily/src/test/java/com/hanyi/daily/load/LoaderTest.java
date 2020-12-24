@@ -8,13 +8,16 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.StopWatch;
+import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.map.TableMap;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.thread.ExecutorBuilder;
 import cn.hutool.core.thread.NamedThreadFactory;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.TypeUtil;
@@ -181,7 +184,6 @@ public class LoaderTest {
         //stringObjectMap.forEach((k, v) -> System.out.println(k + "||" + v));
 
         objectList.forEach(System.out::println);
-
     }
 
     /**
@@ -214,7 +216,6 @@ public class LoaderTest {
      */
     @Test
     public void stopWatchTest() throws InterruptedException {
-
         StopWatch stopWatch = new StopWatch("任务名称");
 
         // 任务1
@@ -303,7 +304,6 @@ public class LoaderTest {
      */
     @Test
     public void idCardTest() {
-
         String idCard = "321083197812162119";
 
         //获取生日：19781216
@@ -319,7 +319,6 @@ public class LoaderTest {
 
         //省份: 江苏
         System.out.println(IdcardUtil.getProvinceByIdCard(idCard));
-
     }
 
     /**
@@ -327,7 +326,6 @@ public class LoaderTest {
      */
     @Test
     public void treeTest() {
-
         // 构建node列表
         List<TreeNode<String>> nodeList = CollUtil.newArrayList();
 
@@ -344,14 +342,41 @@ public class LoaderTest {
     }
 
     /**
-     * 缓存测试
+     * 缓存测试,FIFO指定容量，如果添加的元素超过了指定的容量则将最先添加的元素移除
      */
     @Test
     public void cacheTest() {
-        FIFOCache<String, Integer> fifoCache = CacheUtil.newFIFOCache(Byte.SIZE, 5000);
+        TimeInterval timer = DateUtil.timer();
+        FIFOCache<String, Integer> fifoCache = CacheUtil.newFIFOCache(Integer.BYTES, 5000);
         fifoCache.put("aaa", 1);
+        fifoCache.put("bbb", 2);
+        fifoCache.put("ccc", 3);
+        fifoCache.put("ddd", 4);
+        fifoCache.put("eee", 5);
 
-        fifoCache.forEach(System.out::println);
+        fifoCache.cacheObjIterator().forEachRemaining(s -> System.out.println(s.getKey() + "||" + s.getValue()));
+
+        ThreadUtil.sleep(5000);
+        fifoCache.cacheObjIterator().forEachRemaining(s -> System.out.println(s.getKey() + "||" + s.getValue()));
+        System.out.println("执行耗时：" + timer.intervalMs());
+    }
+
+    /**
+     * 可重复键值
+     */
+    @Test
+    public void tableMapTest() {
+        TableMap<String, Integer> tableMap = new TableMap<>(5);
+        tableMap.put("aaa", 111);
+        tableMap.put("aaa", 222);
+        tableMap.put("bbb", 111);
+        tableMap.put("ccc", 444);
+
+        System.out.println(tableMap);
+        //[aaa, bbb]
+        System.out.println(tableMap.getKeys(111));
+        //[111, 222]
+        System.out.println(tableMap.getValues("aaa"));
     }
 
 }

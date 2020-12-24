@@ -18,6 +18,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Book implements Serializable {
 
+    private static final long serialVersionUID = -5817696354181269160L;
+
     private Integer id;
 
     private String name;
