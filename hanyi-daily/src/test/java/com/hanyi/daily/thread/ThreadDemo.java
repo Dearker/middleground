@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -111,6 +112,9 @@ public class ThreadDemo {
     /**
      * 定时线程池,设置守护线程，当JVM的用户线程退出时，守护线程会舍弃掉任务直接退出
      * 定时每5秒执行一次
+     * <p>
+     * scheduleAtFixedRate：每隔1秒执行一次任务，而执行一次任务的时间需要5秒，执行效果相当于每隔5秒执行一次任务
+     * scheduleWithFixedDelay：每次任务执行完成之后延时1秒再执行，而执行一次任务的时间需要5秒，即5秒执行完之后，再延时1秒，执行效果相当于每隔6秒执行一次任务
      */
     @Test
     public void scheduledExecutorServiceTest() throws InterruptedException {
@@ -118,7 +122,7 @@ public class ThreadDemo {
 
         AtomicInteger atomicInteger = new AtomicInteger(0);
 
-        ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(2, r -> {
+        ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(3, r -> {
             Thread thread = new Thread(r);
             //设置为守护线程
             thread.setDaemon(true);
@@ -136,6 +140,10 @@ public class ThreadDemo {
                         System.out.println(Thread.currentThread().getName() + "---" + DateUtil.date()),
                 2, 3, TimeUnit.SECONDS);
 
+        //线程号: scheduled_3，启动1秒后开始执行，每次任务执行完成之后延时2秒再执行
+        executorService.scheduleWithFixedDelay(() ->
+                System.out.println(Thread.currentThread().getName() + " || " + DateUtil.date()), 1, 2, TimeUnit.SECONDS);
+
         System.out.println("消耗时间：" + timer.intervalMs());
 
         //注册JVM钩子函数代码,当JVM退出时调用线程池的关闭方法
@@ -145,6 +153,38 @@ public class ThreadDemo {
         }));
 
         TimeUnit.SECONDS.sleep(10);
+    }
+
+    /**
+     * 延迟线程，该线程会在一秒之后执行，并且只执行一次，会新创建一个线程进行执行该任务
+     */
+    @Test
+    public void scheduledThreadPoolTest() {
+        // 创建线程池
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(5);
+        // 添加定时执行任务(1s 后执行)
+        System.out.println("添加任务线程：" + Thread.currentThread().getName() + "时间:" + DateUtil.date());
+        threadPool.schedule(() -> {
+            System.out.println("任务被执行线程：" + Thread.currentThread().getName() + "时间:" + DateUtil.date());
+            ThreadUtil.sleep(1000);
+        }, 1, TimeUnit.SECONDS);
+
+        ThreadUtil.sleep(2000);
+    }
+
+    /**
+     * 抢占式执行的线程池（任务执行顺序不确定）,jdk1.8才能使用，底层使用ForkJoinPool实现
+     */
+    @Test
+    public void workStealingPoolTest() {
+        // 创建线程池
+        ExecutorService threadPool = Executors.newWorkStealingPool();
+        // 执行任务
+        IntStream.range(0, 10).forEach(s -> threadPool.execute(() -> {
+            ThreadUtil.sleep(1000);
+            System.out.println(s + " 被执行,线程名:" + Thread.currentThread().getName());
+        }));
+        ThreadUtil.sleep(2000);
     }
 
     /**

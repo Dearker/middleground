@@ -24,6 +24,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.hanyi.daily.pojo.PersonInfo;
 import com.hanyi.daily.pojo.User;
 import com.hanyi.daily.property.Book;
 import com.hanyi.daily.property.Person;
@@ -380,8 +381,11 @@ public class LoaderTest {
         System.out.println(tableMap.getValues("aaa"));
     }
 
+    /**
+     * optional 测试方法
+     */
     @Test
-    public void optionalTest(){
+    public void optionalTest() {
         Person person = new Person();
         String orElse = Optional.ofNullable(person).map(Person::getName).orElse(StrUtil.EMPTY_JSON);
         System.out.println("空：" + orElse);
@@ -393,6 +397,22 @@ public class LoaderTest {
         Person p = null;
         String anElse = Optional.ofNullable(p).map(Person::getName).orElse(null);
         System.out.println(anElse);
+    }
+
+    /**
+     * 慎用继承，后续排除问题可能会提高难度
+     * 子类的equals()和hashCode()、toString()方法都会继承父类的方法，即直接使用父类的方法，
+     * 所以直接打印子类的对象时，没有输出父类的属性值，但属性其实已经完成了复制
+     */
+    @Test
+    public void personTest() {
+        com.hanyi.daily.pojo.Person person = new com.hanyi.daily.pojo.Person(1, "柯基");
+
+        PersonInfo personInfo = new PersonInfo();
+        BeanUtil.copyProperties(person, personInfo);
+
+        BeanUtil.beanToMap(personInfo).forEach((k, v) -> System.out.println(k + " || " + v));
+        System.out.println("直接输出的对象：" + personInfo);
     }
 
 }

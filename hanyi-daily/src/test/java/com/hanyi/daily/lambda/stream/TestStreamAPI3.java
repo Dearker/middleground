@@ -1,9 +1,10 @@
 package com.hanyi.daily.lambda.stream;
 
+import org.junit.Test;
+
 import java.util.*;
 import java.util.stream.Collectors;
-
-import org.junit.Test;
+import java.util.stream.Stream;
 
 
 public class TestStreamAPI3 {
@@ -46,7 +47,7 @@ public class TestStreamAPI3 {
 	public void test2(){
 		Optional<Integer> sum = emps.stream()
 			.map(Employee::getName)
-			.flatMap(TestStreamAPI1::filterCharacter)
+			.flatMap(TestStreamAPI3::filterCharacter)
 			.map((ch) -> {
 				if(ch.equals('六'))
 					return 1;
@@ -56,7 +57,15 @@ public class TestStreamAPI3 {
 		
 		System.out.println(sum.get());
 	}
-	
+
+	private static Stream<Character> filterCharacter(String str){
+		List<Character> list = new ArrayList<>();
+		for (Character ch : str.toCharArray()) {
+			list.add(ch);
+		}
+		return list.stream();
+	}
+
 	//collect——将流转换为其他形式。接收一个 Collector接口的实现，用于给Stream中元素做汇总的方法
 	@Test
 	public void test3(){
