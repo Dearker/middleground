@@ -95,4 +95,49 @@ public class UserController {
         return ResponseResult.success(userService.findUserByPage(userQueryPageParam));
     }
 
+    /**
+     * 根据删除状态进行分组统计
+     *
+     * @return 统计结果
+     */
+    @GetMapping("/group")
+    public ResponseResult findUserByGroup() {
+        return ResponseResult.success(userService.findUserByGroup());
+    }
+
+    /**
+     * 根据版本号查询用户集合
+     *
+     * @param version 版本号
+     * @return 返回用户集合
+     */
+    @GetMapping("/exist")
+    public ResponseResult findUserByExist(Integer version) {
+        return ResponseResult.success(userService.findUserByExist(version));
+    }
+
+    /**
+     * 根据版本号和用户名进行or查询
+     *
+     * @param version  版本号
+     * @param userName 用户名称
+     * @return 返回查询结果
+     */
+    @GetMapping("/union")
+    public ResponseResult findUserByUnion(Integer version, String userName) {
+        return ResponseResult.success(userService.findUserByUnion(version, userName));
+    }
+
+    /**
+     * 根据版本号和用户名进行or查询,包含重复数据
+     *
+     * @param version  版本号
+     * @param userName 用户名称
+     * @return 返回查询结果
+     */
+    @GetMapping("/unionAll")
+    public ResponseResult findUerByUnionAll(Integer version, String userName){
+        return ResponseResult.success(userService.findUerByUnionAll(version, userName));
+    }
+
 }

@@ -4,8 +4,10 @@ import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.*;
 import com.hanyi.daily.pojo.Person;
 import com.hanyi.daily.pojo.Student;
+import javafx.util.Pair;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -567,6 +569,45 @@ public class CollectionTest {
         String str = ",a,,b,";
         String[] splitArr = str.split(StrUtil.COMMA);
         Arrays.stream(splitArr).filter(StrUtil::isNotBlank).forEach(System.out::println);
+    }
+
+    @Test
+    public void hashSetTest() {
+        Set<String> stringSet = new HashSet<>();
+        System.out.println(stringSet.add("111"));
+        System.out.println(stringSet.add("111"));
+        System.out.println(stringSet);
+    }
+
+    @Test
+    public void pairTest() {
+        Pair<String, Integer> integerPair = new Pair<>("111", 222);
+        System.out.println(integerPair.getKey() + "||" + integerPair.getValue());
+    }
+
+    /**
+     * 当integer的范围超过-128~127的时候则不会使用缓存数据，使用==会返回false，需要使用equals方法
+     */
+    @Test
+    public void integerTest() {
+        Integer a = 130;
+        Integer b = 130;
+        //false
+        System.out.println(a == b);
+
+        Integer c = 120;
+        Integer d = 120;
+        //true
+        System.out.println(c == d);
+    }
+
+    /**
+     * double使用valueOf方法底层依旧是使用的BigDecimal的String构造方法
+     */
+    @Test
+    public void bigDecimalTest() {
+        BigDecimal bigDecimal = BigDecimal.valueOf(3.5);
+        System.out.println(bigDecimal.add(BigDecimal.valueOf(4.256)));
     }
 
 }

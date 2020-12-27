@@ -27,7 +27,8 @@
     </select>
 
     <!-- 根据条件统计用户信息 -->
-    <select id="countUserByCondition" parameterType="com.hanyi.hikari.request.UserQueryPageParam" resultType="java.lang.Long">
+    <select id="countUserByCondition" parameterType="com.hanyi.hikari.request.UserQueryPageParam"
+            resultType="java.lang.Long">
         select count(*) from tb_user a left join tb_user_info b on a.id_card=b.id_card
         <where>
             <if test="userName != null and userName != ''">
@@ -46,6 +47,26 @@
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <!-- 根据版本号查询用户集合 -->
+    <select id="findUserByExist" resultType="com.hanyi.hikari.pojo.UserEntity">
+        select * from tb_user a where exists
+        (select version from tb_user b where b.version &gt;= #{version} and a.id=b.id)
+    </select>
+
+    <!-- 根据版本号和用户名进行or查询 -->
+    <select id="findUserByUnion" resultType="com.hanyi.hikari.pojo.UserEntity">
+        select * from tb_user where version=#{version}
+            union
+        select * from tb_user where user_name like concat('%',#{userName},'%')
+    </select>
+
+    <!--  -->
+    <select id="findUerByUnionAll" resultType="com.hanyi.hikari.pojo.UserEntity">
+        select * from tb_user where version=#{version}
+            union all
+        select * from tb_user where user_name like concat('%',#{userName},'%')
     </select>
 
 </mapper>

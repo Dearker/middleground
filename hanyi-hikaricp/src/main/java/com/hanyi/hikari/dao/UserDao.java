@@ -31,4 +31,30 @@ public interface UserDao extends BaseMapper<UserEntity> {
      * @return 返回用户总数
      */
     Long countUserByCondition(UserQueryPageParam userQueryPageParam);
+
+    /**
+     * 根据版本号查询用户集合
+     *
+     * @param version 版本号
+     * @return 返回用户集合
+     */
+    List<UserEntity> findUserByExist(Integer version);
+
+    /**
+     * 根据版本号和用户名进行or查询
+     *
+     * @param version  版本号
+     * @param userName 用户名称
+     * @return 返回查询结果
+     */
+    List<UserEntity> findUserByUnion(Integer version, String userName);
+
+    /**
+     * 根据版本号和用户名进行or查询,包含重复数据
+     *
+     * @param version  版本号
+     * @param userName 用户名称
+     * @return 返回查询结果
+     */
+    List<UserEntity> findUerByUnionAll(Integer version, String userName);
 }
