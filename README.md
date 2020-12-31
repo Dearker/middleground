@@ -266,6 +266,7 @@
     
     4、过滤出文件中关键字并显示行号,file指文件名称
         cat  file | grep -n 关键字 或者 tail -f file | grep -n 关键字
+        查看日志文件：tail -1000f 日志文件名称
     
     5、使用端口号查询进程号
         lsof -i:端口号  或者 netstat -nlp | grep 端口号

@@ -415,4 +415,19 @@ public class LoaderTest {
         System.out.println("直接输出的对象：" + personInfo);
     }
 
+    @Test
+    public void stringTest() {
+        String source = "a:1,b:2,c:3,d:4";
+        int index = source.indexOf(':');
+        String target = source.replace(':', '=');
+        System.out.println(index + "||" + target);
+
+        StringBuilder sb = new StringBuilder(20);
+        sb.append("1:").append("2:").append("3:").append("4");
+        System.out.println(sb.toString());
+        sb.setLength(0);
+        sb.append("5:").append("6:").append("7:").append("8");
+        System.out.println(sb.toString());
+    }
+
 }
