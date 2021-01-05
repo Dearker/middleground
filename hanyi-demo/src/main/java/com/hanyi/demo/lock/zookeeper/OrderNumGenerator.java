@@ -1,6 +1,8 @@
 package com.hanyi.demo.lock.zookeeper;
 
-import java.text.SimpleDateFormat;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.thread.ThreadUtil;
+
 import java.util.Date;
 
 /**
@@ -15,16 +17,11 @@ public class OrderNumGenerator {
     /**
      * 生成订单号规则
      */
-    private static int count = 0;
+    private int count = 0;
 
     public String getNumber() {
-        try {
-            Thread.sleep(200);
-        } catch (Exception ignored) {
-
-        }
-        SimpleDateFormat simpt = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        return simpt.format(new Date()) + "-" + ++count;
+        ThreadUtil.sleep(200);
+        return DateUtil.formatDateTime(new Date()) + "-" + ++count;
     }
 
 }

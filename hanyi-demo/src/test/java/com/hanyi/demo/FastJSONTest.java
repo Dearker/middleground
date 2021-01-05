@@ -230,4 +230,28 @@ public class FastJSONTest {
                 JSON.toJSONString(user, SerializerFeature.WriteDateUseDateFormat));
     }
 
+    /**
+     * 序列化为Json串后，Json串是没有Long类型呢。而且反序列化回来如果也是Object接收，
+     * 数字小于Integer最大值的话，给转成Integer
+     */
+    @Test
+    public void jsonLongTest(){
+
+        Long idValue = 3000L;
+        Map<String, Object> data = new HashMap<>(2);
+        data.put("id", idValue);
+        data.put("name", "捡田螺的小男孩");
+
+        String jsonString = JSON.toJSONString(data);
+
+        // 反序列化时Long被转为了Integer
+        Map map = JSON.parseObject(jsonString, Map.class);
+        Object idObj = map.get("id");
+        //true
+        System.out.println("反序列化的类型是否为Integer："+(idObj instanceof Integer));
+
+        JSONObject jsonObject = JSON.parseObject(jsonString, JSONObject.class);
+        System.out.println(jsonObject.getLong("id"));
+    }
+
 }

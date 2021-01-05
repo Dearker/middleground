@@ -52,6 +52,8 @@ public class ThreadDemo {
     }
 
     /**
+     * invokeAll会等所有任务都处理完成了之后才将结果一起返回，返回之后才会释放所有线程
+     * <p>
      * 初始化线程池的核心线程数最好为需要执行的任务数量，在最开始的时候初始化完成，
      * 后续无需再进行创建线程，效率最高，不过还需要考虑服务器是IO密集型还是CPU密集型
      * <p>
@@ -107,6 +109,39 @@ public class ThreadDemo {
         int total = accumulatorList.stream().mapToInt(Accumulator::getNumber).sum();
         System.out.println("串行流耗时：" + timer.intervalRestart());
         System.out.println("串行流总数：" + total);
+    }
+
+    /**
+     * 直接在并行流中的map函数中完成计算即可
+     */
+    @Test
+    public void parallelStreamMapTest(){
+        List<Integer> integerList = new ArrayList<>();
+        integerList.add(1);
+        integerList.add(2);
+        integerList.add(3);
+        integerList.add(4);
+        integerList.add(5);
+
+        TimeInterval timer = DateUtil.timer();
+
+        List<String> stringList = integerList.parallelStream().map(s -> {
+            ThreadUtil.sleep(1000);
+            return "哈士奇" + s;
+        }).collect(Collectors.toList());
+
+        //耗时：1066
+        System.out.println("并行流耗时：" + timer.intervalRestart());
+        System.out.println(stringList);
+
+        List<String> list = integerList.stream().map(s -> {
+            ThreadUtil.sleep(1000);
+            return "柯基" + s;
+        }).collect(Collectors.toList());
+
+        //耗时：5014
+        System.out.println("串行流耗时：" + timer.intervalRestart());
+        System.out.println(list);
     }
 
     /**

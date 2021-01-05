@@ -464,5 +464,27 @@ public class StreamTest {
         System.out.println(s.characteristics());
     }
 
+    /**
+     * forEachOrdered将并行流中的数据顺序执行
+     */
+    @Test
+    public void forEachOrderedTest(){
+        //无需执行
+        IntStream.range(0, 10).parallel().forEach(s-> System.out.println(Thread.currentThread().getName()+" || " + s));
+        System.out.println("-------------------");
+        //顺序执行
+        IntStream.range(0, 10).parallel().forEachOrdered(s-> System.out.println(Thread.currentThread().getName()+" || " + s));
+    }
+
+    /**
+     * 生成任何类型的集合
+     */
+    @Test
+    public void toCollectionTest(){
+        List<String> stringList = Arrays.asList("1", "2", "3");
+        System.out.println(stringList);
+        List<Integer> arrayList = stringList.stream().map(Integer::parseInt).collect(toCollection(ArrayList::new));
+        System.out.println(arrayList);
+    }
 
 }

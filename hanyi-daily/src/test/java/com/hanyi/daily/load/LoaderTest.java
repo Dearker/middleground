@@ -24,6 +24,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.hanyi.daily.common.enums.CodeEnum;
+import com.hanyi.daily.common.enums.IntEnum;
 import com.hanyi.daily.pojo.PersonInfo;
 import com.hanyi.daily.pojo.User;
 import com.hanyi.daily.property.Book;
@@ -31,6 +33,7 @@ import com.hanyi.daily.property.Person;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
@@ -284,7 +287,8 @@ public class LoaderTest {
     public void exceptionTest() {
         try {
             System.out.println(10 / 0);
-        } catch (Exception e) {
+            throw new IOException();
+        } catch (IOException | ArithmeticException e) {
             e.printStackTrace();
         }
         System.out.println("哈哈哈");
@@ -399,6 +403,34 @@ public class LoaderTest {
         System.out.println(anElse);
     }
 
+    @Test
+    public void optionsMapTest(){
+        Person person = new Person();
+        person.setName("哈哈哈");
+        String orElse = Optional.ofNullable(person).map(s -> {
+            User user = new User();
+            user.setUserName(s.getName());
+            return user;
+        }).map(User::getUserName).orElse(null);
+        System.out.println(orElse);
+
+        person.setName(null);
+        String name = Optional.ofNullable(person).map(s -> {
+            User user = new User();
+            user.setUserName(s.getName());
+            return user;
+        }).map(User::getUserName).orElse(null);
+        System.out.println(name);
+
+        List<String> stringList = null;
+        List<String> list = Optional.ofNullable(stringList).orElse(Collections.singletonList("1"));
+        System.out.println(list);
+
+        stringList = new ArrayList<>();
+        list = Optional.ofNullable(stringList).orElse(Collections.singletonList("1"));
+        System.out.println(list);
+    }
+
     /**
      * 慎用继承，后续排除问题可能会提高难度
      * 子类的equals()和hashCode()、toString()方法都会继承父类的方法，即直接使用父类的方法，
@@ -428,6 +460,45 @@ public class LoaderTest {
         sb.setLength(0);
         sb.append("5:").append("6:").append("7:").append("8");
         System.out.println(sb.toString());
+    }
+
+    /**
+     * 枚举的ordinal方法一般不使用，枚举的排序使用的是索引位置排序
+     */
+    @Test
+    public void enumTest() {
+        int zero = IntEnum.ZERO.ordinal();
+        String zeroName = IntEnum.ZERO.name();
+        System.out.println(zero + "||" + zeroName);
+
+        int one = IntEnum.ONE.ordinal();
+        String oneName = IntEnum.ONE.name();
+        System.out.println(one + "||" + oneName);
+
+        int two = IntEnum.TWO.ordinal();
+        String twoName = IntEnum.TWO.name();
+        System.out.println(two + "||" + twoName);
+
+        int three = IntEnum.THREE.ordinal();
+        String threeName = IntEnum.THREE.name();
+        System.out.println(three + "||" + threeName);
+
+        List<IntEnum> intEnumList = new ArrayList<>();
+        intEnumList.add(IntEnum.THREE);
+        intEnumList.add(IntEnum.ONE);
+        intEnumList.add(IntEnum.ZERO);
+        intEnumList.add(IntEnum.TWO);
+
+        System.out.println(intEnumList);
+        intEnumList.sort(Comparator.naturalOrder());
+        System.out.println(intEnumList);
+    }
+
+    @Test
+    public void codeEnumTest() {
+        CodeEnum codeEnum = CodeEnum.valueOf(CodeEnum.ONE.name());
+        System.out.println(codeEnum.getCode() + "||" + codeEnum.getCodeName());
+        System.out.println(CodeEnum.ONE.getCode() + "||" + CodeEnum.ONE.getCodeName());
     }
 
 }
