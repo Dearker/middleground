@@ -73,7 +73,7 @@ public class CollectionTest {
      * map的key中存在多个value
      */
     @Test
-    public void multiMapTest() {
+    public void multiValueMapTest() {
         List<Person> personList = new ArrayList<>();
         personList.add(new Person(1, "哈士奇"));
         personList.add(new Person(2, "柯基"));
