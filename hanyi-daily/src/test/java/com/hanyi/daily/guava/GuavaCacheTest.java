@@ -1,4 +1,4 @@
-package com.hanyi.daily.load;
+package com.hanyi.daily.guava;
 
 import com.google.common.cache.*;
 import lombok.AllArgsConstructor;

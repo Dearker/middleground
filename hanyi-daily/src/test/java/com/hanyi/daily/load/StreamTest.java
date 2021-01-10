@@ -48,7 +48,6 @@ public class StreamTest {
      */
     @Test
     public void flatMapTest() {
-
         List<String> first = Arrays.asList("one", "two", "three", "four");
         List<String> second = Arrays.asList("A", "B", "C", "D");
 
@@ -60,6 +59,14 @@ public class StreamTest {
         List<String> collect = Stream.of(first, second).flatMap(Collection::stream).collect(Collectors.toList());
 
         System.out.println(collect);
+
+        List<String> temp = Stream.of("b, c", "a", "  ", "a, c")
+                .filter(StrUtil::isNotBlank)
+                .map(val -> val.split(StrUtil.COMMA))
+                .flatMap(Arrays::stream)
+                .map(String::trim)
+                .collect(Collectors.toList());
+        System.out.println(temp);
     }
 
     /**
@@ -67,7 +74,6 @@ public class StreamTest {
      */
     @Test
     public void flatMapIntTest() {
-
         Map<String, List<Integer>> listMap = new HashMap<>();
         listMap.put("1", Arrays.asList(1, 2));
         listMap.put("2", Arrays.asList(3, 4));
@@ -255,7 +261,6 @@ public class StreamTest {
      */
     @Test
     public void summingIntTest() {
-
         Integer sum = Stream.of(11, 22, 33).mapToInt(Integer::intValue).sum();
         System.out.println(sum);
 
@@ -277,7 +282,6 @@ public class StreamTest {
      */
     @Test
     public void hashSetTest() {
-
         Set<Person> personSet = new HashSet<>();
 
         Person person = new Person(1, "柯基");
@@ -309,7 +313,6 @@ public class StreamTest {
      */
     @Test
     public void parallelStreamTest() {
-
         TimeInterval timer = DateUtil.timer();
 
         List<Person> personList = new ArrayList<>();
@@ -386,7 +389,6 @@ public class StreamTest {
      */
     @Test
     public void forEachRemainingTest() {
-
         List<String> list = Arrays.asList("Apple", "Banana", "Orange");
         Spliterator<String> spliterator = list.spliterator();
 
@@ -407,7 +409,6 @@ public class StreamTest {
      */
     @Test
     public void trySplitTest() {
-
         List<String> list = Arrays.asList("Apple", "Banana", "Orange", "Aggie", "哈士奇");
 
         Spliterator<String> s = list.spliterator();
@@ -429,7 +430,6 @@ public class StreamTest {
      */
     @Test
     public void hasCharacteristicsTest() {
-
         List<String> list = Arrays.asList("哈士奇", "柯基");
         Spliterator<String> s = list.spliterator();
 
@@ -468,19 +468,19 @@ public class StreamTest {
      * forEachOrdered将并行流中的数据顺序执行
      */
     @Test
-    public void forEachOrderedTest(){
+    public void forEachOrderedTest() {
         //无需执行
-        IntStream.range(0, 10).parallel().forEach(s-> System.out.println(Thread.currentThread().getName()+" || " + s));
+        IntStream.range(0, 10).parallel().forEach(s -> System.out.println(Thread.currentThread().getName() + " || " + s));
         System.out.println("-------------------");
         //顺序执行
-        IntStream.range(0, 10).parallel().forEachOrdered(s-> System.out.println(Thread.currentThread().getName()+" || " + s));
+        IntStream.range(0, 10).parallel().forEachOrdered(s -> System.out.println(Thread.currentThread().getName() + " || " + s));
     }
 
     /**
      * 生成任何类型的集合
      */
     @Test
-    public void toCollectionTest(){
+    public void toCollectionTest() {
         List<String> stringList = Arrays.asList("1", "2", "3");
         System.out.println(stringList);
         List<Integer> arrayList = stringList.stream().map(Integer::parseInt).collect(toCollection(ArrayList::new));

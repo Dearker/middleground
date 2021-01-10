@@ -2,6 +2,7 @@ package com.hanyi.daily.load;
 
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.*;
+import com.google.common.primitives.Ints;
 import com.hanyi.daily.pojo.Person;
 import com.hanyi.daily.pojo.Student;
 import javafx.util.Pair;
@@ -122,6 +123,25 @@ public class CollectionTest {
 
         System.out.println(multiset.size());
         System.out.println(multiset.count("a"));
+
+        //添加两个相同的元素
+        multiset.setCount("e", 2);
+        System.out.println(multiset);
+
+        Multiset<String> hashMultiset = multiset.stream().filter("a"::equals).collect(Collectors.toCollection(HashMultiset::create));
+
+        //该filter的元素不能进行修改
+        Multiset<String> filter = Multisets.filter(multiset, "a"::equals);
+        hashMultiset.add("f");
+        System.out.println(hashMultiset);
+        System.out.println(filter);
+
+        multiset.addAll(hashMultiset);
+        System.out.println(multiset);
+
+        //根据总数大小进行排序
+        ImmutableMultiset<String> highestCountFirst = Multisets.copyHighestCountFirst(multiset);
+        System.out.println(highestCountFirst);
     }
 
     /**
@@ -137,6 +157,50 @@ public class CollectionTest {
 
         System.out.println(multiMap.get("hanyi"));
         System.out.println(multiMap.get("123"));
+
+        ArrayListMultimap<String, Integer> multimap = ArrayListMultimap.create();
+        multimap.putAll("b", Ints.asList(2, 4, 6));
+        multimap.putAll("a", Ints.asList(4, 2, 1));
+        multimap.putAll("c", Ints.asList(2, 5, 3));
+
+        //反转key和value的位置
+        TreeMultimap<Integer, String> inverse = Multimaps.invertFrom(multimap, TreeMultimap.create());
+        //{1=[a], 2=[a, b, c], 3=[c], 4=[a, b], 5=[c], 6=[b]}
+        System.out.println(inverse);
+
+        //不能出现同样的key
+        Map<String, Integer> map = ImmutableMap.of("a", 1,"b", 1, "c", 2);
+        System.out.println(map);
+
+        //该集合不能修改
+        SetMultimap<String, Integer> setMultimap = Multimaps.forMap(map);
+        System.out.println(setMultimap);
+
+        //根据相同的属性进行分类
+        ImmutableSet<String> digits = ImmutableSet.of("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine");
+        Multimap<Integer, String> listMultimap = Multimaps.index(digits, String::length);
+        System.out.println(listMultimap);
+    }
+
+    @Test
+    public void multimapFilterTest(){
+        SetMultimap<String, Integer> multimap = ImmutableSetMultimap.of("a", 1, "a", 4, "b", -6);
+
+        //转义map中的EnTry属性
+        Multimap<String, String> stringMultimap = Multimaps.transformEntries(multimap, (key, value) -> (value >= 0) ? key : "no" + key);
+        System.out.println(stringMultimap);
+
+        //根据key进行过滤数据
+        SetMultimap<String, Integer> setMultimap = Multimaps.filterKeys(multimap, "a"::equals);
+        System.out.println(setMultimap);
+
+        //根据value进行过滤数据
+        SetMultimap<String, Integer> filterValues = Multimaps.filterValues(multimap, v -> v > 0);
+        System.out.println(filterValues);
+
+        //根据EnTry进行过滤数据
+        SetMultimap<String, Integer> filterEntries = Multimaps.filterEntries(multimap, entry -> "a".equals(entry.getKey()) && entry.getValue() > 1);
+        System.out.println(filterEntries);
     }
 
     /**
@@ -281,12 +345,7 @@ public class CollectionTest {
         integerList.removeIf(s -> s.equals(1));
         integerList.removeIf(Objects::isNull);
 
-        integerList.replaceAll(s -> {
-            if (s == 3) {
-                s = 5;
-            }
-            return s;
-        });
+        integerList.replaceAll(s -> s == 3 ? 5 : s);
 
         System.out.println(integerList);
     }

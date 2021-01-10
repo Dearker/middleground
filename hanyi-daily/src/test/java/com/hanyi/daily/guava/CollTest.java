@@ -134,15 +134,31 @@ public class CollTest {
         stringMap.put(2, "看看看");
         stringMap.put(3, "略略略");
 
-        Map<Integer, String> filterEntries = Maps.filterEntries(stringMap, input -> (input != null ? input.getKey() : 0) > 2);
+        //该map可以进行修改的操作
+        Map<Integer, String> filterEntries = Maps.filterEntries(stringMap, entry -> (entry != null ? entry.getKey() : 0) > 2);
+        filterEntries.put(4, "完全");
         System.out.println(filterEntries);
 
+        //该map可以进行修改的操作
         Map<Integer, String> filterKeys = Maps.filterKeys(stringMap, k ->
                 Optional.ofNullable(k).orElse(0) > 1);
+        filterKeys.put(4, "阿斯达");
         System.out.println(filterKeys);
 
+        //该map不能进行修改的操作
         Map<Integer, String> filterValues = Maps.filterValues(stringMap, "哈哈哈"::equals);
         System.out.println(filterValues);
+    }
+
+    @Test
+    public void rangTest() {
+        //范围(0,10)
+        Range<Integer> integerRange = Range.open(0, 10);
+
+        List<Integer> integerList = Arrays.asList(0, 1, 2, -1, 5, 6, -2);
+
+        List<Integer> filterList = integerList.stream().filter(integerRange::contains).collect(Collectors.toList());
+        System.out.println(filterList);
     }
 
 }
