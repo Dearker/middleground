@@ -3,6 +3,7 @@ package com.hanyi.daily.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * <p>
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
  * @since 15:24 2020/5/21
  */
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {

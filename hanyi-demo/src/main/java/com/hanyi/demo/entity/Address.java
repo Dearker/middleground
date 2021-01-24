@@ -8,11 +8,17 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address implements Serializable {
+
+    private static final long serialVersionUID = 6383187058338980921L;
+
     private String street;
+
     private String city;
+
     private String zip;
+
 }

@@ -25,8 +25,6 @@ import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.result.view.ViewResolver;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -160,7 +158,7 @@ public class GatewayConfiguration {
      * 自定义限流异常页面
      */
     @PostConstruct
-    public void initBlockHandlers() {
+    private void initBlockHandlers() {
         BlockRequestHandler blockRequestHandler = (serverWebExchange, throwable) -> {
             Map<String, Object> map = new HashMap<>(2);
             map.put("code", 405);

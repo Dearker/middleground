@@ -110,6 +110,15 @@ public class CollectionTest {
     }
 
     /**
+     * 直接创建不可变的map集合
+     */
+    @Test
+    public void immutableMapTest() {
+        ImmutableMap<String, Integer> immutableMap = ImmutableMap.of("柯基", 111, "哈士奇", 222);
+        System.out.println(immutableMap);
+    }
+
+    /**
      * Multiset为无序可重复集合
      */
     @Test
@@ -169,7 +178,7 @@ public class CollectionTest {
         System.out.println(inverse);
 
         //不能出现同样的key
-        Map<String, Integer> map = ImmutableMap.of("a", 1,"b", 1, "c", 2);
+        Map<String, Integer> map = ImmutableMap.of("a", 1, "b", 1, "c", 2);
         System.out.println(map);
 
         //该集合不能修改
@@ -183,7 +192,7 @@ public class CollectionTest {
     }
 
     @Test
-    public void multimapFilterTest(){
+    public void multimapFilterTest() {
         SetMultimap<String, Integer> multimap = ImmutableSetMultimap.of("a", 1, "a", 4, "b", -6);
 
         //转义map中的EnTry属性

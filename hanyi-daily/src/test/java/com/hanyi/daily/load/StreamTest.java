@@ -60,6 +60,14 @@ public class StreamTest {
 
         System.out.println(collect);
 
+        Map<String, List<Integer>> integerMap = new HashMap<>();
+        integerMap.put("哈哈哈", Arrays.asList(1, 2));
+        integerMap.put("看看看", Arrays.asList(2, 3));
+        integerMap.put("啊啊啊", Arrays.asList(3, 4));
+
+        Set<Integer> valueSet = integerMap.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
+        System.out.println(valueSet);
+
         List<String> temp = Stream.of("b, c", "a", "  ", "a, c")
                 .filter(StrUtil::isNotBlank)
                 .map(val -> val.split(StrUtil.COMMA))

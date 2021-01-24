@@ -404,7 +404,7 @@ public class LoaderTest {
     }
 
     @Test
-    public void optionsMapTest(){
+    public void optionsMapTest() {
         Person person = new Person();
         person.setName("哈哈哈");
         String orElse = Optional.ofNullable(person).map(s -> {
@@ -435,6 +435,8 @@ public class LoaderTest {
      * 慎用继承，后续排除问题可能会提高难度
      * 子类的equals()和hashCode()、toString()方法都会继承父类的方法，即直接使用父类的方法，
      * 所以直接打印子类的对象时，没有输出父类的属性值，但属性其实已经完成了复制
+     * <p>
+     * 使用@SuperBuilder需要在子类和父类中同时使用，并且空参构造和全参构造都需要实现
      */
     @Test
     public void personTest() {
@@ -445,6 +447,12 @@ public class LoaderTest {
 
         BeanUtil.beanToMap(personInfo).forEach((k, v) -> System.out.println(k + " || " + v));
         System.out.println("直接输出的对象：" + personInfo);
+
+        PersonInfo build = PersonInfo.builder()
+                .id(1)
+                .age(2)
+                .build();
+        System.out.println(build);
     }
 
     @Test

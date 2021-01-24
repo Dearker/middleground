@@ -41,14 +41,12 @@ public class FastJSONTest {
         String aPackage = ClassUtil.getPackage(FastJSONTest.class);
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation(aPackage, SpringBootApplication.class);
         classes.forEach(s -> System.out.println(ClassUtil.getPackage(s)));
-
     }
 
     @Test
     public void ExecTest() {
         Process exec = RuntimeUtil.exec("ls -l");
         String str = RuntimeUtil.execForStr("ipconfig");
-
     }
 
     /**
@@ -67,21 +65,19 @@ public class FastJSONTest {
      */
     @Test
     public void DateTest() {
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("date", "20191220");
 
         String date = DateUtil.format(jsonObject.getDate("date"), DatePattern.NORM_DATE_PATTERN);
         System.out.println("获取的日期-->" + date);
-
     }
 
     /**
      * JSONArray转list
+     * json中如果TypeReference的泛型是<T>则转换成JSON后会结果中依旧还是JSON，还需要再转换一次
      */
     @Test
     public void JSONTest() {
-
         JSONArray jsonArray = new JSONArray();
         jsonArray.add(Address.builder().city("1").zip("2").street("3").build());
         jsonArray.add(Address.builder().city("1").zip("2").street("3").build());
@@ -118,7 +114,6 @@ public class FastJSONTest {
      */
     @Test
     public void BloomFilterTest() {
-
         int size = 1000000;
         //布隆过滤器
         BloomFilter<Integer> bloomFilter = BloomFilter.create(Funnels.integerFunnel(), size, 0.001);
@@ -141,7 +136,6 @@ public class FastJSONTest {
      */
     @Test
     public void forTest() {
-
         Object obj = null;
         for (int i = 0; i <= 10; i++) {
             obj = new Object();
@@ -173,7 +167,6 @@ public class FastJSONTest {
      */
     @Test
     public void SortJSONTest() {
-
         JSONArray jsonArray = new JSONArray();
 
         JSONObject jsonObject = new JSONObject();
@@ -198,7 +191,6 @@ public class FastJSONTest {
      */
     @Test
     public void serializableTest() {
-
         User user = new User();
         user.setId(1000);
         user.setName("柯基小短腿");
@@ -235,8 +227,7 @@ public class FastJSONTest {
      * 数字小于Integer最大值的话，给转成Integer
      */
     @Test
-    public void jsonLongTest(){
-
+    public void jsonLongTest() {
         Long idValue = 3000L;
         Map<String, Object> data = new HashMap<>(2);
         data.put("id", idValue);
@@ -248,7 +239,7 @@ public class FastJSONTest {
         Map map = JSON.parseObject(jsonString, Map.class);
         Object idObj = map.get("id");
         //true
-        System.out.println("反序列化的类型是否为Integer："+(idObj instanceof Integer));
+        System.out.println("反序列化的类型是否为Integer：" + (idObj instanceof Integer));
 
         JSONObject jsonObject = JSON.parseObject(jsonString, JSONObject.class);
         System.out.println(jsonObject.getLong("id"));
