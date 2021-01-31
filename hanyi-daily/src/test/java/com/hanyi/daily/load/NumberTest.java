@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 /**
@@ -81,7 +82,7 @@ public class NumberTest {
      * round：四舍五入
      * sqrt: 正平方根
      * abs：绝对值
-     *round(double a)：返回参数中最接近的long类型之，四舍五入
+     * round(double a)：返回参数中最接近的long类型之，四舍五入
      */
     @Test
     public void math01Test() {
@@ -96,7 +97,7 @@ public class NumberTest {
         //次方：8.0
         System.out.println("pow: " + Math.pow(2, 3));
         //正平方根：2.0
-        System.out.println("sqrt: "+Math.sqrt(4));
+        System.out.println("sqrt: " + Math.sqrt(4));
 
         System.out.println(Math.toIntExact(30L));
     }
@@ -183,14 +184,14 @@ public class NumberTest {
      * compareTo的返回值为0则表示相等，1表示大于，-1表示小于
      */
     @Test
-    public void compareToTest(){
+    public void compareToTest() {
 
         BigDecimal bigDecimal = new BigDecimal("12");
         BigDecimal decimal = new BigDecimal("11");
 
-        if(bigDecimal.compareTo(decimal) > 0){
+        if (bigDecimal.compareTo(decimal) > 0) {
             System.out.println("大于");
-        }else{
+        } else {
             System.out.println("小于");
         }
 
@@ -248,6 +249,27 @@ public class NumberTest {
         String percent = NumberUtil.formatPercent(score, 3);
         //32.568%
         System.out.println(percent);
+    }
+
+    /**
+     * 通过forEach计算bigDecimal
+     */
+    @Test
+    public void computeTest() {
+        Map<BigDecimal, Integer> bigDecimalMap = new HashMap<>();
+        bigDecimalMap.put(BigDecimal.valueOf(10), 15);
+        bigDecimalMap.put(BigDecimal.valueOf(14), 15);
+
+        final BigDecimal[] total = {BigDecimal.ZERO};
+
+        AtomicReference<BigDecimal> bigDecimalAtomicReference = new AtomicReference<>(BigDecimal.ZERO);
+        bigDecimalMap.forEach((k, v) -> {
+            total[0] = NumberUtil.mul(k, v).add(total[0]);
+            bigDecimalAtomicReference.set(bigDecimalAtomicReference.get().add(NumberUtil.mul(k, v)));
+        });
+
+        System.out.println(total[0]);
+        System.out.println(bigDecimalAtomicReference.get());
     }
 
 }

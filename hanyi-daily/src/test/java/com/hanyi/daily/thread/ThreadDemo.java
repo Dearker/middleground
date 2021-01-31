@@ -115,7 +115,7 @@ public class ThreadDemo {
      * 直接在并行流中的map函数中完成计算即可
      */
     @Test
-    public void parallelStreamMapTest(){
+    public void parallelStreamMapTest() {
         List<Integer> integerList = new ArrayList<>();
         integerList.add(1);
         integerList.add(2);
@@ -192,6 +192,7 @@ public class ThreadDemo {
 
     /**
      * 延迟线程，该线程会在一秒之后执行，并且只执行一次，会新创建一个线程进行执行该任务
+     * 如果当前延迟的任务过多时，则可能无法在指定的延迟时间全部开始执行
      */
     @Test
     public void scheduledThreadPoolTest() {
