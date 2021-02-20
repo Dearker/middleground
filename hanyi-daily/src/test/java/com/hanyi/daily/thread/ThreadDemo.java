@@ -7,14 +7,14 @@ import cn.hutool.core.util.IdUtil;
 import com.hanyi.daily.pojo.TimeInfo;
 import com.hanyi.daily.thread.pojo.Accumulator;
 import com.hanyi.daily.thread.pojo.Athlete;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -26,6 +26,7 @@ import java.util.stream.Stream;
  * @CreateDate: 2020-02-09 16:47
  * @Version: 1.0
  */
+@Slf4j
 public class ThreadDemo {
 
     private static final ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(Integer.SIZE, Integer.SIZE);
@@ -37,7 +38,6 @@ public class ThreadDemo {
      */
     @Test
     public void joinTest() throws InterruptedException {
-
         Thread thread = new Thread(() -> {
             for (int i = 0; i < 30; i++) {
                 System.out.println("子线程: " + i);
@@ -49,6 +49,97 @@ public class ThreadDemo {
         for (int i = 0; i < 30; i++) {
             System.out.println("主线程: " + i);
         }
+    }
+
+    /**
+     * 不能将ThreadLocalRandom的实例设置到静态变量中，
+     * 使用current() 的时候初始化一个初始化种子到线程，每次nextSeed再使用之前的种子生成新的种子
+     *
+     * @throws InterruptedException 异常
+     */
+    @Test
+    public void localRandomTest() throws InterruptedException {
+        //循环次数
+        int loopCount = 10000000;
+        //线程数量
+        int threadCount = 10;
+        //元素数量
+        int itemCount = 10;
+
+        ConcurrentHashMap<String, Long> longConcurrentHashMap = new ConcurrentHashMap<>(itemCount);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(threadCount);
+        forkJoinPool.execute(() -> IntStream.rangeClosed(1, loopCount).parallel().forEach(i -> {
+            //获得一个随机的Key
+            String key = "item" + ThreadLocalRandom.current().nextInt(itemCount);
+            synchronized (longConcurrentHashMap) {
+                if (longConcurrentHashMap.containsKey(key)) {
+                    //Key存在则+1
+                    longConcurrentHashMap.put(key, longConcurrentHashMap.get(key) + 1);
+                } else {
+                    //Key不存在则初始化为1
+                    longConcurrentHashMap.put(key, 1L);
+                }
+            }
+        }));
+
+        //上述代码的优化方案
+        ConcurrentHashMap<String, LongAdder> adderConcurrentHashMap = new ConcurrentHashMap<>(itemCount);
+        forkJoinPool.execute(() -> IntStream.rangeClosed(1, loopCount).parallel().forEach(i -> {
+            //获得一个随机的Key
+            String key = "item" + ThreadLocalRandom.current().nextInt(itemCount);
+            //利用computeIfAbsent()方法来实例化LongAdder，然后利用LongAdder来进行线程安全计数
+            adderConcurrentHashMap.computeIfAbsent(key, k -> new LongAdder()).increment();
+        }));
+
+        forkJoinPool.shutdown();
+        forkJoinPool.awaitTermination(1, TimeUnit.HOURS);
+
+        Map<String, Long> longMap = new HashMap<>(itemCount);
+        adderConcurrentHashMap.forEach((k, v) -> longMap.put(k, v.longValue()));
+        System.out.println("优化前的数据：" + longConcurrentHashMap);
+        System.out.println("优化后的数据：" + longMap);
+    }
+
+    /**
+     * 创建线程池执行任务
+     *
+     * @throws InterruptedException 异常
+     */
+    @Test
+    public void threadPoolExecutorTest() throws InterruptedException {
+        //使用一个计数器跟踪完成的任务数
+        AtomicInteger atomicInteger = new AtomicInteger();
+
+        //创建一个具有2个核心线程、5个最大线程，使用容量为10的ArrayBlockingQueue阻塞队列作为工作队列的线程池，使用默认的AbortPolicy拒绝策略
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 5, 5,
+                TimeUnit.SECONDS, new ArrayBlockingQueue<>(10),
+                ThreadUtil.newNamedThreadFactory("demo-threadpool-", false),
+                new ThreadPoolExecutor.AbortPolicy());
+        //启动所有核心线程
+        threadPool.prestartAllCoreThreads();
+        //线程池在空闲的时候同样回收核心线程
+        threadPool.allowCoreThreadTimeOut(Boolean.TRUE);
+
+        //每隔1秒提交一次，一共提交20次任务
+        IntStream.rangeClosed(1, 20).forEach(i -> {
+            ThreadUtil.sleep(1000);
+            int id = atomicInteger.incrementAndGet();
+            try {
+                threadPool.submit(() -> {
+                    log.info("{} started", id);
+                    //每个任务耗时10秒
+                    ThreadUtil.sleep(10000);
+                    log.info("{} finished", id);
+                });
+            } catch (Exception ex) {
+                //提交出现异常的话，打印出错信息并为计数器减一
+                log.error("error submitting task {}", id, ex);
+                atomicInteger.decrementAndGet();
+            }
+        });
+
+        TimeUnit.SECONDS.sleep(60);
+        System.out.println(atomicInteger.intValue());
     }
 
     /**
@@ -64,7 +155,6 @@ public class ThreadDemo {
      */
     @Test
     public void multithreadedAsyncCallback() throws Exception {
-
         System.out.println("当前线程总数：" + threadPoolExecutor.getMaximumPoolSize());
         TimeInterval timer = DateUtil.timer();
         int length = 32;

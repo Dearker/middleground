@@ -72,6 +72,7 @@ public class LoaderTest {
      */
     @Test
     public void systemPropertiesTest() {
+        System.out.println("默认字符编码：" + Charset.defaultCharset());
         System.getProperties().list(System.out);
     }
 

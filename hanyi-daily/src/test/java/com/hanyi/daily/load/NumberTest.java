@@ -6,6 +6,7 @@ import cn.hutool.core.util.NumberUtil;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
@@ -110,7 +111,7 @@ public class NumberTest {
     }
 
     /**
-     * BigDecimal的加减乘除方法
+     * BigDecimal的加减乘除方法，查看文档：https://time.geekbang.org/column/article/261446
      *
      * <p>
      * RoundingMode模式：
@@ -125,7 +126,6 @@ public class NumberTest {
      */
     @Test
     public void bigDecimalTest() {
-
         BigDecimal bigNum1 = new BigDecimal("10");
         BigDecimal bigNum2 = new BigDecimal("5");
 
@@ -162,7 +162,6 @@ public class NumberTest {
      */
     @Test
     public void valueOfTest() throws InterruptedException {
-
         TimeInterval timer = DateUtil.timer();
 
         TimeUnit.SECONDS.sleep(1);
@@ -185,7 +184,6 @@ public class NumberTest {
      */
     @Test
     public void compareToTest() {
-
         BigDecimal bigDecimal = new BigDecimal("12");
         BigDecimal decimal = new BigDecimal("11");
 
@@ -204,7 +202,6 @@ public class NumberTest {
      */
     @Test
     public void numberTest() {
-
         List<BigDecimal> bigDecimalList = new ArrayList<>();
         bigDecimalList.add(new BigDecimal("3.5"));
         bigDecimalList.add(new BigDecimal("-1.5"));
@@ -270,6 +267,42 @@ public class NumberTest {
 
         System.out.println(total[0]);
         System.out.println(bigDecimalAtomicReference.get());
+    }
+
+    /**
+     * BigDecimal的 equals 和 hashCode 方法会同时考虑 value 和 scale
+     * 使用 TreeSet 替换 HashSet。TreeSet 不使用 hashCode 方法，也不使用 equals 比较元素，而是使用 compareTo 方法，所以不会有问题
+     */
+    @Test
+    public void bigDecimalEqualsTest(){
+        Set<BigDecimal> hashSet = new HashSet<>();
+        hashSet.add(new BigDecimal("1.0"));
+        //返回false
+        System.out.println(hashSet.contains(new BigDecimal("1")));
+        //true
+        System.out.println(hashSet.contains(new BigDecimal("1.0")));
+
+        Set<BigDecimal> bigDecimalSet = new TreeSet<>();
+        bigDecimalSet.add(new BigDecimal("1.0"));
+        //true
+        System.out.println(bigDecimalSet.contains(new BigDecimal("1")));
+        //true
+        System.out.println(bigDecimalSet.contains(new BigDecimal("1.0")));
+    }
+
+    /**
+     * 超出类型的最大范围会报错
+     */
+    @Test
+    public void bigIntegerTest(){
+        BigInteger i = new BigInteger(String.valueOf(Long.MAX_VALUE));
+        System.out.println(i.add(BigInteger.ONE).toString());
+
+        try {
+            long l = i.add(BigInteger.ONE).longValueExact();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

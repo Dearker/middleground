@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.LongStream;
 
 /**
  * 集合API测试类
@@ -49,7 +50,6 @@ public class CollectionApiTest {
      */
     @Test
     public void linkedListTest() {
-
         //创建存放int类型的linkedList
         LinkedList<Integer> linkedList = new LinkedList<>();
         /************************** linkedList的基本操作 ************************/
@@ -92,25 +92,64 @@ public class CollectionApiTest {
         System.out.println("从此列表中移除最后一次出现的指定元素：" + linkedList);
     }
 
+    /**
+     * mappingCount: 和size方法类似，但在多线程的情况下，使用该方法准确度较高，但任存在偏差
+     * <p>
+     * forEach：第一个参数parallelismThreshold的值越小并发线程越多，反之亦然，底层使用ForkJoinPool，乱序，
+     * 当该值为Long.MAX_VALUE则会顺序执行；第二个参数是对key和value的值进行处理并返回一个新的值，
+     * 第三个参数的值就是之前返回的新值
+     * <p>
+     * search: 执行一定的逻辑，返回不为null的对象，若元素全部遍历后仍没有符合条件的元素，则返回 null
+     */
     @Test
     public void concurrentHashMapTest() {
-
         ConcurrentHashMap<Integer, String> concurrentHashMap = new ConcurrentHashMap<>();
         concurrentHashMap.put(1, "aaa");
         concurrentHashMap.put(2, "bbb");
         concurrentHashMap.put(3, "ccc");
 
         System.out.println(concurrentHashMap.mappingCount());
-        concurrentHashMap.forEach(5, (k, v) -> System.out.println(Thread.currentThread().getName() + ":" + k + v));
+        concurrentHashMap.forEach(0, (k, v) -> System.out.println(Thread.currentThread().getName() + ":" + k + v));
+        concurrentHashMap.forEach(0, (k, v) -> {
+            k += 1;
+            return k + v;
+        }, s -> {
+            System.out.println("------------");
+            System.out.println(s);
+        });
 
-        Integer reduce = concurrentHashMap.reduce(3, (k, v) -> k, Integer::sum);
-        //6
+        System.out.println("search---------------");
+        //如果不返回null，则只会遍历一次并将结果返回，返回null，则全部遍历，如果没有符合条件的数据则最后返回null
+        String search = concurrentHashMap.search(Long.MAX_VALUE, (k, v) -> k == 3 ? v : null);
+
+        System.out.println("search 结果: " + search);
+    }
+
+    /**
+     * reduce会通过提供的积累函数，将所有的键或指结合起来
+     */
+    @Test
+    public void concurrentHashMapReduceTest() {
+        ConcurrentHashMap<Integer, Long> longConcurrentHashMap = new ConcurrentHashMap<>();
+        LongStream.range(0, 10).forEach(s -> longConcurrentHashMap.put(Math.toIntExact(s), s));
+
+        Integer reduce = longConcurrentHashMap.reduce(3, (k, v) -> k, Integer::sum);
+        //45
         System.out.println(reduce);
+
+        int reduceKeysToInt = longConcurrentHashMap.reduceKeysToInt(0, k -> k > 2 ? k : 0, 0, Integer::sum);
+        System.out.println("reduceKeysToInt 结果：" + reduceKeysToInt);
+
+        Integer reduceKeys = longConcurrentHashMap.reduceKeys(0, k -> k > 5 ? k : null, Integer::sum);
+        System.out.println("reduceKeys 结果" + reduceKeys);
+
+        //第二个参数为转换器函数可以作为一个过滤器，通过返回null来排除不想要的输入
+        Long reduceValues = longConcurrentHashMap.reduceValues(0, v -> v > 5 ? v : null, Long::sum);
+        System.out.println("reduceValues 结果：" + reduceValues);
     }
 
     @Test
     public void treeMapTest() {
-
         TreeMap<String, String> treeMap = new TreeMap<>();
 
         treeMap.put("1", "aaa");
@@ -164,7 +203,7 @@ public class CollectionApiTest {
         System.out.println("--------------------------------------");
 
         // 返回此map的部分map，其键值范围[fromKey, toKey)
-        System.out.println(treeMap.subMap("1","3"));
+        System.out.println(treeMap.subMap("1", "3"));
 
         // 返回此map的部分map，其键的范围从fromKey到toKey(inclusive为true时包括toKey)
         System.out.println(treeMap.subMap("1", Boolean.TRUE, "4", Boolean.TRUE));

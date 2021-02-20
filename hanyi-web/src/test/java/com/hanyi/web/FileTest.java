@@ -1,11 +1,18 @@
 package com.hanyi.web;
 
+import org.junit.Test;
+
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * <p>
@@ -16,6 +23,20 @@ import java.util.stream.Collectors;
  * @since 4:56 下午 2021/1/2
  */
 public class FileTest {
+
+    /**
+     * FileChannel 的 transferTo 方法进行流的复制。
+     * 在一些操作系统（比如高版本的 Linux 和 UNIX）上可以实现 DMA（直接内存访问），
+     * 也就是数据从磁盘经过总线直接发送到目标文件，无需经过内存和 CPU 进行数据中转
+     *
+     * @throws IOException 异常
+     */
+    @Test
+    public void fileChannelTest() throws IOException {
+        FileChannel in = FileChannel.open(Paths.get("src.txt"), StandardOpenOption.READ);
+        FileChannel out = FileChannel.open(Paths.get("dest.txt"), CREATE, WRITE);
+        in.transferTo(0, in.size(), out);
+    }
 
     /**
      * Files不能使用测试类获取文件路径
@@ -37,7 +58,6 @@ public class FileTest {
         List<String> strings = Files.lines(path).collect(Collectors.toList());
         strings.forEach(System.out::println);
     }
-
 
     private static void read(String file) {
         // 创建字符流对象，并根据已创建的字节流对象创建字符流对象

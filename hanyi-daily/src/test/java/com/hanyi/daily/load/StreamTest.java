@@ -40,6 +40,7 @@ public class StreamTest {
         IntStream.range(0, 10).forEach(System.out::println);
         System.out.println("-----");
         IntStream.rangeClosed(0, 10).forEachOrdered(System.out::println);
+        System.out.println(IntStream.rangeClosed(1, 10_000).mapToObj(s -> "a").collect(Collectors.joining(StrUtil.EMPTY)));
     }
 
     /**

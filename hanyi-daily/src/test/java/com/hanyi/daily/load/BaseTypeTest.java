@@ -3,9 +3,13 @@ package com.hanyi.daily.load;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * 基础类型测试类
@@ -78,7 +82,6 @@ public class BaseTypeTest {
 
     @Test
     public void integerTest() {
-
         Integer integer = 20;
         System.out.println(integer.byteValue());
         System.out.println(integer.longValue());
@@ -88,6 +91,21 @@ public class BaseTypeTest {
         System.out.println(Integer.sum(1, 3));
         System.out.println(Integer.max(1, 2));
         System.out.println(Integer.min(1, 4));
+    }
+
+    /**
+     * 通过初始化一个具有1个元素的数组，然后通过获取这个数组的值来获取基本类型默认值
+     */
+    @Test
+    public void baseTypeTest() {
+        Map<Class<?>, Object> defaultValues = Stream.of(boolean.class, byte.class,
+                char.class, double.class, float.class, int.class, long.class, short.class)
+                .collect(toMap(clazz -> clazz, clazz -> Array.get(Array.newInstance(clazz, 1), 0)));
+
+        System.out.println(defaultValues.get(boolean.class));
+        System.out.println(defaultValues.get(byte.class));
+        System.out.println(defaultValues.get(double.class));
+        System.out.println(defaultValues.get(float.class));
     }
 
 }

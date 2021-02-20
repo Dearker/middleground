@@ -1,9 +1,12 @@
 package com.hanyi.daily.service;
 
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.mapper.one.TimeInfoMapper;
 import com.hanyi.daily.pojo.TimeInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -38,10 +41,17 @@ public class TimeInfoService {
      * @param timeInfo 时间对象
      * @return 返回新增条数
      */
+    @Transactional(rollbackFor = Exception.class)
     public Integer insert(TimeInfo timeInfo) {
         timeInfo.setId(snowflake.nextId());
         timeInfo.setTimeExtent(System.currentTimeMillis());
         timeInfo.setCreateTime(LocalDateTime.now());
+
+        //手动设置让当前事务处于回滚状态
+        if(StrUtil.isBlank(timeInfo.getFormatName())){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+
         return timeInfoMapper.insert(timeInfo);
     }
 

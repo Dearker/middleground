@@ -5,11 +5,13 @@ import org.junit.Test;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <p>
@@ -23,13 +25,18 @@ public class DateTest {
 
     /**
      * 时间对象转换
+     * <p>
+     * 把 Date 转换为 LocalDateTime 的时候，需要通过 Date 的 toInstant 方法得到一个 UTC 时间戳进行转换，
+     * 并需要提供当前的时区，这样才能把 UTC 时间转换为本地日期时间（的表示）。
+     * 把 LocalDateTime 的时间表示转换为 Date 时，也需要提供时区，用于指定是哪个时区的时间表示，
+     * 也就是先通过 atZone 方法把 LocalDateTime 转换为 ZonedDateTime，然后才能获得 UTC 时间戳：
      */
     @Test
     public void localDateTest() {
-
         Date date = new Date();
         // Date-----> LocalDateTime 这里指定使用当前系统默认时区
         LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         // LocalDateTime------> Date 这里指定使用当前系统默认时区
         Date newDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
@@ -67,18 +74,18 @@ public class DateTest {
     }
 
     @Test
-    public void rangTest(){
+    public void rangTest() {
         DateTime dateTime = DateUtil.date();
         DateTime dateTime1 = DateUtil.offset(dateTime, DateField.MONTH, -6);
 
         DateRange range = DateUtil.range(dateTime1, dateTime, DateField.MONTH);
         List<String> dateTimeList = new ArrayList<>(6);
-        range.forEach(s->dateTimeList.add(s.toString()));
+        range.forEach(s -> dateTimeList.add(s.toString()));
 
         List<String> stringList = new ArrayList<>(6);
         for (int i = 0, length = dateTimeList.size(); i < length; i++) {
-            if(i+1<length){
-                String s = dateTimeList.get(i) + "||" + dateTimeList.get(i+1);
+            if (i + 1 < length) {
+                String s = dateTimeList.get(i) + "||" + dateTimeList.get(i + 1);
                 stringList.add(s);
             }
         }
@@ -89,40 +96,41 @@ public class DateTest {
      * 获取开始时间和结束时间之间总共多少天
      */
     @Test
-    public void dateTest(){
-
+    public void dateTest() {
         DateTime start = DateUtil.date();
         DateTime end = DateUtil.lastWeek();
         long l = DateUtil.betweenDay(start, end, true);
         System.out.println(l);
         DateRange range = DateUtil.range(start, end, DateField.DAY_OF_YEAR);
 
-        range.forEach(s-> System.out.println(s.toString()));
+        range.forEach(System.out::println);
     }
 
     /**
      * 时间转换类
      */
     @Test
-    public void LocalDateTimeTest(){
+    public void LocalDateTimeTest() {
         long localTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         long localTimeTime = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
 
-        System.out.println("获取的时间-->"+ localTime +"||"+localTimeTime);
+        System.out.println("获取的时间-->" + localTime + "||" + localTimeTime);
 
         long currentSeconds = DateUtil.currentSeconds();
-        System.out.println("获取的秒数-->"+currentSeconds);
+        System.out.println("获取的秒数-->" + currentSeconds);
 
         DateTime dateTime = DateUtil.lastMonth();
         String now = DateUtil.now();
 
         DateTime parse = DateUtil.parse("2019-12-20");
-        System.out.println(dateTime+"||"+now+"||"+parse.getTime());
+        System.out.println(dateTime + "||" + now + "||" + parse.getTime());
     }
 
-    //6.ZonedDate、ZonedTime、ZonedDateTime ： 带时区的时间或日期
+    /**
+     * ZonedDate、ZonedTime、ZonedDateTime ： 带时区的时间或日期
+     */
     @Test
-    public void test7() {
+    public void zonedTest() {
         LocalDateTime ldt = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
         System.out.println(ldt);
 
@@ -139,11 +147,12 @@ public class DateTest {
         set.forEach(System.out::println);
     }
 
-
-    //5. DateTimeFormatter : 解析和格式化日期或时间
+    /**
+     * DateTimeFormatter : 解析和格式化日期或时间
+     */
     @Test
-    public void test5() {
-//		DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE;
+    public void dateTimeFormatterTest() {
+        //DateTimeFormatter dtf = DateTimeFormatter.ISO_LOCAL_DATE;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss E");
 
         LocalDateTime ldt = LocalDateTime.now();
@@ -155,9 +164,15 @@ public class DateTest {
         System.out.println(newLdt);
     }
 
-    //4. TemporalAdjuster : 时间校正器
+    /**
+     * TemporalAdjuster : 时间校正器
+     * 使用 TemporalAdjusters.firstDayOfMonth 得到当前月的第一天；
+     * 使用 TemporalAdjusters.firstDayOfYear() 得到当前年的第一天；
+     * 使用 TemporalAdjusters.previous(DayOfWeek.SATURDAY) 得到上一个周六；
+     * 使用 TemporalAdjusters.lastInMonth(DayOfWeek.FRIDAY) 得到本月最后一个周五。
+     */
     @Test
-    public void test4() {
+    public void temporalAdjusterTest() {
         LocalDateTime ldt = LocalDateTime.now();
         System.out.println(ldt);
 
@@ -168,7 +183,7 @@ public class DateTest {
         System.out.println(ldt3);
 
         //自定义：下一个工作日
-        LocalDateTime ldt5 = ldt.with((l) -> {
+        LocalDateTime ldt5 = ldt.with(l -> {
             LocalDateTime ldt4 = (LocalDateTime) l;
 
             DayOfWeek dow = ldt4.getDayOfWeek();
@@ -184,25 +199,25 @@ public class DateTest {
 
         System.out.println(ldt5);
 
+        //为当前时间增加 100 天以内的随机天数
+        System.out.println(LocalDate.now().with(temporal ->
+                temporal.plus(ThreadLocalRandom.current().nextInt(100), ChronoUnit.DAYS)));
     }
 
-    //3.
-    //Duration : 用于计算两个“时间”间隔
-    //Period : 用于计算两个“日期”间隔
+    /**
+     * Duration : 用于计算两个“时间”间隔
+     * Period : 用于计算两个“日期”间隔
+     */
     @Test
-    public void test3() {
+    public void durationTest() throws InterruptedException {
         Instant ins1 = Instant.now();
 
         System.out.println("--------------------");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignore) {
-        }
+        Thread.sleep(1000);
 
         Instant ins2 = Instant.now();
 
         System.out.println("所耗费时间为：" + Duration.between(ins1, ins2));
-
         System.out.println("----------------------------------");
 
         LocalDate ld1 = LocalDate.now();
@@ -214,9 +229,11 @@ public class DateTest {
         System.out.println(pe.getDays());
     }
 
-    //2. Instant : 时间戳。 （使用 Unix 元年  1970年1月1日 00:00:00 所经历的毫秒值）
+    /**
+     * Instant : 时间戳。 （使用 Unix 元年  1970年1月1日 00:00:00 所经历的毫秒值）
+     */
     @Test
-    public void test2() {
+    public void instantTest() {
         Instant ins = Instant.now();  //默认使用 UTC 时区
         System.out.println(ins);
 
@@ -229,7 +246,9 @@ public class DateTest {
         System.out.println(ins2);
     }
 
-    //1. LocalDate、LocalTime、LocalDateTime
+    /**
+     * LocalDate、LocalTime、LocalDateTime
+     */
     @Test
     public void localDateTimeTest() {
         LocalDateTime ldt = LocalDateTime.now();
@@ -250,6 +269,46 @@ public class DateTest {
         System.out.println(ldt.getHour());
         System.out.println(ldt.getMinute());
         System.out.println(ldt.getSecond());
+    }
+
+    /**
+     * ZonedDateTime=LocalDateTime+ZoneId，具有时区属性
+     * LocalDateTime 只能认为是一个时间表示，ZonedDateTime 才是一个有效的时间
+     */
+    @Test
+    public void zonedDateTimeTest() {
+        //一个时间表示
+        String stringDate = "2020-01-02 22:00:00";
+        //初始化三个时区
+        ZoneId timeZoneSH = ZoneId.of("Asia/Shanghai");
+        ZoneId timeZoneNY = ZoneId.of("America/New_York");
+        ZoneId timeZoneJST = ZoneOffset.ofHours(9);
+
+        //格式化器
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        ZonedDateTime date = ZonedDateTime.of(LocalDateTime.parse(stringDate, dateTimeFormatter), timeZoneJST);
+
+        //使用DateTimeFormatter格式化时间，可以通过withZone方法直接设置格式化使用的时区
+        DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
+        System.out.println(timeZoneSH.getId() + " || " + outputFormat.withZone(timeZoneSH).format(date));
+        System.out.println(timeZoneNY.getId() + " || " + outputFormat.withZone(timeZoneNY).format(date));
+        System.out.println(timeZoneJST.getId() + " || " + outputFormat.withZone(timeZoneJST).format(date));
+    }
+
+    /**
+     * 通过 Period.between 得到了两个 LocalDate 的差，返回的是两个日期差几年零几月零几天。
+     * 如果希望得知两个日期之间差几天，直接调用 Period 的 getDays() 方法得到的只是最后的“零几天”，而不是算总的间隔天数。
+     * <p>
+     * 使用 ChronoUnit.DAYS.between 解决
+     */
+    @Test
+    public void periodTest() {
+        System.out.println("//计算日期差");
+        LocalDate today = LocalDate.of(2019, 12, 12);
+        LocalDate specifyDate = LocalDate.of(2019, 10, 1);
+        System.out.println(Period.between(specifyDate, today).getDays());
+        System.out.println(Period.between(specifyDate, today));
+        System.out.println(ChronoUnit.DAYS.between(specifyDate, today));
     }
 
 }

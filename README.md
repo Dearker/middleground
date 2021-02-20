@@ -213,6 +213,12 @@
        
 2、向master中添加节点
     
+    使用命令查询当前token集合：kubeadm token list
+    如果token都已经过期则创建新的token并打印出具体的添加命令：
+        kubeadm token create --print-join-command
+        
+        注：该token的有效时间为2个小时，2小时内，您可以使用此token初始化任意数量的worker节点
+    
     先将master中的~/.kube/config文件的内容复制到需要添加的node中，让node和master可以使用秘钥通信
     在执行命令添加节点：
         kubeadm join 192.168.0.3:6443 --token 8ln737.77grxng35yn6b263 --discovery-token-ca-cert-hash sha256:aada718a2aafdad65bd3dc241d394d64846a38047db10bf45f59c70d587ced74 
