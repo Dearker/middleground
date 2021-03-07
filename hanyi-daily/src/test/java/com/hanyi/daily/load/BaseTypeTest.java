@@ -1,5 +1,6 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Test;
 
@@ -91,6 +92,14 @@ public class BaseTypeTest {
         System.out.println(Integer.sum(1, 3));
         System.out.println(Integer.max(1, 2));
         System.out.println(Integer.min(1, 4));
+    }
+
+    @Test
+    public void arrayTest(){
+        Object newInstance = Array.newInstance(boolean.class, 1);
+        System.out.println(ArrayUtil.isArray(newInstance));
+        System.out.println(newInstance);
+        System.out.println(Array.get(newInstance, 0));
     }
 
     /**

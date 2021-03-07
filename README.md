@@ -127,14 +127,15 @@
     mvn clean install -Dmaven.test.skip=true
 
 
-### docker 部署数据库及三方依赖
+### docker 部署数据库及三方依赖 电子商务 business
 
     注：docker中强制删除未使用的镜像文件命令：docker image prune -a -f
 
 1、mysql
 
     docker run -p 3306:3306 --name mysql -v /opt/canal/mysql/conf:/etc/mysql/conf.d -v /opt/canal/mysql/logs:/logs -v /opt/canal/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=asdzxc789 -d mysql:5.7
-
+    docker run -p 3307:3306 --name mysql8.0 --restart=always -e MYSQL_ROOT_PASSWORD=asdzxc789 -d mysql:8.0
+    
 2、mongo
 
     docker run -p 27017:27017 -v /opt/data/mongo/db:/data/db -v /opt/data/mongo:/data/configdb -d mongo:3.6

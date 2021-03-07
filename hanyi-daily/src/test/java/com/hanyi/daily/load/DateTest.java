@@ -3,6 +3,7 @@ package com.hanyi.daily.load;
 import cn.hutool.core.date.*;
 import org.junit.Test;
 
+import java.time.Month;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +17,16 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * <p>
  * 日期测试类
+ * Instant          时间戳
+ * Duration         持续时间，时间差
+ * LocalDate        只包含日期
+ * LocalTime        只包含时间
+ * LocalDateTime    包含日期和时间
+ * Period           时间段
+ * ZoneOffset       时区偏移量
+ * ZonedDateTime    带时区的时间
+ * Clock            时钟，比如获取目前美国纽约的时间
+ * DateTimeFormatter 时间格式化
  * </p>
  *
  * @author wenchangwei
@@ -40,21 +51,7 @@ public class DateTest {
         // LocalDateTime------> Date 这里指定使用当前系统默认时区
         Date newDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        LocalDateTime now = LocalDateTime.now();
-        // 年
-        int year = now.getYear();
-        // 月
-        int month = now.getMonthValue();
-        // 日
-        int day = now.getDayOfMonth();
-        // 当前时间加一天
-        LocalDateTime plusDays = now.plusDays(1);
-        // 当前时间减一个小时
-        LocalDateTime minusHours = now.minusHours(1);
-
-        DateTime dateTime = DateUtil.date();
-        LocalDateTime toLocalDateTime = DateUtil.toLocalDateTime(dateTime);
-
+        System.out.println(LocalDate.now());
     }
 
     /**
@@ -71,6 +68,13 @@ public class DateTest {
 
         LocalDate localDate = LocalDate.parse("20161121", DateTimeFormatter.ofPattern("yyyyMMdd"));
         System.out.println(localDate);
+
+        String time = "20160102";
+        //2016-01-02
+        System.out.println(LocalDate.parse(time, DateTimeFormatter.BASIC_ISO_DATE));
+        String date = "2016-01-02";
+        //2016-01-02
+        System.out.println(LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     @Test
@@ -97,6 +101,7 @@ public class DateTest {
      */
     @Test
     public void dateTest() {
+        System.out.println(new Date());
         DateTime start = DateUtil.date();
         DateTime end = DateUtil.lastWeek();
         long l = DateUtil.betweenDay(start, end, true);
@@ -111,10 +116,31 @@ public class DateTest {
      */
     @Test
     public void LocalDateTimeTest() {
-        long localTime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        long localTimeTime = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        LocalDateTime ldt = LocalDateTime.now();
+        System.out.println(ldt);
 
-        System.out.println("获取的时间-->" + localTime + "||" + localTimeTime);
+        LocalDateTime ld2 = LocalDateTime.of(2016, 11, 21, 10, 10, 10);
+        System.out.println(ld2);
+
+        //获取20年后的日期
+        LocalDateTime ldt3 = ld2.plusYears(20);
+        System.out.println(ldt3);
+
+        //获取2个月之前的日期
+        LocalDateTime ldt4 = ld2.minusMonths(2);
+        System.out.println(ldt4);
+
+        System.out.println(ldt.getYear());
+        System.out.println(ldt.getMonthValue());
+
+        System.out.println("---------------------------------");
+
+        //获取毫秒
+        long epochMilli = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        //获取秒
+        long epochSecond = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+
+        System.out.println("获取的时间-->" + epochMilli + "||" + epochSecond);
 
         long currentSeconds = DateUtil.currentSeconds();
         System.out.println("获取的秒数-->" + currentSeconds);
@@ -124,6 +150,14 @@ public class DateTest {
 
         DateTime parse = DateUtil.parse("2019-12-20");
         System.out.println(dateTime + "||" + now + "||" + parse.getTime());
+
+        LocalDateTime toLocalDateTime = DateUtil.toLocalDateTime(DateUtil.date());
+        System.out.println("日期工具类：" + toLocalDateTime);
+        System.out.println(toLocalDateTime.toLocalDate());
+        System.out.println(toLocalDateTime.toLocalTime());
+
+        LocalDateTime ofInstant = LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilli), ZoneId.systemDefault());
+        System.out.println("毫秒值转日期时间：" + ofInstant);
     }
 
     /**
@@ -131,6 +165,7 @@ public class DateTest {
      */
     @Test
     public void zonedTest() {
+        System.out.println(ZoneId.systemDefault());
         LocalDateTime ldt = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
         System.out.println(ldt);
 
@@ -142,7 +177,7 @@ public class DateTest {
      * 获取所有的时区
      */
     @Test
-    public void test6() {
+    public void availableZoneTest6() {
         Set<String> set = ZoneId.getAvailableZoneIds();
         set.forEach(System.out::println);
     }
@@ -244,31 +279,25 @@ public class DateTest {
 
         Instant ins2 = Instant.ofEpochSecond(5);
         System.out.println(ins2);
-    }
 
-    /**
-     * LocalDate、LocalTime、LocalDateTime
-     */
-    @Test
-    public void localDateTimeTest() {
-        LocalDateTime ldt = LocalDateTime.now();
-        System.out.println(ldt);
+        long currentTimeMillis = System.currentTimeMillis();
+        System.out.println("毫秒：" + ins.toEpochMilli());
+        System.out.println("纳秒：" + ins.getNano());
+        System.out.println("系统毫秒：" + currentTimeMillis);
 
-        LocalDateTime ld2 = LocalDateTime.of(2016, 11, 21, 10, 10, 10);
-        System.out.println(ld2);
+        //获取当前秒数
+        System.out.println("秒：" + Instant.now().getEpochSecond());
+        System.out.println("系统秒：" + currentTimeMillis / 1000);
 
-        LocalDateTime ldt3 = ld2.plusYears(20);
-        System.out.println(ldt3);
+        Instant instant = Instant.ofEpochMilli(currentTimeMillis);
+        //毫秒值转instance对象  默认时间差8小时
+        System.out.println("时间戳转时间：" + instant);
+        //需要推后8小时才能和当前时间匹配
+        Instant plus = instant.plus(8, ChronoUnit.HOURS);
+        System.out.println("时间戳转时间plus：" + plus);
 
-        LocalDateTime ldt4 = ld2.minusMonths(2);
-        System.out.println(ldt4);
-
-        System.out.println(ldt.getYear());
-        System.out.println(ldt.getMonthValue());
-        System.out.println(ldt.getDayOfMonth());
-        System.out.println(ldt.getHour());
-        System.out.println(ldt.getMinute());
-        System.out.println(ldt.getSecond());
+        //转LocalDateTime时，不需要使用+8小时的instance对象
+        System.out.println(LocalDateTime.ofInstant(instant, ZoneId.systemDefault()));
     }
 
     /**
@@ -309,6 +338,94 @@ public class DateTest {
         System.out.println(Period.between(specifyDate, today).getDays());
         System.out.println(Period.between(specifyDate, today));
         System.out.println(ChronoUnit.DAYS.between(specifyDate, today));
+    }
+
+    /**
+     * 检查生日周期性事件
+     */
+    @Test
+    public void monthDayTest() {
+        LocalDate date1 = LocalDate.now();
+
+        LocalDate date2 = LocalDate.of(2018, 2, 6);
+        MonthDay birthday = MonthDay.of(date2.getMonth(), date2.getDayOfMonth());
+        //将localDate转换成MonthDay
+        MonthDay currentMonthDay = MonthDay.from(date1);
+
+        System.out.println(birthday);
+        System.out.println(currentMonthDay);
+        if (currentMonthDay.equals(birthday)) {
+            System.out.println("是你的生日");
+        } else {
+            System.out.println("你的生日还没有到");
+        }
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMdd");
+        //--01-03
+        System.out.println(MonthDay.parse("--01-03"));
+        //--01-03
+        System.out.println(MonthDay.parse("0103", dateTimeFormatter));
+
+        MonthDay monthDay = MonthDay.now();
+        //0307
+        System.out.println(monthDay.format(dateTimeFormatter));
+    }
+
+    /**
+     * 年月组合类
+     */
+    @Test
+    public void yearMonthTest() {
+        YearMonth yearMonth = YearMonth.parse("2020-07");
+        System.out.println(yearMonth);
+
+        System.out.println("当前是否为闰年：" + yearMonth.isLeapYear());
+        System.out.println(yearMonth.format(DateTimeFormatter.ofPattern("yyyy-MM")));
+
+        YearMonth currentYearMonth = YearMonth.now();
+        //获取当前月份的总共天数
+        System.out.printf("Days in month year %s: %d%n", currentYearMonth, currentYearMonth.lengthOfMonth());
+        YearMonth creditCardExpiry = YearMonth.of(2019, Month.FEBRUARY);
+        System.out.printf("Your credit card expires on %s %n", creditCardExpiry);
+    }
+
+    /**
+     * 单独的年和月日期格式
+     */
+    @Test
+    public void yearAndMonthTest() {
+        //2
+        System.out.println(Month.FEBRUARY.getValue());
+        System.out.println(Month.of(10).getValue());
+
+        System.out.println(Year.now());
+        System.out.println(Year.of(2021));
+    }
+
+    /**
+     * 检查闰年
+     */
+    @Test
+    public void leapYearTest() {
+        LocalDate today = LocalDate.now();
+        if (today.isLeapYear()) {
+            System.out.println("This year is Leap year");
+        } else {
+            System.out.println("This is not a Leap year");
+        }
+    }
+
+    @Test
+    public void clockTest() {
+        // 获取UTC时间
+        Clock clock = Clock.systemUTC();
+        System.out.println("Clock : " + clock.millis());
+        System.out.println("instance: " + clock.instant());
+
+        // 获取系统默认时区时间
+        Clock defaultClock = Clock.systemDefaultZone();
+        System.out.println("Clock : " + defaultClock.millis());
+        System.out.println(defaultClock.instant());
     }
 
 }
