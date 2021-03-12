@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class TimeInfoService {
     public Integer insert(TimeInfo timeInfo) {
         timeInfo.setId(snowflake.nextId());
         timeInfo.setTimeExtent(System.currentTimeMillis());
+        timeInfo.setCreateDate(LocalDate.now());
         timeInfo.setCreateTime(LocalDateTime.now());
 
         //手动设置让当前事务处于回滚状态
-        if(StrUtil.isBlank(timeInfo.getFormatName())){
+        if (StrUtil.isBlank(timeInfo.getFormatName())) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
@@ -80,7 +82,7 @@ public class TimeInfoService {
      * @param timeInfo 查询对象
      * @return 返回集合
      */
-    public List<TimeInfo> findByCondition(TimeInfo timeInfo){
+    public List<TimeInfo> findByCondition(TimeInfo timeInfo) {
         return timeInfoMapper.findByCondition(timeInfo);
     }
 }

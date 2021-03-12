@@ -7,9 +7,9 @@
     <!-- 新增时间数据 -->
     <insert id="insert">
         insert into sys_time
-            (id,format_name,time_extent,create_time)
+            (id,format_name,time_extent,create_time,create_date)
         values
-            (#{id},#{formatName},#{timeExtent},#{createTime})
+            (#{id},#{formatName},#{timeExtent},#{createTime},#{createDate})
     </insert>
 
     <!-- 查询全部 -->

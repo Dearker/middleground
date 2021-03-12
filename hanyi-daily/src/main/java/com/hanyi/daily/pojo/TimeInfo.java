@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -46,6 +47,11 @@ public class TimeInfo implements Serializable {
      * 时间毫秒值 int(10)类型最长十位,10位时间戳/秒，占4个字节；bigint占8个字节
      */
     private Long timeExtent;
+
+    /**
+     * 创建日期
+     */
+    private LocalDate createDate;
 
     /**
      * 日期时间,如果返回的类型为Date,则相差8小时，需要加上timezone = "GMT+8"
