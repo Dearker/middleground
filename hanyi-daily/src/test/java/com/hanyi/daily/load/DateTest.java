@@ -70,12 +70,54 @@ public class DateTest {
 
         System.out.println("获取当前周的星期一：" + localDate.with(ChronoField.DAY_OF_WEEK, 1));
         System.out.println("获取今年的第一天：" + localDate.with(ChronoField.DAY_OF_YEAR, 1));
+
+        System.out.println("获取今年的第一天" + localDate.with(TemporalAdjusters.firstDayOfYear()));
+        System.out.println("获取今年的最后一天 " + localDate.with(TemporalAdjusters.lastDayOfYear()));
+    }
+
+    /**
+     * previousOrSame() : 如果参数中指定的星期几核当前时间不是同一天则返回上个星期的，相同则返回相同的时间
+     * nextOrSame(): 如果参数中指定的星期几核当前时间不是同一天则返回下个星期的，相同则返回相同的时间
+     */
+    @Test
+    public void temporalAdjustersTest() {
+        LocalDate localDate = LocalDate.now();
+
+        LocalDate dayOfWeekInMonth = localDate.with(TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.MONDAY));
+        System.out.println("当前月份的第3周的星期一：" + dayOfWeekInMonth);
+
+        LocalDate firstInMonth = localDate.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+        System.out.println("当前月份第一个星期一" + firstInMonth);
+
+        LocalDate lastInMonth = localDate.with(TemporalAdjusters.lastInMonth(DayOfWeek.MONDAY));
+        System.out.println("当前月份最后一个星期一" + lastInMonth);
+
+        LocalDate next = localDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        System.out.println("下个星期一的日期：" + next);
+
+        LocalDate with = localDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+        System.out.println("下周一的日期：" + with);
+
+        LocalDate nextOrSame = localDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        System.out.println("返回的当前时间：" + nextOrSame);
+
+        LocalDate with1 = localDate.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        System.out.println("获取上一周的周一：" + with1);
+
+        LocalDate previousOrSame = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        System.out.println("获取上周的周一：" + previousOrSame);
     }
 
     @Test
     public void localTimeTest() {
         LocalTime localTime = LocalTime.now();
         System.out.println(localTime);
+
+        System.out.println("当前凌晨时间：" + LocalTime.MIN);
+        System.out.println("当前最晚时间：" + LocalTime.MAX);
+
+        System.out.println("午夜时间：" + LocalTime.MIDNIGHT);
+        System.out.println("中午时间：" + LocalTime.NOON);
     }
 
     /**
@@ -129,6 +171,12 @@ public class DateTest {
 
         LocalDateTime ofInstant = LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMilli), ZoneId.systemDefault());
         System.out.println("毫秒值转日期时间：" + ofInstant);
+    }
+
+    @Test
+    public void localDateTimeWithTest() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        System.out.println("当前月的最后一天的日期：" + localDateTime.with(TemporalAdjusters.lastDayOfMonth()));
     }
 
     /**

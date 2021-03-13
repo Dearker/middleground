@@ -1,6 +1,7 @@
 package com.hanyi.daily.controller;
 
 import com.hanyi.daily.pojo.TimeInfo;
+import com.hanyi.daily.pojo.YearDate;
 import com.hanyi.daily.service.TimeInfoService;
 import com.hanyi.framework.enums.ResultCode;
 import com.hanyi.framework.model.response.ResponseResult;
@@ -70,8 +71,19 @@ public class TimeInfoController {
      * @return 返回集合
      */
     @PostMapping("/condition")
-    public List<TimeInfo> findByCondition(@RequestBody TimeInfo timeInfo){
+    public List<TimeInfo> findByCondition(@RequestBody TimeInfo timeInfo) {
         return timeInfoService.findByCondition(timeInfo);
+    }
+
+    /**
+     * 日期测试方法
+     *
+     * @param yearDate 参数
+     * @return 返回结果
+     */
+    @PostMapping("/date")
+    public YearDate date(@RequestBody YearDate yearDate) {
+        return yearDate;
     }
 
 }
