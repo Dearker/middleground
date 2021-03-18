@@ -23,9 +23,9 @@ import java.util.Map;
  * @CreateDate: 2020-02-09 16:54
  * @Version: 1.0
  */
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Slf4j
 public class ApplicationTest {
 
     @Autowired
@@ -52,7 +52,6 @@ public class ApplicationTest {
      */
     @Test
     public void targetInterfaceImplTest() {
-
         Map<String, SearchService> implementor = springAwareComponent.getTargetInterfaceAllImplementor(SearchService.class);
 
         implementor.forEach((k, v) -> {
@@ -75,6 +74,5 @@ public class ApplicationTest {
         springAwareComponent.applicationPublishEvent(new ApplicationEvent("无敌柯基小短腿") {
         });
     }
-
 
 }
