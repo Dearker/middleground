@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @ClassName: middleground com.hanyi.demo
@@ -118,16 +119,14 @@ public class FastJSONTest {
         //布隆过滤器
         BloomFilter<Integer> bloomFilter = BloomFilter.create(Funnels.integerFunnel(), size, 0.001);
 
-        for (int i = 0; i < size; i++) {
-            bloomFilter.put(i);
-        }
+        IntStream.range(0, size).forEach(bloomFilter::put);
 
         List<Integer> list = new ArrayList<>(1000);
-        for (int i = size + 1; i < size + 10000; i++) {
-            if (bloomFilter.mightContain(i)) {
-                list.add(i);
+        IntStream.range(size + 1, size + 10000).forEach(s -> {
+            if (bloomFilter.mightContain(s)) {
+                list.add(s);
             }
-        }
+        });
         System.out.println("误判数量：" + list.size());
     }
 

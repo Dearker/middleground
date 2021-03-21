@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hanyi.hikari.dao.BookDao;
 import com.hanyi.hikari.pojo.Book;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.concurrent.Callable;
  * @author wenchangwei
  * @since 10:19 下午 2020/6/8
  */
+@RequiredArgsConstructor
 public class BatchInsertTask implements Callable<String> {
 
     private static final int COUNT = 500;
@@ -26,11 +28,6 @@ public class BatchInsertTask implements Callable<String> {
     private final Snowflake snowflake;
 
     private final BookDao bookDao;
-
-    public BatchInsertTask(Snowflake snowflake, BookDao bookDao) {
-        this.snowflake = snowflake;
-        this.bookDao = bookDao;
-    }
 
     @Override
     public String call() throws Exception {

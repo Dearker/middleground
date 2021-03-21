@@ -2,7 +2,7 @@ package com.hanyi.daily.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.hanyi.daily.common.property.UserProperty;
-import com.hanyi.daily.common.strategy.SearchTypeService;
+import com.hanyi.daily.common.strategy.SearchTypeStrategyService;
 import com.hanyi.daily.pojo.Company;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ public class DailyController {
     private ApplicationContext applicationContext;
 
     @Resource
-    private List<SearchTypeService> searchTypeServiceList;
+    private List<SearchTypeStrategyService> searchTypeStrategyServiceList;
 
     @GetMapping("/test")
     public String getString() {
@@ -49,13 +49,14 @@ public class DailyController {
     }
 
     /**
-     * 直接通过注入的方式获取接口下的所有实现，并完成调用返回
+     * 直接通过注入的方式获取接口下的所有实现，并完成调用返回。
+     * 可通过@order注解调整实现的执行顺序，默认根据类的从上到下的排序执行，如：1，3，2
      *
      * @return 返回执行后的结果集合
      */
     @GetMapping("/search")
     public List<Integer> searchTest() {
-        return searchTypeServiceList.stream().map(SearchTypeService::search).collect(Collectors.toList());
+        return searchTypeStrategyServiceList.stream().map(SearchTypeStrategyService::search).collect(Collectors.toList());
     }
 
     /**
@@ -65,10 +66,21 @@ public class DailyController {
      */
     @GetMapping("/map")
     public Map<String, Integer> map() {
-        Map<String, SearchTypeService> serviceMap = applicationContext.getBeansOfType(SearchTypeService.class);
+        Map<String, SearchTypeStrategyService> serviceMap = applicationContext.getBeansOfType(SearchTypeStrategyService.class);
         Map<String, Integer> stringMap = new HashMap<>(serviceMap.size());
         serviceMap.forEach((k, v) -> stringMap.put(k, v.search()));
         return stringMap;
+    }
+
+    /**
+     * 根据指定的beanName获取对应的实现类执行，并返回结果
+     *
+     * @param num beanName
+     * @return 返回执行结果
+     */
+    @GetMapping("/num")
+    public Integer num(String num) {
+        return applicationContext.getBean(num, SearchTypeStrategyService.class).search();
     }
 
 }

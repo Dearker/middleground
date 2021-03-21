@@ -34,7 +34,7 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
      */
     @Override
     public void setEnvironment(Environment environment) {
-
+        //非 Web 应用，Environment 接口的实现为 StandardEnvironment
         if (environment instanceof StandardServletEnvironment) {
             StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
             MutablePropertySources propertySources = standardServletEnvironment.getPropertySources();
@@ -78,7 +78,6 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
         //random
         if (propertySource instanceof RandomValuePropertySource) {
-
             RandomValuePropertySource randomValuePropertySource = (RandomValuePropertySource) propertySource;
 
             String name = randomValuePropertySource.getName();
@@ -90,7 +89,6 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
         //servletConfigPropertySource
         if (propertySource instanceof PropertySource.StubPropertySource) {
-
             PropertySource.StubPropertySource servletConfigPropertySource = (PropertySource.StubPropertySource) propertySource;
 
             String name = servletConfigPropertySource.getName();
@@ -102,7 +100,6 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
         //servletContextInitParams
         if (propertySource instanceof ServletContextPropertySource) {
-
             ServletContextPropertySource servletContextPropertySource = (ServletContextPropertySource) propertySource;
 
             String name = servletContextPropertySource.getName();
@@ -114,7 +111,6 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
         //applicationConfig
         if (propertySource instanceof OriginTrackedMapPropertySource) {
-
             OriginTrackedMapPropertySource originTrackedMapPropertySource = (OriginTrackedMapPropertySource) propertySource;
 
             String name = originTrackedMapPropertySource.getName();
@@ -126,7 +122,6 @@ public class ThreadPoolEnvironmentComponent implements EnvironmentAware {
 
         //systemEnvironment
         if (propertySource instanceof SystemEnvironmentPropertySource) {
-
             SystemEnvironmentPropertySource systemEnvironmentPropertySource = (SystemEnvironmentPropertySource) propertySource;
 
             String name = systemEnvironmentPropertySource.getName();

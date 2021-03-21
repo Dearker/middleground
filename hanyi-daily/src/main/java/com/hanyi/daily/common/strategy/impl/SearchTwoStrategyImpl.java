@@ -1,6 +1,7 @@
 package com.hanyi.daily.common.strategy.impl;
 
-import com.hanyi.daily.common.strategy.SearchTypeService;
+import com.hanyi.daily.common.strategy.SearchTypeStrategyService;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,10 +10,11 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author wenchangwei
- * @since 8:12 下午 2021/3/18
+ * @since 8:11 下午 2021/3/18
  */
-@Service("three")
-public class SearchThreeServiceImpl implements SearchTypeService {
+@Order(2)
+@Service("two")
+public class SearchTwoStrategyImpl implements SearchTypeStrategyService {
     /**
      * 搜索类型方法
      *
@@ -20,6 +22,6 @@ public class SearchThreeServiceImpl implements SearchTypeService {
      */
     @Override
     public int search() {
-        return 3;
+        return 2;
     }
 }

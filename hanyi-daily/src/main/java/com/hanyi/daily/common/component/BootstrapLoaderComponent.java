@@ -1,13 +1,15 @@
 package com.hanyi.daily.common.component;
 
 import com.hanyi.daily.pojo.Person;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -20,35 +22,36 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BootstrapLoaderComponent implements CommandLineRunner {
 
     /**
      * ioc容器
      */
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     /**
      * 获取系统环境
      */
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
+
+    /**
+     * env接口的默认实现
+     */
+    private final StandardEnvironment standardEnvironment;
 
     /**
      * person对象
      */
-    @Autowired
-    private Person hanyi123;
+    private final Person hanyi123;
 
     /**
      * 线程池
      */
-    @Autowired
-    private ThreadPoolExecutor hanyi;
+    private final ThreadPoolExecutor hanyi;
 
     @Override
     public void run(String... args) throws Exception {
-
         log.info("获取的bean：" + hanyi123);
         log.info("获取的线程池bean：" + hanyi);
 
@@ -59,6 +62,19 @@ public class BootstrapLoaderComponent implements CommandLineRunner {
 
         String serverPort = environment.getProperty("server.port");
         log.info("serverPort is : {}", serverPort);
+
+        log.info("------------------------------");
+
+        Arrays.asList("user.name", "server.port").forEach(key ->
+                standardEnvironment.getPropertySources().forEach(propertySource -> {
+                    if (propertySource.containsProperty(key)) {
+                        log.info("{} -> {} 实际取值：{}", propertySource, propertySource.getProperty(key), standardEnvironment.getProperty(key));
+                    }
+                }));
+
+        log.info("配置优先级：");
+        standardEnvironment.getPropertySources().stream().forEach(s -> log.info("the source is: {}", s));
+
     }
 
 }

@@ -8,7 +8,7 @@ package com.hanyi.daily.common.strategy;
  * @author wenchangwei
  * @since 8:10 下午 2021/3/18
  */
-public interface SearchTypeService {
+public interface SearchTypeStrategyService {
 
     /**
      * 搜索类型方法

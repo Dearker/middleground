@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
@@ -274,7 +275,7 @@ public class NumberTest {
      * 使用 TreeSet 替换 HashSet。TreeSet 不使用 hashCode 方法，也不使用 equals 比较元素，而是使用 compareTo 方法，所以不会有问题
      */
     @Test
-    public void bigDecimalEqualsTest(){
+    public void bigDecimalEqualsTest() {
         Set<BigDecimal> hashSet = new HashSet<>();
         hashSet.add(new BigDecimal("1.0"));
         //返回false
@@ -294,7 +295,7 @@ public class NumberTest {
      * 超出类型的最大范围会报错
      */
     @Test
-    public void bigIntegerTest(){
+    public void bigIntegerTest() {
         BigInteger i = new BigInteger(String.valueOf(Long.MAX_VALUE));
         System.out.println(i.add(BigInteger.ONE).toString());
 
@@ -303,6 +304,20 @@ public class NumberTest {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * 获取设置之后的值并重置值为0
+     */
+    @Test
+    public void atomicIntegerTest() {
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        IntStream.range(0, 10).forEach(s -> atomicInteger.incrementAndGet());
+
+        // 10
+        System.out.println(atomicInteger.getAndSet(0));
+        // 0
+        System.out.println(atomicInteger);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.hanyi.mongo.common.thread;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -13,16 +14,12 @@ import java.util.concurrent.Callable;
  * @author wenchangwei
  * @since 2:13 下午 2020/6/7
  */
+@RequiredArgsConstructor
 public class QueryCountTask implements Callable<Long> {
 
     private final Query query;
 
     private final MongoTemplate mongoTemplate;
-
-    public QueryCountTask(Query query, MongoTemplate mongoTemplate) {
-        this.query = query;
-        this.mongoTemplate = mongoTemplate;
-    }
 
     @Override
     public Long call() {

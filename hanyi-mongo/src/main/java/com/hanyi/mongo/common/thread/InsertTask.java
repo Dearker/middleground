@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.RandomUtil;
 import com.hanyi.mongo.pojo.Book;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.concurrent.Callable;
  * @CreateDate: 2020-05-10 14:19
  * @Version: 1.0
  */
+@RequiredArgsConstructor
 public class InsertTask implements Callable<String> {
 
     private static final int COUNT = 500;
@@ -24,11 +26,6 @@ public class InsertTask implements Callable<String> {
     private final Snowflake snowflake;
 
     private final MongoTemplate mongoTemplate;
-
-    public InsertTask(Snowflake snowflake, MongoTemplate mongoTemplate) {
-        this.snowflake = snowflake;
-        this.mongoTemplate = mongoTemplate;
-    }
 
     @Override
     public String call() throws Exception {
