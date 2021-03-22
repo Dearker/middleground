@@ -2,23 +2,29 @@ package com.hanyi.daily.load;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.pojo.CostInfo;
 import com.hanyi.daily.pojo.Person;
+import com.hanyi.daily.pojo.Student;
 import com.hanyi.daily.thread.pojo.Accumulator;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.comparingLong;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.*;
 
 /**
  * <p>
@@ -168,6 +174,53 @@ public class StreamTest {
                 .collect(collectingAndThen(Collectors.joining(StrUtil.COMMA), String::toUpperCase));
         System.out.println(collect);
     }
+
+    @Test
+    public void groupingByTest() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        List<Student> studentList = new ArrayList<>();
+        IntStream.rangeClosed(1, 10).forEach(s -> {
+            int i = s % 3;
+            LocalDateTime dateTime = localDateTime.plusMonths(i);
+            String randomString = RandomUtil.randomString(2);
+            int randomInt = RandomUtil.randomInt(20, 30);
+            double randomDouble = RandomUtil.randomDouble(3.5, 20.6, 2, RoundingMode.UP);
+            studentList.add(new Student(randomString, "柯基--" + i, randomInt, randomDouble, dateTime));
+        });
+
+        System.out.println(studentList);
+
+        Map<String, Long> stringLongMap = studentList.stream().collect(groupingBy(Student::getName, counting()));
+        System.out.println("根据学生名称进行分组统计各自的总个数：" + stringLongMap);
+
+        Map<String, Double> stringDoubleMap = studentList.stream().collect(
+                groupingBy(Student::getName, summingDouble(Student::getTotalPrice)));
+        System.out.println("根据学生名称分组并统计各自的总金额：" + stringDoubleMap);
+
+        //默认是从小到大排序
+        List<Map.Entry<String, Double>> entryList = studentList.stream()
+                .collect(groupingBy(Student::getName, summingDouble(Student::getTotalPrice)))
+                .entrySet().stream().sorted(Map.Entry.<String, Double>comparingByValue().reversed()).collect(toList());
+        System.out.println("根据学生名称分组并根据总金额从大到小排序：" + entryList);
+
+        //以下两种方式功能相同
+        Map<String, Student> studentMap = studentList.stream().collect(groupingBy(Student::getName,
+                collectingAndThen(maxBy(Comparator.comparingDouble(Student::getTotalPrice)), Optional::get)));
+
+        Map<String, Student> stringStudentMap = studentList.stream().collect(toMap(Student::getName,
+                Function.identity(), BinaryOperator.maxBy(Comparator.comparingDouble(Student::getTotalPrice))));
+        System.out.println(stringStudentMap);
+        System.out.println("根据学生名称分组并获取金额最大的学生：" + studentMap);
+
+        Map<YearMonth, List<String>> yearMonthListMap = studentList.stream().collect(groupingBy(s -> {
+            LocalDateTime createTime = s.getCreateTime();
+            return YearMonth.of(createTime.getYear(), createTime.getMonthValue());
+        }, mapping(Student::getId, toList())));
+
+        System.out.println("根据学生创建时间年月分组，并统计学生id列表 " + yearMonthListMap);
+    }
+
 
     /**
      * 获取出集合中对应的元素构成intStream，并对该流进行操作
