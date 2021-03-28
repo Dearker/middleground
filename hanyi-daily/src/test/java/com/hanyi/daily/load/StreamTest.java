@@ -175,6 +175,9 @@ public class StreamTest {
         System.out.println(collect);
     }
 
+    /**
+     * 分组统计
+     */
     @Test
     public void groupingByTest() {
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -213,6 +216,16 @@ public class StreamTest {
         System.out.println(stringStudentMap);
         System.out.println("根据学生名称分组并获取金额最大的学生：" + studentMap);
 
+        Map<String, Double> doubleMap = studentList.stream().collect(groupingBy(Student::getName,
+                collectingAndThen(maxBy(Comparator.comparingDouble(Student::getTotalPrice)),
+                        s -> s.map(Student::getTotalPrice).orElse(0.0))));
+
+        System.out.println("根据名称分组并获取最大的金额：" + doubleMap);
+
+        Map<String, Double> avgDoubleMap = studentList.stream().collect(groupingBy(Student::getName,
+                averagingInt(Student::getAge)));
+        System.out.println("根据名称分组并获取年龄的平均数：" + avgDoubleMap);
+
         Map<YearMonth, List<String>> yearMonthListMap = studentList.stream().collect(groupingBy(s -> {
             LocalDateTime createTime = s.getCreateTime();
             return YearMonth.of(createTime.getYear(), createTime.getMonthValue());
@@ -221,6 +234,53 @@ public class StreamTest {
         System.out.println("根据学生创建时间年月分组，并统计学生id列表 " + yearMonthListMap);
     }
 
+    /**
+     * 参数含义分别是：
+     *      keyMapper：Key 的映射函数
+     *      valueMapper：Value 的映射函数
+     *      mergeFunction：当 Key 冲突时，调用的合并方法
+     *      mapSupplier：Map 构造器，在需要返回特定的 Map 时使用
+     */
+    @Test
+    public void toMapTest(){
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        List<Student> studentList = new ArrayList<>();
+        IntStream.rangeClosed(1, 10).forEach(s -> {
+            int i = s % 3;
+            LocalDateTime dateTime = localDateTime.plusMonths(i);
+            String randomString = RandomUtil.randomString(2);
+            int randomInt = RandomUtil.randomInt(20, 30);
+            double randomDouble = RandomUtil.randomDouble(3.5, 20.6, 2, RoundingMode.UP);
+            studentList.add(new Student(randomString, "柯基--" + i, randomInt, randomDouble, dateTime));
+        });
+
+        System.out.println(studentList);
+
+        Map<String, Double> groupDoubleMap = studentList.stream().collect(groupingBy(Student::getName,
+                collectingAndThen(maxBy(Comparator.comparingDouble(Student::getTotalPrice)),
+                        s -> s.map(Student::getTotalPrice).orElse(0.0))));
+
+        System.out.println("根据名称分组并获取最大的金额：" + groupDoubleMap);
+
+        Map<String, Double> doubleMap = studentList.stream().collect(toMap(Student::getName,
+                Student::getTotalPrice, Double::sum));
+        System.out.println("根据名称分组并统计总金额：" + doubleMap);
+
+        //该方式适用于所有的比较场景，如果为基本类型则可以使用比较器进行处理
+        Map<String, Double> stringDoubleMap = studentList.stream().collect(toMap(Student::getName, Student::getTotalPrice,
+                (oldValue, newValue) -> oldValue > newValue ? oldValue : newValue));
+
+        System.out.println("根据名称进行分组并获取最大的总金额：" + stringDoubleMap);
+
+        Map<String, Double> compareDoubleMap = studentList.stream().collect(toMap(Student::getName, Student::getTotalPrice,
+                BinaryOperator.maxBy(Comparator.comparingDouble(Double::doubleValue))));
+        System.out.println("根据名称分组并根据比较器获取最大的金额：" + compareDoubleMap);
+
+        TreeMap<String, Double> treeMap = studentList.stream().collect(toMap(Student::getName, Student::getTotalPrice,
+                (a, b) -> b, TreeMap::new));
+        System.out.println("创建指定类型的map集合：" + treeMap);
+    }
 
     /**
      * 获取出集合中对应的元素构成intStream，并对该流进行操作
