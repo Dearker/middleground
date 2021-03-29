@@ -198,18 +198,18 @@ public class StreamTest {
         System.out.println("根据学生名称进行分组统计各自的总个数：" + stringLongMap);
 
         Map<String, Double> stringDoubleMap = studentList.stream().collect(
-                groupingBy(Student::getName, summingDouble(Student::getTotalPrice)));
+                Collectors.groupingBy(Student::getName, Collectors.summingDouble(Student::getTotalPrice)));
         System.out.println("根据学生名称分组并统计各自的总金额：" + stringDoubleMap);
 
         //默认是从小到大排序
         List<Map.Entry<String, Double>> entryList = studentList.stream()
-                .collect(groupingBy(Student::getName, summingDouble(Student::getTotalPrice)))
+                .collect(Collectors.groupingBy(Student::getName, Collectors.summingDouble(Student::getTotalPrice)))
                 .entrySet().stream().sorted(Map.Entry.<String, Double>comparingByValue().reversed()).collect(toList());
         System.out.println("根据学生名称分组并根据总金额从大到小排序：" + entryList);
 
         //以下两种方式功能相同
-        Map<String, Student> studentMap = studentList.stream().collect(groupingBy(Student::getName,
-                collectingAndThen(maxBy(Comparator.comparingDouble(Student::getTotalPrice)), Optional::get)));
+        Map<String, Student> studentMap = studentList.stream().collect(Collectors.groupingBy(Student::getName,
+                collectingAndThen(Collectors.maxBy(Comparator.comparingDouble(Student::getTotalPrice)), Optional::get)));
 
         Map<String, Student> stringStudentMap = studentList.stream().collect(toMap(Student::getName,
                 Function.identity(), BinaryOperator.maxBy(Comparator.comparingDouble(Student::getTotalPrice))));
@@ -217,19 +217,19 @@ public class StreamTest {
         System.out.println("根据学生名称分组并获取金额最大的学生：" + studentMap);
 
         Map<String, Double> doubleMap = studentList.stream().collect(groupingBy(Student::getName,
-                collectingAndThen(maxBy(Comparator.comparingDouble(Student::getTotalPrice)),
-                        s -> s.map(Student::getTotalPrice).orElse(0.0))));
+                Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingDouble(Student::getTotalPrice)),
+                        s -> s.map(Student::getTotalPrice).orElse(null))));
 
         System.out.println("根据名称分组并获取最大的金额：" + doubleMap);
 
-        Map<String, Double> avgDoubleMap = studentList.stream().collect(groupingBy(Student::getName,
-                averagingInt(Student::getAge)));
+        Map<String, Double> avgDoubleMap = studentList.stream().collect(Collectors.groupingBy(Student::getName,
+                Collectors.averagingInt(Student::getAge)));
         System.out.println("根据名称分组并获取年龄的平均数：" + avgDoubleMap);
 
-        Map<YearMonth, List<String>> yearMonthListMap = studentList.stream().collect(groupingBy(s -> {
+        Map<YearMonth, List<String>> yearMonthListMap = studentList.stream().collect(Collectors.groupingBy(s -> {
             LocalDateTime createTime = s.getCreateTime();
             return YearMonth.of(createTime.getYear(), createTime.getMonthValue());
-        }, mapping(Student::getId, toList())));
+        }, Collectors.mapping(Student::getId, toList())));
 
         System.out.println("根据学生创建时间年月分组，并统计学生id列表 " + yearMonthListMap);
     }
