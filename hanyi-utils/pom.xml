@@ -15,7 +15,7 @@
         <fastjson.version>1.2.58</fastjson.version>
         <crypto.version>4.2.3.RELEASE</crypto.version>
         <jwt.version>1.0.8.RELEASE</jwt.version>
-        <guava.version>28.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.4.3</hutool.version>
         <mockito.version>1.10.19</mockito.version>
