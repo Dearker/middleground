@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -450,6 +451,15 @@ public class CollectionTest {
         studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(), Integer::sum));
 
         System.out.println(stringIntegerMap);
+
+        stringIntegerMap.clear();
+        studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(), (a,b)-> b));
+        System.out.println("当key存在时，则获取新的值：" + stringIntegerMap);
+
+        stringIntegerMap.clear();
+        studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(),
+                BinaryOperator.maxBy(Comparator.comparingInt(Integer::intValue))));
+        System.out.println("当key存在时，则获取最大的值：" + stringIntegerMap);
 
         Map<String, IntSummaryStatistics> collectMap = studentList.stream()
                 .collect(Collectors.groupingBy(Student::getName, Collectors.summarizingInt(Student::getAge)));

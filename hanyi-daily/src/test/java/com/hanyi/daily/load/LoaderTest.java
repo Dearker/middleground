@@ -36,6 +36,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -106,7 +109,6 @@ public class LoaderTest {
      */
     @Test
     public void interfaceParamTest() {
-
         User person = new User();
         person.setUserAge(12);
         List<Serializable> common = this.buildParams(person);
@@ -150,7 +152,6 @@ public class LoaderTest {
      */
     @Test
     public void changeUser() {
-
         User user = new User(1, "柯基", 20);
 
         User u = new User();
@@ -172,7 +173,6 @@ public class LoaderTest {
 
     @Test
     public void attributeToMap() {
-
         NamedThreadFactory namedThreadFactory = new NamedThreadFactory("thread-pool-business", false);
         ThreadPoolExecutor threadPoolExecutor = ExecutorBuilder.create().setThreadFactory(namedThreadFactory)
                 .setCorePoolSize(5)
@@ -199,6 +199,40 @@ public class LoaderTest {
     public void ipTest() {
         long ipv4ToLong = NetUtil.ipv4ToLong(NetUtil.LOCAL_IP);
         System.out.println(ipv4ToLong);
+
+        System.out.println("内网ip：" + NetUtil.getLocalhostStr());
+        System.out.println(NetUtil.localIpv4s());
+
+        System.out.println("外网ip：" + getInternetIp());
+    }
+
+    /**
+     * 获取外网ip
+     *
+     * @return 返回外网ip地址
+     */
+    private static String getInternetIp() {
+        String localhostStr = NetUtil.getLocalhostStr();
+        InetAddress ip;
+        Enumeration<InetAddress> address;
+        try {
+            Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+            while (networks.hasMoreElements()) {
+                address = networks.nextElement().getInetAddresses();
+                while (address.hasMoreElements()) {
+                    ip = address.nextElement();
+                    if (ip instanceof Inet4Address && ip.isSiteLocalAddress()
+                            && !ip.getHostAddress().equals(localhostStr)) {
+                        return ip.getHostAddress();
+                    }
+                }
+            }
+
+            // 如果没有外网IP，就返回内网IP
+            return localhostStr;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

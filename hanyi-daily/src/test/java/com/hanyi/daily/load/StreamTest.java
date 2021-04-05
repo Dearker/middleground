@@ -185,14 +185,18 @@ public class StreamTest {
         List<Student> studentList = new ArrayList<>();
         IntStream.rangeClosed(1, 10).forEach(s -> {
             int i = s % 3;
-            LocalDateTime dateTime = localDateTime.plusMonths(i);
             String randomString = RandomUtil.randomString(2);
             int randomInt = RandomUtil.randomInt(20, 30);
+            LocalDateTime dateTime = localDateTime.plusMonths(randomInt);
             double randomDouble = RandomUtil.randomDouble(3.5, 20.6, 2, RoundingMode.UP);
             studentList.add(new Student(randomString, "柯基--" + i, randomInt, randomDouble, dateTime));
         });
 
         System.out.println(studentList);
+
+        Map<String, List<LocalDateTime>> dateTimeMap = studentList.stream().sorted(Comparator.comparing(Student::getCreateTime))
+                .collect(groupingBy(Student::getName, mapping(Student::getCreateTime, toList())));
+        System.out.println("时间排序后的集合：" + dateTimeMap);
 
         Map<String, Long> stringLongMap = studentList.stream().collect(groupingBy(Student::getName, counting()));
         System.out.println("根据学生名称进行分组统计各自的总个数：" + stringLongMap);
@@ -236,13 +240,13 @@ public class StreamTest {
 
     /**
      * 参数含义分别是：
-     *      keyMapper：Key 的映射函数
-     *      valueMapper：Value 的映射函数
-     *      mergeFunction：当 Key 冲突时，调用的合并方法
-     *      mapSupplier：Map 构造器，在需要返回特定的 Map 时使用
+     * keyMapper：Key 的映射函数
+     * valueMapper：Value 的映射函数
+     * mergeFunction：当 Key 冲突时，调用的合并方法
+     * mapSupplier：Map 构造器，在需要返回特定的 Map 时使用
      */
     @Test
-    public void toMapTest(){
+    public void toMapTest() {
         LocalDateTime localDateTime = LocalDateTime.now();
 
         List<Student> studentList = new ArrayList<>();
@@ -280,6 +284,50 @@ public class StreamTest {
         TreeMap<String, Double> treeMap = studentList.stream().collect(toMap(Student::getName, Student::getTotalPrice,
                 (a, b) -> b, TreeMap::new));
         System.out.println("创建指定类型的map集合：" + treeMap);
+    }
+
+    /**
+     * 计算处理测试
+     */
+    @Test
+    public void reducingTest() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        List<Student> studentList = new ArrayList<>();
+        IntStream.rangeClosed(1, 10).forEach(s -> {
+            int i = s % 3;
+            LocalDateTime dateTime = localDateTime.plusMonths(i);
+            String randomString = RandomUtil.randomString(2);
+            int randomInt = RandomUtil.randomInt(20, 30);
+            double randomDouble = RandomUtil.randomDouble(3.5, 20.6, 2, RoundingMode.UP);
+            studentList.add(new Student(randomString, "柯基--" + i, randomInt, randomDouble, dateTime));
+        });
+
+        System.out.println(studentList);
+
+        Map<String, Optional<Integer>> optionalMap = studentList.stream().collect(groupingBy(Student::getName,
+                mapping(Student::getAge, reducing((a, b) -> {
+                    System.out.println(a + " || " + b);
+                    a += b;
+                    return a;
+                }))));
+        System.out.println(optionalMap);
+
+        Map<String, Integer> integerMap = studentList.stream().collect(groupingBy(Student::getName,
+                mapping(Student::getAge, reducing(0, (a, b) -> {
+                    System.out.println(a + " || " + b);
+                    a += b;
+                    return a;
+                }))));
+        System.out.println("指定初始值进行计算：" + integerMap);
+
+        Map<String, Integer> stringIntegerMap = studentList.stream().collect(groupingBy(Student::getName,
+                reducing(0, Student::getAge, (a, b) -> {
+                    System.out.println(a + " || " + b);
+                    a += b;
+                    return a;
+                })));
+        System.out.println("指定初始值并且指定字段进行计算：" + stringIntegerMap);
     }
 
     /**
