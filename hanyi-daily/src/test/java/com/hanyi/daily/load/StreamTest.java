@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.hanyi.daily.pojo.CostInfo;
 import com.hanyi.daily.pojo.Person;
 import com.hanyi.daily.pojo.Student;
+import com.hanyi.daily.pojo.StudentSort;
 import com.hanyi.daily.thread.pojo.Accumulator;
 import org.junit.Test;
 
@@ -657,4 +658,70 @@ public class StreamTest {
         System.out.println(arrayList);
     }
 
+    /**
+     * 排序接口测试
+     * <p>
+     * 实现了Comparable接口的实体类可直接使用比较器进行排序
+     * <p>
+     * 不能直接使用thenComparing()方法，该类型方法不是静态方法；
+     * comparing()方法可以直接使用，该类型的方法为静态方法
+     */
+    @Test
+    public void comparatorTest() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        List<Student> studentList = new ArrayList<>();
+        IntStream.rangeClosed(1, 3).forEach(s -> {
+            int i = s % 3;
+            LocalDateTime dateTime = localDateTime.plusMonths(i);
+            int randomInt = RandomUtil.randomInt(20, 30);
+            double randomDouble = RandomUtil.randomDouble(3.5, 20.6, 2, RoundingMode.UP);
+            studentList.add(new Student(null, "柯基--" + i, randomInt, randomDouble, dateTime));
+        });
+
+        studentList.forEach(System.out::println);
+        System.out.println("--------------------------");
+
+        //单字段排序
+        studentList.sort(Comparator.comparing(Student::getName));
+        System.out.println("按名称升序排序：" + studentList);
+
+        studentList.sort(Comparator.comparing(Student::getName).reversed());
+        System.out.println("按名称降序排序：" + studentList);
+
+        //多字段排序
+        studentList.sort(Comparator.comparing(Student::getName).thenComparingInt(Student::getAge));
+        System.out.println("按名称升序然后年龄升序排序：" + studentList);
+
+        studentList.sort(Comparator.comparing(Student::getName).thenComparing(Student::getAge, Comparator.reverseOrder()));
+        System.out.println("按名称升序然后年龄降序排序：" + studentList);
+
+        //如下比较器里面的元素不能为空
+        List<Integer> integerList = Arrays.asList(1, 3, 2, 5, 4);
+        integerList.sort(Comparator.naturalOrder());
+        System.out.println("自然升序排序：" + integerList);
+
+        integerList.sort(Comparator.reverseOrder());
+        System.out.println("自然降序排序：" + integerList);
+
+        //如下比较器里面的元素可以为空
+        List<Integer> integers = Arrays.asList(1, null, 3, null, 2, 5, 4);
+        integers.sort(Comparator.nullsFirst(Integer::compareTo));
+        System.out.println("将空元素放在前排：" + integers);
+
+        integers.sort(Comparator.nullsLast(Integer::compareTo));
+        System.out.println("将空元素放在后排：" + integers);
+
+        //实现了Comparable接口的排序
+        List<StudentSort> studentSortList = new ArrayList<>(3);
+        studentSortList.add(new StudentSort(2, "哈哈哈"));
+        studentSortList.add(new StudentSort(1, "看看看"));
+        studentSortList.add(new StudentSort(3, "略略略"));
+
+        studentSortList.sort(Comparator.naturalOrder());
+        System.out.println("自然升序排序：" + studentSortList);
+
+        studentSortList.sort(Comparator.reverseOrder());
+        System.out.println("自然降序排序：" + studentSortList);
+    }
 }
