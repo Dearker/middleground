@@ -51,6 +51,9 @@ public class StreamTest {
     }
 
     /**
+     * 在获取第一个集合中一个元素时，然后根据该元素的字段过滤出另一个集合中的一个元素并获取其相应的字段时，
+     * 可使用flatMap直接获取，不需要多次使用Optional#orElse()
+     * <p>
      * flatMap 主要是将集合中的元素进一步细化打平；builder()方法用于构建Stream对象，使用较少
      * 如果使用map获取集合中的元素，则返回的是Lis<char[]>；如果需要获取里面的char元素则还需要循环遍历一次
      */
@@ -83,6 +86,14 @@ public class StreamTest {
                 .map(String::trim)
                 .collect(Collectors.toList());
         System.out.println(temp);
+
+        List<String> stringList = Arrays.asList("1", "2", "3");
+        List<Integer> integerList = Arrays.asList(1, 4, 5);
+
+        Integer integer = stringList.stream().min(Comparator.naturalOrder())
+                .flatMap(s -> integerList.stream().filter(a -> a.toString().equals(s)).findFirst())
+                .orElse(null);
+        System.out.println("两个optional获取对象中的元素可以直接使用flatMap：" + integer);
     }
 
     /**
