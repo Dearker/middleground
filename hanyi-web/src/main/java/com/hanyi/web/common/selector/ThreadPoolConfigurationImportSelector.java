@@ -7,8 +7,6 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
-import java.util.Set;
-
 /**
  * <p>
  * 线程池配置注入器
@@ -27,17 +25,15 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
      */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-        Set<String> annotationTypes = annotationMetadata.getAnnotationTypes();
-        Class<ThreadPoolConfigurationImportSelector> clazz = ThreadPoolConfigurationImportSelector.class;
-        annotationTypes.forEach(s -> {
-            if (s.contains(EnableThreadPool.class.getSimpleName())) {
-                RootBeanDefinition beanDefinition = new RootBeanDefinition(clazz);
-                //设置自定义属性
-                beanDefinition.setSynthetic(true);
-                String lowerFirst = StrUtil.lowerFirst(clazz.getSimpleName());
-                registry.registerBeanDefinition(lowerFirst, beanDefinition);
-            }
-        });
+        boolean hasAnnotation = annotationMetadata.hasAnnotation(EnableThreadPool.class.getName());
+        if(hasAnnotation){
+            Class<ThreadPoolConfigurationImportSelector> clazz = ThreadPoolConfigurationImportSelector.class;
+            RootBeanDefinition beanDefinition = new RootBeanDefinition(clazz);
+            //设置自定义属性
+            beanDefinition.setSynthetic(true);
+            String lowerFirst = StrUtil.lowerFirst(clazz.getSimpleName());
+            registry.registerBeanDefinition(lowerFirst, beanDefinition);
+        }
     }
 
 }
