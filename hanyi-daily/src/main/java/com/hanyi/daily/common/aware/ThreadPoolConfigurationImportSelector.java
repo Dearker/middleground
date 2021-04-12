@@ -40,7 +40,6 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
      */
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry registry) {
-
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(Person.class)
                 .addPropertyValue("id", 123)
                 .addPropertyValue("name", "哈士奇")
@@ -52,7 +51,8 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
         if (Objects.isNull(businessThreadPoolProperties)) {
             String simpleName = ThreadPoolExecutor.class.getSimpleName();
             String lowerFirst = StrUtil.lowerFirst(simpleName);
-            businessThreadPoolProperties = new BusinessThreadPoolProperties(Collections.singletonMap(lowerFirst, new BusinessThreadPool()));
+            businessThreadPoolProperties = new BusinessThreadPoolProperties(
+                    Collections.singletonMap(lowerFirst, new BusinessThreadPool()));
         }
 
         //组装线程池map对象，key为bean名称，value为线程池对象
@@ -60,12 +60,14 @@ public class ThreadPoolConfigurationImportSelector implements ImportBeanDefiniti
         Map<String, ThreadPoolExecutor> threadPoolExecutorMap = new HashMap<>(threadPools.size());
 
         threadPools.forEach((k, v) -> {
-            ThreadPoolExecutor threadPoolExecutor = BeanDefinitionUtil.newThreadPoolExecutor(v.getThreadNamePrefix(), v.getCorePoolSize(), v.getMaxPoolSize());
+            ThreadPoolExecutor threadPoolExecutor = BeanDefinitionUtil.newThreadPoolExecutor(
+                    v.getThreadNamePrefix(), v.getCorePoolSize(), v.getMaxPoolSize());
             threadPoolExecutorMap.put(k, threadPoolExecutor);
         });
 
         //向容器中注入bean对象
-        threadPoolExecutorMap.forEach((k, v) -> registry.registerBeanDefinition(k, BeanDefinitionUtil.buildBeanDefinitionForThreadPool(v)));
+        threadPoolExecutorMap.forEach((k, v) -> registry.registerBeanDefinition(k,
+                BeanDefinitionUtil.buildBeanDefinitionForThreadPool(v)));
     }
 
     /**

@@ -9,7 +9,7 @@ import java.util.List;
  * @since 2020-02-11
  */
 @Data
-public class Person {
+public class PersonDesc {
 
     private String name;
     private Integer age;

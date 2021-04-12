@@ -29,7 +29,7 @@ import com.hanyi.daily.common.enums.IntEnum;
 import com.hanyi.daily.pojo.PersonInfo;
 import com.hanyi.daily.pojo.User;
 import com.hanyi.daily.property.Book;
-import com.hanyi.daily.property.Person;
+import com.hanyi.daily.property.PersonDesc;
 import org.junit.Test;
 
 import java.io.File;
@@ -96,7 +96,7 @@ public class LoaderTest {
      */
     @Test
     public void genericTypeTest() {
-        Person person = this.getObject(Person.class);
+        PersonDesc personDesc = this.getObject(PersonDesc.class);
         Book book = this.getObject(Book.class);
     }
 
@@ -334,8 +334,8 @@ public class LoaderTest {
      */
     @Test
     public void typeTest() {
-        Stream.of(ReflectUtil.getFields(Person.class)).forEach(s -> {
-            Type list = TypeUtil.getFieldType(Person.class, s.getName());
+        Stream.of(ReflectUtil.getFields(PersonDesc.class)).forEach(s -> {
+            Type list = TypeUtil.getFieldType(PersonDesc.class, s.getName());
             System.out.println(list.getTypeName() + " || " + s.getName());
         });
     }
@@ -425,32 +425,32 @@ public class LoaderTest {
      */
     @Test
     public void optionalTest() {
-        Person person = new Person();
-        String orElse = Optional.ofNullable(person).map(Person::getName).orElse(StrUtil.EMPTY_JSON);
+        PersonDesc personDesc = new PersonDesc();
+        String orElse = Optional.ofNullable(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
         System.out.println("空：" + orElse);
 
-        person.setName("哈士奇");
-        String s = Optional.ofNullable(person).map(Person::getName).orElse(StrUtil.EMPTY_JSON);
+        personDesc.setName("哈士奇");
+        String s = Optional.ofNullable(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
         System.out.println("name: " + s);
 
-        Person p = null;
-        String anElse = Optional.ofNullable(p).map(Person::getName).orElse(null);
+        PersonDesc p = null;
+        String anElse = Optional.ofNullable(p).map(PersonDesc::getName).orElse(null);
         System.out.println(anElse);
     }
 
     @Test
     public void optionsMapTest() {
-        Person person = new Person();
-        person.setName("哈哈哈");
-        String orElse = Optional.ofNullable(person).map(s -> {
+        PersonDesc personDesc = new PersonDesc();
+        personDesc.setName("哈哈哈");
+        String orElse = Optional.ofNullable(personDesc).map(s -> {
             User user = new User();
             user.setUserName(s.getName());
             return user;
         }).map(User::getUserName).orElse(null);
         System.out.println(orElse);
 
-        person.setName(null);
-        String name = Optional.ofNullable(person).map(s -> {
+        personDesc.setName(null);
+        String name = Optional.ofNullable(personDesc).map(s -> {
             User user = new User();
             user.setUserName(s.getName());
             return user;
@@ -542,6 +542,16 @@ public class LoaderTest {
         CodeEnum codeEnum = CodeEnum.valueOf(CodeEnum.ONE.name());
         System.out.println(codeEnum.getCode() + "||" + codeEnum.getCodeName());
         System.out.println(CodeEnum.ONE.getCode() + "||" + CodeEnum.ONE.getCodeName());
+    }
+
+    /**
+     * 获取当前系统语言环境
+     */
+    @Test
+    public void languageTest(){
+        Locale locale = Locale.getDefault();
+        System.out.println(locale.getLanguage());
+        System.out.println(locale.getCountry());
     }
 
 }

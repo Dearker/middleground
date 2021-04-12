@@ -2,6 +2,7 @@ package com.hanyi.web.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,8 +14,11 @@ import java.util.Date;
  * @since 2020-12-07 16:35
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
+
+    private static final long serialVersionUID = -2379171125562759373L;
 
     /**
      * 用户名称

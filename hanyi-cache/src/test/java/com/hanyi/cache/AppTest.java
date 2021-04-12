@@ -80,14 +80,14 @@ public class AppTest {
         Map<String, String> parseObject = JSON.parseObject(stringRedisTemplate.opsForHash().get("2", hashKey).toString(), new TypeReference<Map<String, String>>() {
         });
         System.out.println(parseObject);
-        parseObject.forEach((k,v)-> System.out.println(k+" || "+v));
+        parseObject.forEach((k, v) -> System.out.println(k + " || " + v));
 
         //获取全部信息
         Map<Object, Object> objectMap = stringRedisTemplate.opsForHash().entries("2");
         System.out.println(objectMap);
         Map<String, String> map = JSON.parseObject(objectMap.get(hashKey).toString(), new TypeReference<Map<String, String>>() {
         });
-        map.forEach((k,v)-> System.out.println(k+" || "+v));
+        map.forEach((k, v) -> System.out.println(k + " || " + v));
     }
 
     /**
@@ -170,7 +170,8 @@ public class AppTest {
     @Test
     public void ZSetTest() {
         Set<Book> bookSet = new HashSet<>();
-        bookSet.add(new Book(1, "柯基", "123"));
+        Book firstBook = new Book(1, "柯基", "123");
+        bookSet.add(firstBook);
         bookSet.add(new Book(2, "哈士奇", "234"));
         bookSet.add(new Book(3, "柴犬", "345"));
 
@@ -181,14 +182,26 @@ public class AppTest {
         stringRedisTemplate.expire(setKey, 20, TimeUnit.MINUTES);
 
         //从低到高排行榜
-        Set<String> range = stringRedisTemplate.opsForZSet().range(setKey, 0, -1);
+        Set<String> range = opsForZSet.range(setKey, 0, -1);
         System.out.println(range);
         range.forEach(s -> System.out.println(JSON.parseObject(s, Book.class)));
 
         //从高到低排行榜
-        Set<String> reverseRange = stringRedisTemplate.opsForZSet().reverseRange(setKey, 0, -1);
+        Set<String> reverseRange = opsForZSet.reverseRange(setKey, 0, -1);
         System.out.println(reverseRange);
         reverseRange.forEach(s -> System.out.println(JSON.parseObject(s, Book.class)));
+
+        Set<String> rangeByScore = opsForZSet.rangeByScore(setKey, 1, 2);
+        System.out.println("获取zset中指定score范围值内的元素: " + rangeByScore);
+
+        Long size = opsForZSet.size(setKey);
+        System.out.println("当前key元素总数：" + size);
+
+        String firstString = JSON.toJSONString(firstBook);
+        Double score = opsForZSet.score(setKey, firstString);
+        System.out.println("获取元素的得分：" + score);
+        opsForZSet.incrementScore(setKey, firstString, 10);
+        System.out.println("获取增加后的得分：" + opsForZSet.score(setKey, firstString));
     }
 
 }

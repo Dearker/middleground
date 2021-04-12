@@ -10,7 +10,7 @@ import java.util.List;
  * @author weiwenchang
  * @since 2020-02-11
  */
-@ConfigurationProperties(prefix = "person")
+@ConfigurationProperties(prefix = "person-desc")
 @Component
 @Data
 public class PersonProperty {
