@@ -490,8 +490,23 @@ public class LoaderTest {
         System.out.println(build);
     }
 
+    /**
+     * Objects.toString()和String.valueOf()效果一样，如果传入的对象为null，则输出的为"null"字符串
+     */
     @Test
-    public void stringTest() {
+    public void stringTest(){
+        Object object = null;
+        String valueOf = String.valueOf(object);
+        System.out.println(valueOf);
+        String toString = Objects.toString(object);
+        System.out.println(toString);
+
+        String string = Objects.toString(object, "1");
+        System.out.println(string);
+    }
+
+    @Test
+    public void stringBuilderTest() {
         String source = "a:1,b:2,c:3,d:4";
         int index = source.indexOf(':');
         String target = source.replace(':', '=');
@@ -545,7 +560,7 @@ public class LoaderTest {
     }
 
     /**
-     * 获取当前系统语言环境
+     * 获取当前系统语言环境 消除判断
      */
     @Test
     public void languageTest(){

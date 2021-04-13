@@ -12,8 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author wenchangwei
  * @since 10:51 下午 2020/7/24
  */
-@SpringBootApplication
 @EnableThreadPool
+@SpringBootApplication
 public class WebApplication {
 
     public static void main(String[] args) {
