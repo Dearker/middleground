@@ -1,5 +1,8 @@
 package com.hanyi.daily.lambda.stream;
 
+import cn.hutool.core.util.RandomUtil;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,8 +10,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-import org.junit.Test;
 
 /*
  * Java8 内置的四大核心函数式接口
@@ -70,8 +71,7 @@ public class TestLambda3 {
 	//Supplier<T> 供给型接口 :
 	@Test
 	public void test2(){
-		List<Integer> numList = getNumList(10, () -> (int)(Math.random() * 100));
-		
+		List<Integer> numList = getNumList(10, () -> RandomUtil.randomInt() * 100);
 		for (Integer num : numList) {
 			System.out.println(num);
 		}
