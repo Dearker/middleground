@@ -24,4 +24,9 @@ spring:
     #该方式只适合日期格式为Date类型的，而且需要加8小时，LocalDateTime无效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  #是否开启bean覆盖功能
+  main:
+    allow-bean-definition-overriding: false
 
+#动态加载的文件相对路径
+relativePath: "config/test.properties"

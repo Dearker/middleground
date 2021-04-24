@@ -2,11 +2,11 @@ package com.hanyi.web.common.component;
 
 import com.hanyi.web.common.aware.ApplicationComponent;
 import com.hanyi.web.export.ExportComponent;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -19,13 +19,12 @@ import java.util.concurrent.ExecutorService;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BootstrapComponent implements CommandLineRunner {
 
-    @Resource
-    private ApplicationComponent applicationComponent;
+    private final ExportComponent exportComponent;
 
-    @Resource
-    private ExportComponent exportComponent;
+    private final ApplicationComponent applicationComponent;
 
     @Override
     public void run(String... args) throws Exception {

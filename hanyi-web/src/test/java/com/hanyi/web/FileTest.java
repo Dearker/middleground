@@ -1,14 +1,17 @@
 package com.hanyi.web;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.io.watch.SimpleWatcher;
+import cn.hutool.core.io.watch.WatchMonitor;
+import cn.hutool.setting.dialect.Props;
 import org.junit.Test;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -92,5 +95,73 @@ public class FileTest {
             System.out.println("文件不存在!");
         }
     }
+
+    /**
+     * 文件监听事件
+     */
+    @Test
+    public void fileListerTest() throws InterruptedException {
+        String relativeFileName = "config/test.properties";
+        File file = FileUtil.file(relativeFileName);
+
+        Props props = new Props(relativeFileName);
+        System.out.println(props);
+
+        //创建需要监听的事件类型
+        WatchMonitor watchMonitor = WatchMonitor.create(file, WatchMonitor.ENTRY_MODIFY);
+        SimpleWatcher simpleWatcher = new SimpleWatcher() {
+            @Override
+            public void onModify(WatchEvent<?> event, Path currentPath) {
+                // 事件发生源是相对路径
+                Path fileRelativePath = (Path) event.context();
+                //处理为绝对路径
+                Path filePath = currentPath.resolve(fileRelativePath);
+                //绝对路径
+                String absolutePath = filePath.toFile().getAbsolutePath();
+                if(absolutePath.endsWith(relativeFileName)){
+                    props.clear();
+                    props.load(ResourceUtil.getResourceObj(absolutePath));
+                    System.out.println(props);
+                    System.out.println("当前线程id：" + Thread.currentThread().getName());
+                }
+            }
+        };
+
+        watchMonitor.setWatcher(simpleWatcher).start();
+        System.out.println("外部线程id：" + Thread.currentThread().getName());
+        TimeUnit.HOURS.sleep(1);
+    }
+
+    @Test
+    public void loadPropsTest() throws IOException {
+        String fileName = "config/test.properties";
+        Props props = new Props(fileName);
+        System.out.println(props);
+
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        System.out.println(resourceAsStream);
+        Props properties = new Props();
+        properties.load(resourceAsStream);
+        System.out.println(properties);
+    }
+
+    /**
+     * 如果读取的文件不在resource的根路径下，则需要加上前缀，否则无法读取文件
+     */
+    @Test
+    public void toFileTest(){
+        String fileName = "config/test.properties";
+        File file = FileUtil.file(fileName);
+        System.out.println(file);
+        Path path = Paths.get(fileName);
+        System.out.println(path.toAbsolutePath());
+
+        String absolutePath = FileUtil.getAbsolutePath(fileName);
+        System.out.println(absolutePath);
+
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+        System.out.println(resourceAsStream);
+    }
+
 }
 

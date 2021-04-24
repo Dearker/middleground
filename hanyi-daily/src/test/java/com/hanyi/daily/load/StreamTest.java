@@ -299,6 +299,44 @@ public class StreamTest {
     }
 
     /**
+     * list转map并完成排序,map的key默认是根据hashCode值的大小进行排序，values是直接获取排序后键的值
+     * toMap()函数构建的map，value不能为null，否则会空指针
+     * <p>
+     * HashMap键或者值都可以null，只不过允许一个key为null，多个value为null，key相同覆盖先前的值
+     * TreeMap的value可以是null，（没有自定义比较器）key不能为null，自定义比较器后可以为null，
+     * 该比较器需要对null进行特殊处理。
+     */
+    @Test
+    public void toMapSortTest() {
+        int size = 10;
+        List<CostInfo> costInfoList = new ArrayList<>(size);
+        IntStream.range(0, size).forEach(s ->
+                costInfoList.add(new CostInfo(RandomUtil.randomInt(0, 100), null)));
+
+        //消除toMap()函数value为空的方式一：
+        Map<Integer, BigDecimal> bigDecimalMap = new HashMap<>(size);
+        costInfoList.forEach(s -> bigDecimalMap.put(s.getId(), s.getCost()));
+        System.out.println(bigDecimalMap);
+
+        //方式二：推荐方式一，方式二可能需要创建2个hashMap来添加合并最后的结果
+        Map<Integer, BigDecimal> hashMap = costInfoList.stream().collect(HashMap::new,
+                (n, v) -> n.put(v.getId(), v.getCost()), HashMap::putAll);
+        System.out.println(hashMap);
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(new Person(1,"哈哈哈"));
+        personList.add(new Person(3,"看看看"));
+        personList.add(new Person(5,"略略略"));
+        personList.add(new Person(2,"去去去"));
+        personList.add(new Person(4,"嗷嗷嗷"));
+
+        Map<Integer, String> personMap = personList.stream().collect(toMap(Person::getId, Person::getName));
+        System.out.println(personMap);
+        System.out.println(personMap.keySet());
+        System.out.println(personMap.values());
+    }
+
+    /**
      * 计算处理测试
      */
     @Test

@@ -69,6 +69,7 @@ public class ExcelController {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet();
+        sheet.setDefaultColumnWidth(12);
         Font titleFont = workbook.createFont();
         titleFont.setFontName("simsun");
         titleFont.setBold(true);

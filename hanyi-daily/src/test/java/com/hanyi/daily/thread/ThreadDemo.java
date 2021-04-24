@@ -100,6 +100,50 @@ public class ThreadDemo {
         System.out.println("优化后的数据：" + longMap);
     }
 
+    @Test
+    public void forkJoinPoolTest() {
+        TimeInterval timer = DateUtil.timer();
+        ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+
+        List<Callable<Integer>> callableList = new ArrayList<>();
+        IntStream.rangeClosed(1, 5).forEach(s ->
+                callableList.add(() -> {
+                    TimeUnit.SECONDS.sleep(1);
+                    return s;
+                }));
+
+        List<Future<Integer>> futureList = forkJoinPool.invokeAll(callableList);
+        Integer reduce = futureList.stream().map(integerFuture -> {
+            int result = 0;
+            try {
+                result = integerFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                System.out.println(e);
+            }
+            return result;
+        }).reduce(0, Integer::sum);
+
+        System.out.println("获取的总数" + reduce);
+        System.out.println("执行耗时：" + timer.intervalMs());
+    }
+
+    @Test
+    public void forkJoinTaskTest() {
+        TimeInterval timer = DateUtil.timer();
+        ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+
+        List<ForkJoinTask<Integer>> forkJoinTaskList = new ArrayList<>();
+        IntStream.rangeClosed(1, 5).forEach(s ->
+                forkJoinTaskList.add(forkJoinPool.submit(() -> {
+                    TimeUnit.SECONDS.sleep(1);
+                    return s;
+                })));
+
+        Integer reduce = forkJoinTaskList.stream().map(ForkJoinTask::join).reduce(0, Integer::sum);
+        System.out.println("获取的总数" + reduce);
+        System.out.println("执行耗时：" + timer.intervalMs());
+    }
+
     /**
      * 创建线程池执行任务
      *
@@ -182,7 +226,6 @@ public class ThreadDemo {
      */
     @Test
     public void multithreadedParallelStream() {
-
         TimeInterval timer = DateUtil.timer();
 
         int length = 5;
@@ -244,7 +287,6 @@ public class ThreadDemo {
     @Test
     public void scheduledExecutorServiceTest() throws InterruptedException {
         TimeInterval timer = DateUtil.timer();
-
         AtomicInteger atomicInteger = new AtomicInteger(0);
 
         ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(3, r -> {
@@ -318,7 +360,6 @@ public class ThreadDemo {
      */
     @Test
     public void completableFutureAsyncTest() throws ExecutionException, InterruptedException {
-
         System.out.println("main...start");
 
         CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
@@ -347,7 +388,6 @@ public class ThreadDemo {
      */
     @Test
     public void CompletableFutureHandleTest() throws ExecutionException, InterruptedException {
-
         CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
             return 10 / 0;
@@ -374,7 +414,6 @@ public class ThreadDemo {
      */
     @Test
     public void completableFutureThenTest() throws Exception {
-
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
             return 10 / 4;
@@ -394,7 +433,6 @@ public class ThreadDemo {
      */
     @Test
     public void completableFutureBothTest() throws Exception {
-
         TimeInterval timer = DateUtil.timer();
         CompletableFuture<Integer> future1 = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
@@ -434,7 +472,6 @@ public class ThreadDemo {
      */
     @Test
     public void completableFutureEitherTest() throws ExecutionException, InterruptedException {
-
         CompletableFuture<Object> future1 = CompletableFuture.supplyAsync(() -> {
             System.out.println("当前线程号 -> " + Thread.currentThread().getId());
             return 10 / 4;

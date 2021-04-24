@@ -96,7 +96,6 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public List<String> createFile(String fileName) {
-
         Path path = Paths.get(fileName);
 
         if (path.toFile().exists()) {

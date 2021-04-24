@@ -1,21 +1,39 @@
 package com.hanyi.web;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
+import com.hanyi.web.bo.Car;
+import com.hanyi.web.bo.Student;
 import com.hanyi.web.bo.User;
+import com.hanyi.web.common.annotation.AutowiredExt;
+import com.hanyi.web.service.impl.FunctionServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.EncodedResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -29,6 +47,12 @@ import java.util.Map;
 @SpringBootTest
 public class ApplicationTest {
 
+    /**
+     * 资源加载对象
+     */
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Autowired
     private BeanFactory beanFactory;
 
@@ -37,6 +61,21 @@ public class ApplicationTest {
 
     @Autowired
     private DefaultListableBeanFactory defaultListableBeanFactory;
+
+    @AutowiredExt
+    private FunctionServiceImpl functionServiceImpl;
+
+    @AutowiredExt(required = false)
+    private Car car;
+
+    @Value("classpath:/application.yml")
+    private Resource defaultYmlResource;
+
+    @Value("classpath*:*.yml")
+    private Resource[] ymlResources;
+
+    @Value("${user.dir}")
+    private String currentProjectRootPath;
 
     /**
      * applicationContext和beanFactory都是通过组合模式将defaultListableBeanFactory对象作为具体操作IOC的方式
@@ -52,6 +91,18 @@ public class ApplicationTest {
         //DefaultListableBeanFactory
         System.out.println(applicationContext.getAutowireCapableBeanFactory());
         System.out.println(defaultListableBeanFactory);
+    }
+
+    /**
+     * resourceLoader资源加载对象和applicationContext是同一个对象，
+     * 具体实现都是GenericWebApplicationContext
+     */
+    @Test
+    public void resourceLoaderTest(){
+        //具体实现为GenericWebApplicationContext
+        System.out.println(resourceLoader);
+        //true
+        System.out.println(resourceLoader == applicationContext);;
     }
 
     /**
@@ -110,6 +161,79 @@ public class ApplicationTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 将@AutowiredExt注解中的require设置成false则表示不是必须加装的组件，找不到对象时不会报错
+     */
+    @Test
+    public void annotationExtTest() {
+        System.out.println(functionServiceImpl);
+        System.out.println(car);
+
+        Student student = applicationContext.getBean("student", Student.class);
+        System.out.println(student);
+
+        User user = applicationContext.getBean("user", User.class);
+        System.out.println(user);
+    }
+
+    /**
+     * 不同的线程中会创建不同的对象，相同的线程中使用的是同一个对象
+     */
+    @Test
+    public void threadScopeTest() {
+        ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(3, 3);
+        IntStream.range(0, 3).forEach(s ->
+                threadPoolExecutor.execute(() -> {
+                    Student student = applicationContext.getBean("student", Student.class);
+                    System.out.printf("[Thread id :%d] user = %s%n", Thread.currentThread().getId(), student);
+                }));
+
+        ThreadUtil.sleep(1000);
+        IntStream.range(0, 3).forEach(s -> {
+            Student student = applicationContext.getBean("student", Student.class);
+            System.out.println("当前对象：" + student);
+        });
+    }
+
+    @Test
+    public void annotatedBeanDefinitionReaderTest() {
+        AnnotatedBeanDefinitionReader beanDefinitionReader = new AnnotatedBeanDefinitionReader(defaultListableBeanFactory);
+        beanDefinitionReader.register(Car.class);
+
+        Car bean = defaultListableBeanFactory.getBean(Car.class);
+        System.out.println("获取的bean对象：" + bean);
+    }
+
+    /**
+     * @value 注解资源注入,获取资源集合只能使用数组，使用集合获取会报错
+     */
+    @Test
+    public void valueAnnotationTest() {
+        System.out.println("当前目录地址：" + currentProjectRootPath);
+        System.out.println("读取指定资源内容" + this.getContent(defaultYmlResource));
+
+        System.out.println("---------------------");
+        //通过匹配器的方式查询所有的文件并输出
+        Stream.of(ymlResources).map(this::getContent).forEach(System.out::println);
+    }
+
+    /**
+     * 将资源对象转换成字符串
+     *
+     * @param resource 资源对象
+     * @return 转换后的字符串
+     */
+    String getContent(Resource resource) {
+        EncodedResource encodedResource = new EncodedResource(resource, CharsetUtil.UTF_8);
+        // 字符输入流
+        try (Reader reader = encodedResource.getReader()) {
+            return IoUtil.read(reader);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        return StrUtil.EMPTY;
     }
 
 }
