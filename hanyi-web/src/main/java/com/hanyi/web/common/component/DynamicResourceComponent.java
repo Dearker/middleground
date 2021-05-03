@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * <p>
- * 动态加载资源，该功能在jar包中修改文件，无法触发该事件，有待考察
+ * 动态加载资源，该功能在jar包中修改文件，无法触发该事件
  * </p>
  *
  * @author wenchangwei
@@ -83,7 +83,7 @@ public class DynamicResourceComponent implements CommandLineRunner {
         objectMap.put("resourcePath", ResourceUtil.getResourceObj(relativePath).getUrl());
         Resource resource = resolver.getResource(relativePath);
         try {
-            objectMap.put("filePath", DateUtil.date(resource.lastModified()));
+            objectMap.put("lastModified", DateUtil.date(resource.lastModified()));
             objectMap.put("isFile", resource.isFile());
             objectMap.put("url", resource.getURI());
             objectMap.put("urL", resource.getURL());
@@ -98,9 +98,7 @@ public class DynamicResourceComponent implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //不能通过构造器加载资源，会无法找到文件路径
         cn.hutool.core.io.resource.Resource resourceObj = ResourceUtil.getResourceObj(relativePath);
-        log.info("当前获取的路径：" + resourceObj.getUrl());
         props.load(resourceObj);
-        //props.load(resolver.getResource(relativePath).getInputStream());
 
         SimpleWatcher simpleWatcher = new SimpleWatcher() {
             @SneakyThrows

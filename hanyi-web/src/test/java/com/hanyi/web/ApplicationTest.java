@@ -5,9 +5,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import com.hanyi.web.bo.Car;
-import com.hanyi.web.bo.Student;
-import com.hanyi.web.bo.User;
+import com.hanyi.web.bo.*;
 import com.hanyi.web.common.annotation.AutowiredExt;
 import com.hanyi.web.service.impl.FunctionServiceImpl;
 import org.junit.Test;
@@ -22,6 +20,7 @@ import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -98,11 +97,12 @@ public class ApplicationTest {
      * 具体实现都是GenericWebApplicationContext
      */
     @Test
-    public void resourceLoaderTest(){
+    public void resourceLoaderTest() {
         //具体实现为GenericWebApplicationContext
         System.out.println(resourceLoader);
         //true
-        System.out.println(resourceLoader == applicationContext);;
+        System.out.println(resourceLoader == applicationContext);
+        ;
     }
 
     /**
@@ -207,7 +207,7 @@ public class ApplicationTest {
     }
 
     /**
-     * @value 注解资源注入,获取资源集合只能使用数组，使用集合获取会报错
+     * @value 注解资源注入, 获取资源集合只能使用数组，使用集合获取会报错
      */
     @Test
     public void valueAnnotationTest() {
@@ -234,6 +234,18 @@ public class ApplicationTest {
             System.out.println(e.toString());
         }
         return StrUtil.EMPTY;
+    }
+
+    /**
+     * 事件发布测试，不同的事件监听只会处理对应的事件类型，事件发送时，事件监听会监听当前事件对象以及其子类的事件内容
+     */
+    @Test
+    public void publishEventTest() {
+        applicationContext.publishEvent(new WeCatEvent(this, "柯基"));
+        applicationContext.publishEvent(new EmailEvent(this, "哈士奇"));
+        applicationContext.publishEvent(new ApplicationEvent("柴犬一号") {
+            private static final long serialVersionUID = -8790439947553341449L;
+        });
     }
 
 }

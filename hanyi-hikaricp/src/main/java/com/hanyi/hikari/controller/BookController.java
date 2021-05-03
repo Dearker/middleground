@@ -68,4 +68,15 @@ public class BookController {
         return bookService.findBookListByCondition(bookQueryParam);
     }
 
+    /**
+     * 分页查询类型数据
+     *
+     * @param bookQueryPageParam 查询条件
+     * @return 返回分页结果
+     */
+    @PostMapping("/pageType")
+    public BookPageVo findBookByPageType(@RequestBody BookQueryPageParam bookQueryPageParam) {
+        return bookService.selectBookPage(bookQueryPageParam);
+    }
+
 }

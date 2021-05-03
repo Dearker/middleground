@@ -26,6 +26,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.hanyi.daily.common.enums.CodeEnum;
 import com.hanyi.daily.common.enums.IntEnum;
+import com.hanyi.daily.common.event.ExtApplicationEvent;
 import com.hanyi.daily.pojo.PersonInfo;
 import com.hanyi.daily.pojo.User;
 import com.hanyi.daily.property.Book;
@@ -338,6 +339,10 @@ public class LoaderTest {
             Type list = TypeUtil.getFieldType(PersonDesc.class, s.getName());
             System.out.println(list.getTypeName() + " || " + s.getName());
         });
+
+        //获取具体化参数的类型
+        Type typeArgument = TypeUtil.getTypeArgument(ExtApplicationEvent.class);
+        System.out.println(typeArgument);
     }
 
     /**
@@ -494,7 +499,7 @@ public class LoaderTest {
      * Objects.toString()和String.valueOf()效果一样，如果传入的对象为null，则输出的为"null"字符串
      */
     @Test
-    public void stringTest(){
+    public void stringTest() {
         Object object = null;
         String valueOf = String.valueOf(object);
         System.out.println(valueOf);
@@ -563,10 +568,24 @@ public class LoaderTest {
      * 获取当前系统语言环境 消除判断
      */
     @Test
-    public void languageTest(){
+    public void languageTest() {
         Locale locale = Locale.getDefault();
         System.out.println(locale.getLanguage());
         System.out.println(locale.getCountry());
+    }
+
+    /**
+     * set集合中添加元素，如果已经存在元素则返回false，表示添加失败，remove方法类似，如果删除的元素不存在则返回false
+     */
+    @Test
+    public void addSetTest() {
+        Set<Integer> integerSet = new HashSet<>();
+
+        System.out.println(integerSet.add(1));
+        System.out.println(integerSet.add(1));
+
+        System.out.println(integerSet.remove(1));
+        System.out.println(integerSet.remove(2));
     }
 
 }

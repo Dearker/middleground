@@ -20,7 +20,6 @@ import java.util.List;
  * @Author: weiwenchang
  * @Description: java类作用描述
  * @CreateDate: 2020-02-04 15:40
- * @Aersion: 1.0
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -44,7 +43,6 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Bean
     public FilterRegistrationBean<HandlerFilter> thirdFilter() {
-
         FilterRegistrationBean<HandlerFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(handlerFilter);
         List<String> urls = new ArrayList<>(Byte.BYTES);

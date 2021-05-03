@@ -55,4 +55,12 @@ public interface BookService extends IService<Book> {
      * @return 返回书籍集合
      */
     List<Book> findBookListByCondition(BookQueryParam bookQueryParam);
+
+    /**
+     * 分页查询类型数据
+     *
+     * @param bookQueryPageParam 查询条件
+     * @return 返回分页结果
+     */
+    BookPageVo selectBookPage(BookQueryPageParam bookQueryPageParam);
 }

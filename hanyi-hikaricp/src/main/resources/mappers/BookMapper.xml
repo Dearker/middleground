@@ -11,4 +11,8 @@
         </foreach>
     </insert>
 
+    <select id="selectBookPage" resultType="com.hanyi.hikari.pojo.Book">
+        select * from tb_book where book_type = #{bookType}
+    </select>
+
 </mapper>

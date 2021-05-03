@@ -21,6 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BookPageVo implements Serializable {
 
+    private static final long serialVersionUID = -5337475767409238689L;
+
     /**
      * 总数
      */

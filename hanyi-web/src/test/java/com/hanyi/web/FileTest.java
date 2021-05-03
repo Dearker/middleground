@@ -118,7 +118,7 @@ public class FileTest {
                 Path filePath = currentPath.resolve(fileRelativePath);
                 //绝对路径
                 String absolutePath = filePath.toFile().getAbsolutePath();
-                if(absolutePath.endsWith(relativeFileName)){
+                if (absolutePath.endsWith(relativeFileName)) {
                     props.clear();
                     props.load(ResourceUtil.getResourceObj(absolutePath));
                     System.out.println(props);
@@ -149,7 +149,7 @@ public class FileTest {
      * 如果读取的文件不在resource的根路径下，则需要加上前缀，否则无法读取文件
      */
     @Test
-    public void toFileTest(){
+    public void toFileTest() {
         String fileName = "config/test.properties";
         File file = FileUtil.file(fileName);
         System.out.println(file);
@@ -161,6 +161,24 @@ public class FileTest {
 
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
         System.out.println(resourceAsStream);
+    }
+
+    /**
+     * 使用缓冲区读写文件
+     */
+    @Test
+    public void bufferFileTest() {
+        long begin = System.currentTimeMillis();
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream("C:/456.png"));
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("C:/789.png"))) {
+            byte[] bytes = new byte[1024];
+            int i;
+            while ((i = bufferedInputStream.read(bytes)) != -1) {
+                bufferedOutputStream.write(bytes, 0, i);
+            }
+        } catch (IOException ignore) {
+        }
+        System.out.println("总共耗时ms" + (System.currentTimeMillis() - begin));
     }
 
 }

@@ -76,7 +76,6 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
      */
     @Override
     public QueryStats queryThreadCount() {
-
         TimeInterval timer = DateUtil.timer();
 
         List<QueryCountTask> queryCountTaskList = new ArrayList<>();
@@ -138,6 +137,21 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
                         .eq(Book::getBookTotal, bookQueryParam.getBookTitle())));
 
         return baseMapper.selectList(lambdaQueryWrapper);
+    }
+
+    /**
+     * 分页查询类型数据
+     *
+     * @param bookQueryPageParam 查询条件
+     * @return 返回分页结果
+     */
+    @Override
+    public BookPageVo selectBookPage(BookQueryPageParam bookQueryPageParam) {
+        //构建分页查询对象
+        Page<Book> queryPage = new Page<>(bookQueryPageParam.getCurrentPage(), bookQueryPageParam.getPageSize());
+        IPage<Book> bookPage = baseMapper.selectBookPage(queryPage, bookQueryPageParam.getBookType());
+
+        return new BookPageVo(bookPage.getTotal(), bookPage.getRecords());
     }
 
 }
