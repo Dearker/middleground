@@ -15,6 +15,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class BizException extends RuntimeException{
 
+    private static final long serialVersionUID = 8904430730584545511L;
+
     /**
      * 错误信息
      */

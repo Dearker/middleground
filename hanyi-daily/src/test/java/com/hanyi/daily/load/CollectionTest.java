@@ -453,7 +453,7 @@ public class CollectionTest {
         System.out.println(stringIntegerMap);
 
         stringIntegerMap.clear();
-        studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(), (a,b)-> b));
+        studentList.forEach(s -> stringIntegerMap.merge(s.getName(), s.getAge(), (a, b) -> b));
         System.out.println("当key存在时，则获取新的值：" + stringIntegerMap);
 
         stringIntegerMap.clear();
@@ -468,6 +468,17 @@ public class CollectionTest {
         collectMap.forEach((k, v) -> nameMap.put(k, v.getSum()));
 
         System.out.println(nameMap);
+
+        Map<String, List<Student>> listMap = new HashMap<>();
+        studentList.forEach(s -> listMap.merge(s.getName(), new ArrayList<>(Collections.singletonList(s)), (a, b) -> {
+            a.addAll(b);
+            return a;
+        }));
+        System.out.println("根据name属性进行分组：" + listMap);
+
+        Map<String, Integer> countMap = new HashMap<>();
+        studentList.forEach(s -> countMap.merge(s.getName(), 1, Integer::sum));
+        System.out.println("根据name属性进行统计：" + countMap);
     }
 
     /**

@@ -178,6 +178,9 @@ public class NumberTest {
         BigDecimal bigDecimal = NumberUtil.div(BigDecimal.valueOf(intervalMs), BigDecimal.valueOf(1000), 3, RoundingMode.FLOOR);
         System.out.println(bigDecimal);
         System.out.println(intervalMs);
+
+        //如果确定计算的方式都是long类型，则可直接使用，负责需要使用对应的字符串构造方法
+        System.out.println(BigDecimal.valueOf(12).multiply(BigDecimal.valueOf(15.79)));
     }
 
     /**

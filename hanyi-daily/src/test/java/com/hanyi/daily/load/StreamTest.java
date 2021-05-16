@@ -142,8 +142,8 @@ public class StreamTest {
     @Test
     public void mapTest() {
         List<CostInfo> costInfoList = new ArrayList<>();
-        costInfoList.add(new CostInfo(new BigDecimal("12.02")));
-        costInfoList.add(new CostInfo(new BigDecimal("32.01")));
+        costInfoList.add(new CostInfo(BigDecimal.valueOf(12.02)));
+        costInfoList.add(new CostInfo(BigDecimal.valueOf(32.04)));
 
         List<String> collect = costInfoList.stream().map(CostInfo::getCost).map(BigDecimal::toString).collect(Collectors.toList());
         System.out.println(collect);
@@ -324,16 +324,49 @@ public class StreamTest {
         System.out.println(hashMap);
 
         List<Person> personList = new ArrayList<>();
-        personList.add(new Person(1,"哈哈哈"));
-        personList.add(new Person(3,"看看看"));
-        personList.add(new Person(5,"略略略"));
-        personList.add(new Person(2,"去去去"));
-        personList.add(new Person(4,"嗷嗷嗷"));
+        personList.add(new Person(1, "哈哈哈"));
+        personList.add(new Person(3, "看看看"));
+        personList.add(new Person(5, "略略略"));
+        personList.add(new Person(2, "去去去"));
+        personList.add(new Person(4, "嗷嗷嗷"));
 
         Map<Integer, String> personMap = personList.stream().collect(toMap(Person::getId, Person::getName));
         System.out.println(personMap);
         System.out.println(personMap.keySet());
         System.out.println(personMap.values());
+    }
+
+    /**
+     * map集合过滤
+     */
+    @Test
+    public void mapFilterTest() {
+        Map<Integer, String> stringMap = new HashMap<>();
+        stringMap.put(1, "哈哈哈");
+        stringMap.put(2, "哈哈哈222");
+        stringMap.put(3, "哈哈哈333");
+        stringMap.put(4, "哈哈哈444");
+
+        //该方式不会修改原有的map，并创建一个新的map集合
+        Map<Integer, String> filterMap = stringMap.keySet().stream().filter(s -> !s.equals(1))
+                .collect(toMap(Function.identity(), stringMap::get));
+
+        System.out.println("过滤后的map：" + filterMap);
+        System.out.println(stringMap);
+
+        //以下两种方式直接修改map集合本身
+        stringMap.keySet().removeIf(s -> s.equals(1));
+        System.out.println(stringMap);
+
+        stringMap.values().removeIf(s -> s.equals("哈哈哈222"));
+        System.out.println(stringMap);
+
+        // map.forEach中不能直接或间接调用map.remove方法，会报错
+        List<Integer> integerList = Arrays.asList(1, 2, 3);
+        //调用computeIfPresent和compute方法将key对应的value设置为null都会自动删除对应的元素
+        integerList.forEach(s -> stringMap.computeIfPresent(s, (k, v) -> v = null));
+
+        System.out.println(stringMap);
     }
 
     /**

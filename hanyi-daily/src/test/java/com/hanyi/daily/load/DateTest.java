@@ -10,10 +10,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -118,6 +115,13 @@ public class DateTest {
 
         System.out.println("午夜时间：" + LocalTime.MIDNIGHT);
         System.out.println("中午时间：" + LocalTime.NOON);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        LocalTime of = LocalTime.of(9, 0);
+        System.out.println(of);
+        System.out.println(of.format(dateTimeFormatter));
+
+        System.out.println(of.plusHours(5).format(dateTimeFormatter));
     }
 
     /**
@@ -264,7 +268,7 @@ public class DateTest {
 
     /**
      * ZonedDateTime=LocalDateTime+ZoneId，具有时区属性
-     * LocalDateTime 只能认为是一个时间表示，ZonedDateTime 才是一个有效的时间
+     * LocalDateTime 只能认为是一个时间表示，ZonedDateTime 才是一个有效的时间，相同的时间参数，不同的地区返回的值不同
      */
     @Test
     public void zonedDateTimeTest() {
@@ -303,6 +307,9 @@ public class DateTest {
             }
         }
         stringList.forEach(System.out::println);
+        System.out.println("-------------------");
+        List<DateTime> dateTimes = DateUtil.rangeToList(dateTime1, dateTime, DateField.MONTH);
+        dateTimes.forEach(System.out::println);
     }
 
     /**
