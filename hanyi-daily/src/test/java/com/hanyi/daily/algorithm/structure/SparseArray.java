@@ -49,7 +49,6 @@ public class SparseArray {
      * @param sparseArray 稀疏数组
      */
     private void buildChessArray(int[][] sparseArray) {
-
         int[][] chessArray = new int[sparseArray[0][0]][sparseArray[0][1]];
 
         for (int i = 1; i < sparseArray.length; i++) {

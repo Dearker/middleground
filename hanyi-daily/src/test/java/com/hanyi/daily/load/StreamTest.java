@@ -361,6 +361,9 @@ public class StreamTest {
         stringMap.values().removeIf(s -> s.equals("哈哈哈222"));
         System.out.println(stringMap);
 
+        stringMap.keySet().removeIf(s -> s.equals(4) && stringMap.get(s).equals("哈哈哈444"));
+        System.out.println("测试4: " + stringMap);
+
         // map.forEach中不能直接或间接调用map.remove方法，会报错
         List<Integer> integerList = Arrays.asList(1, 2, 3);
         //调用computeIfPresent和compute方法将key对应的value设置为null都会自动删除对应的元素

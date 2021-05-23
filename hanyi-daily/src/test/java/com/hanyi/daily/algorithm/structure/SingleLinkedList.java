@@ -20,15 +20,20 @@ public class SingleLinkedList {
 
     @Test
     public void demoTest() {
-
-        SingleNode singleNode = new SingleNode();
+        SingleNode singleNode = new SingleNode(0,"");
         singleNode.add(new SingleNode(1, "1"));
         singleNode.add(new SingleNode(2, "2"));
         singleNode.add(new SingleNode(3, "3"));
 
         singleNode.list();
+        System.out.println("-----------------");
 
-        singleNode.update(new SingleNode(2,"4"));
+        singleNode.update(new SingleNode(2, "4"));
+        singleNode.delete(2);
+        singleNode.list();
+
+        System.out.println("-----------------");
+        singleNode.reverseList(singleNode);
         singleNode.list();
     }
 
@@ -96,17 +101,54 @@ public class SingleLinkedList {
                     break;
                 }
                 if (temp.id.equals(singleNode.id)) {
+                    temp.name = singleNode.getName();
                     flag = true;
                     break;
                 }
                 temp = temp.next;
             }
 
-            if (flag) {
-                temp.next = temp.next.next;
-            } else {
+            if (!flag) {
                 System.out.println("要修改的数据不存在");
             }
+        }
+
+        public void delete(int id) {
+            SingleNode temp = head.next;
+            boolean flag = false;
+            while (true) {
+                if (Objects.isNull(temp)) {
+                    break;
+                }
+                if (temp.next.id.equals(id)) {
+                    temp.next = temp.next.next;
+                    flag = true;
+                    break;
+                }
+                temp = temp.next;
+            }
+
+            if (!flag) {
+                System.out.println("要修改的数据不存在");
+            }
+        }
+
+        public void reverseList(SingleNode singleNode){
+            if(singleNode.next == null || singleNode.next.next == null){
+                return;
+            }
+
+            SingleNode cur = singleNode.next;
+            SingleNode next;
+
+            SingleNode reverseHead = new SingleNode();
+            while (cur != null){
+                next = cur.next;
+                cur.next = reverseHead.next;
+                reverseHead.next = cur;
+                cur = next;
+            }
+            singleNode.next = reverseHead.next;
         }
 
         @Override

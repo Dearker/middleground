@@ -25,9 +25,7 @@ public class CircleArrayQueue {
 
     @Test
     public void queueTest() {
-
         CircleArray circleArray = new CircleArray(3);
-
         for (int i = 0; i < 6; i++) {
             circleArray.addQueue(i);
             while (true) {
