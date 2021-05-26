@@ -416,7 +416,7 @@ public class DateTest {
      * 通过 Period.between 得到了两个 LocalDate 的差，返回的是两个日期差几年零几月零几天。
      * 如果希望得知两个日期之间差几天，直接调用 Period 的 getDays() 方法得到的只是最后的“零几天”，而不是算总的间隔天数。
      * <p>
-     * 使用 ChronoUnit.DAYS.between 解决
+     * 使用 ChronoUnit.DAYS.between 或者 jdk8的时间API的util()方法解决
      */
     @Test
     public void periodTest() {
@@ -425,6 +425,10 @@ public class DateTest {
         Period between = Period.between(specifyDate, today);
         System.out.println(between);
         System.out.println(between.getDays());
+        //相差的月份数，不是总月数，输出的值为2
+        System.out.println(between.getMonths());
+        //相差的年数，值为1
+        System.out.println(between.getYears());
         //localDate不能使用Duration
         System.out.println(ChronoUnit.DAYS.between(specifyDate, today));
 
