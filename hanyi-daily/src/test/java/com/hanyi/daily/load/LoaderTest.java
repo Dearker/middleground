@@ -510,6 +510,19 @@ public class LoaderTest {
         System.out.println(string);
     }
 
+    /**
+     * insert(): 在索引的前面添加字符串
+     */
+    @Test
+    public void stringInsertTest(){
+        StringBuilder stringBuilder = new StringBuilder("BCD");
+        stringBuilder.insert(0,"A");
+        System.out.println(stringBuilder);
+    }
+
+    /**
+     * setLength(): 用于清空stringBuilder中的内容
+     */
     @Test
     public void stringBuilderTest() {
         String source = "a:1,b:2,c:3,d:4";

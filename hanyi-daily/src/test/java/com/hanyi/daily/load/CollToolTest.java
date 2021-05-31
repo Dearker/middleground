@@ -20,6 +20,14 @@ import java.util.stream.Collectors;
 public class CollToolTest {
 
     @Test
+    public void createCollTest(){
+        List<Integer> integerList = CollUtil.newArrayList(1, 2, 3);
+        System.out.println(integerList);
+        Set<Integer> integerSet = CollUtil.newHashSet(1, 2, 3, 1);
+        System.out.println(integerSet);
+    }
+
+    @Test
     public void CollUtilTest() {
         List<Person> personList = new ArrayList<>();
         personList.add(new Person(1, "柴犬"));

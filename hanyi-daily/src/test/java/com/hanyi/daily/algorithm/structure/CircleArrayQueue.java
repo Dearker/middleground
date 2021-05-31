@@ -4,7 +4,7 @@ import org.junit.Test;
 
 /**
  * <p>
- *
+ * 环形数组队列
  * </p>
  *
  * @author wenchangwei

@@ -343,6 +343,10 @@ public class CollectionTest {
         }
     }
 
+    /**
+     * retainAll(): 过滤出两个元素的交集，会直接修改原集合
+     * replaceAll(): 替换所有符合条件的数据
+     */
     @Test
     public void listTest() {
         List<Integer> integerList = new ArrayList<>();
@@ -352,6 +356,7 @@ public class CollectionTest {
         integerList.add(3);
 
         integerList.retainAll(Arrays.asList(1, 3));
+        System.out.println(integerList);
         integerList.removeIf(s -> s.equals(1));
         integerList.removeIf(Objects::isNull);
 

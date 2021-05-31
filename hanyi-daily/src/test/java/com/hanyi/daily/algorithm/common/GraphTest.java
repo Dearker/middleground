@@ -1,8 +1,11 @@
-package com.hanyi.daily.algorithm.structure;
+package com.hanyi.daily.algorithm.common;
 
+import com.hanyi.daily.algorithm.pojo.AllLine;
 import com.hanyi.daily.algorithm.pojo.Graph;
+import javafx.util.Pair;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -39,5 +42,13 @@ public class GraphTest {
         graph.bfs();
     }
 
+    @Test
+    public void lineTest(){
+        List<String> stringList = AllLine.findResult('C', 'C');
+        System.out.println(stringList);
+
+        Pair<Integer, List<String>> integerListPair = AllLine.findShortLine('C', 'C');
+        System.out.println(integerListPair);
+    }
 
 }
