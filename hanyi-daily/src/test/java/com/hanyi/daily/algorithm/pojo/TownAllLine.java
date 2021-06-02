@@ -22,7 +22,7 @@ public class TownAllLine {
     /**
      * 所有节点对应路线集合
      */
-    private static Map<Character, List<Character>> lineMap;
+    private static final Map<Character, List<Character>> lineMap;
 
     static {
         //初始化数据

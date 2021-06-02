@@ -16,12 +16,12 @@ public class MaxLineParam {
     /**
      * 起点
      */
-    private Character start;
+    private String start;
 
     /**
      * 终点
      */
-    private Character end;
+    private String end;
 
     /**
      * 长度

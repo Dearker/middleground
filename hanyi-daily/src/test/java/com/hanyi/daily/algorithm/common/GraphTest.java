@@ -1,6 +1,6 @@
 package com.hanyi.daily.algorithm.common;
 
-import com.hanyi.daily.algorithm.pojo.AllLine;
+import com.hanyi.daily.algorithm.service.AllLineService;
 import com.hanyi.daily.algorithm.pojo.Graph;
 import com.hanyi.daily.algorithm.pojo.MaxLineParam;
 import javafx.util.Pair;
@@ -45,30 +45,43 @@ public class GraphTest {
 
     @Test
     public void lineTest(){
-        List<String> stringList = AllLine.findResult('C', 'C');
+        List<String> stringList = AllLineService.findResult("C", "C");
         System.out.println(stringList);
 
-        Pair<Integer, List<String>> integerListPair = AllLine.findShortLine('C', 'C');
+        Pair<Integer, List<String>> integerListPair = AllLineService.findShortLine("C", "C");
         System.out.println(integerListPair);
     }
 
     @Test
     public void line6Test(){
-        AllLine.dfs("C", "C", 3);
-        System.out.println(AllLine.solution6(3, "C"));
+        System.out.println(AllLineService.solution6(3, "C","C"));
     }
 
     @Test
     public void line7Test(){
-        System.out.println(AllLine.solution7(4, "A", "C"));
-
+        System.out.println(AllLineService.solution7(4, "A", "C"));
     }
 
+    /**
+     * line10
+     */
     @Test
     public void maxLineTest(){
-        MaxLineParam maxLineParam = new MaxLineParam('C','C',0,30);
-        int maxDfs = AllLine.maxDfs(maxLineParam);
+        MaxLineParam maxLineParam = new MaxLineParam("C","C",0,30);
+        int maxDfs = AllLineService.maxDfs(maxLineParam);
         System.out.println(maxDfs);
+
+        System.out.println(AllLineService.solution10(30, "C", "C"));
+    }
+
+    /**
+     * 最短路径测试
+     */
+    @Test
+    public void shortLineTest(){
+        System.out.println(AllLineService.solution8_9("A", "C"));
+        System.out.println("------------------------");
+        System.out.println(AllLineService.solution8_9("B", "B"));
     }
 
 }

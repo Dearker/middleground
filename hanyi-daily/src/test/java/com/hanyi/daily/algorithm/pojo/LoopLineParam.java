@@ -4,19 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * <p>
- * 路线参数
+ *
  * </p>
  *
  * @author wenchangwei
- * @since 2021/5/31 9:45 下午
+ * @since 2021/6/1 9:21 下午
  */
 @Data
 @AllArgsConstructor
-public class LineParam {
+public class LoopLineParam {
 
     /**
      * 开始节点索引
@@ -29,22 +30,23 @@ public class LineParam {
     private int endIndex;
 
     /**
-     * 用于在dfs中记录访问过的顶点信息
+     * 路线总长度
      */
-    private int[] visited;
+    private int lineTotal;
 
     /**
      * 存储每条可能的路径集合
      */
-    private List<String> pathList;
+    private LinkedList<Character> pathList;
 
     /**
      * 所有可能路线集合
      */
-    private List<String> allLineList;
+    private List<LinkedList<Character>> allLineList;
 
-    public LineParam(int startIndex, int endIndex, int[] visited) {
-        this(startIndex, endIndex, visited, new ArrayList<>(visited.length), new ArrayList<>(visited.length));
+    public LoopLineParam(int startIndex, int endIndex, int lineTotal) {
+        this(startIndex, endIndex, lineTotal, new LinkedList<>(), new ArrayList<>());
     }
+
 
 }
