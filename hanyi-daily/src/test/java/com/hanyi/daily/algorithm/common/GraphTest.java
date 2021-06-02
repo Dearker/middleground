@@ -2,6 +2,7 @@ package com.hanyi.daily.algorithm.common;
 
 import com.hanyi.daily.algorithm.pojo.AllLine;
 import com.hanyi.daily.algorithm.pojo.Graph;
+import com.hanyi.daily.algorithm.pojo.MaxLineParam;
 import javafx.util.Pair;
 import org.junit.Test;
 
@@ -49,6 +50,25 @@ public class GraphTest {
 
         Pair<Integer, List<String>> integerListPair = AllLine.findShortLine('C', 'C');
         System.out.println(integerListPair);
+    }
+
+    @Test
+    public void line6Test(){
+        AllLine.dfs("C", "C", 3);
+        System.out.println(AllLine.solution6(3, "C"));
+    }
+
+    @Test
+    public void line7Test(){
+        System.out.println(AllLine.solution7(4, "A", "C"));
+
+    }
+
+    @Test
+    public void maxLineTest(){
+        MaxLineParam maxLineParam = new MaxLineParam('C','C',0,30);
+        int maxDfs = AllLine.maxDfs(maxLineParam);
+        System.out.println(maxDfs);
     }
 
 }

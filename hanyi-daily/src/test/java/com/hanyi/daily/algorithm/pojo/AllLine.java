@@ -140,11 +140,10 @@ public class AllLine {
         visited[startIndex] = 1;
 
         List<Character> pathList = lineParam.getPathList();
-        List<String> allLineList = lineParam.getAllLineList();
         pathList.add(NODE_LIST.get(startIndex));
         if (startIndex == endIndex) {
             String nodeLine = pathList.stream().map(String::valueOf).collect(Collectors.joining(StrUtil.EMPTY));
-            allLineList.add(nodeLine);
+            lineParam.getAllLineList().add(nodeLine);
         } else {
             for (int i = 0; i < LINE_GRAPH.length; i++) {
                 if (visited[i] == 0 && i != startIndex && LINE_GRAPH[startIndex][i] == 1) {
@@ -155,6 +154,120 @@ public class AllLine {
         }
         pathList.remove(pathList.size() - 1);
         visited[startIndex] = 0;
+    }
+
+    /**
+     * 查询小于等于指定距离的路线总数
+     *
+     * @param maxLineParam 最大路线参数
+     * @return 返回路线总数
+     */
+    public static int maxDfs(MaxLineParam maxLineParam) {
+        Character start = maxLineParam.getStart();
+        Set<Character> nodeLineSet = NODE_LINE_MAP.getOrDefault(start, Collections.emptySet());
+
+        int weight = maxLineParam.getWeight();
+        int maxDistance = maxLineParam.getMaxDistance();
+        int routeTotal = 0;
+        for (Character character : nodeLineSet) {
+            String s = start.toString() + character.toString();
+            int length = LINE_LENGTH_MAP.getOrDefault(s, 0);
+
+            weight += length;
+            if (weight <= maxDistance) {
+                maxLineParam.setWeight(weight);
+                maxLineParam.setStart(character);
+                if (character.equals(maxLineParam.getEnd())) {
+                    routeTotal++;
+                    routeTotal += maxDfs(maxLineParam);
+                } else {
+                    routeTotal += maxDfs(maxLineParam);
+                    weight -= length;
+                }
+            } else {
+                weight -= length;
+            }
+        }
+        return routeTotal;
+    }
+
+    /**
+     * 解决问题6
+     *
+     * @param end
+     * @param path
+     * @param maxLength
+     */
+    public static void dfs(String end, String path, int maxLength) {
+        if (path.length() - 1 > maxLength) {
+            return;
+        }
+
+        if (path.length() > 1 && path.endsWith(end)) {
+            System.out.println(path + ", " + path.length());
+        }
+
+        char lastChar = path.charAt(path.length() - 1);
+        int lastNodeIndex = lastChar - 'A';
+
+        for (int i = 0; i < LINE_GRAPH[lastNodeIndex].length; i++) {
+            char newChar = (char) (i + 'A');
+            if (LINE_GRAPH[lastNodeIndex][i] > 0) {
+                dfs(end, path + newChar, maxLength);
+            }
+        }
+    }
+
+    /**
+     * https://www.itdaan.com/blog/2016/04/30/a853438cd534.html
+     *
+     * @param lmtStops
+     * @param roundCity
+     * @return
+     */
+    public static int solution6(int lmtStops, String roundCity) {
+        return logicForSolution6(lmtStops, roundCity, 0, roundCity.charAt(0), roundCity, 0);
+    }
+
+    private static int logicForSolution6(int lmtStops, String roundCtyNm, int count, Character nextNode, String logRoute, int result) {
+        count++;
+        if (count > lmtStops) {
+            return result;
+        }
+        Set<Character> nodeLineSet = NODE_LINE_MAP.getOrDefault(nextNode, Collections.emptySet());
+        for (Character character : nodeLineSet) {
+            String buffer = logRoute + character;
+            if (character.equals(roundCtyNm.charAt(0))) {
+//System.out.println(buffer);
+                result++;
+            } else {
+                result = logicForSolution6(lmtStops, roundCtyNm, count, character, buffer, result);
+            }
+        }
+        return result;
+    }
+
+    public static int solution7(int exactlyStops, String fromCity, String toCityNm) {
+        return logicForSolution7(exactlyStops, toCityNm, 0, fromCity.charAt(0), fromCity, 0);
+    }
+
+    private static int logicForSolution7(int exactlyStops, String toCityNm, int count, Character city, String logRoute, int result) {
+        count++;
+        if (count > exactlyStops) {
+            return result;
+        }
+        Set<Character> nodeLineSet = NODE_LINE_MAP.getOrDefault(city, Collections.emptySet());
+        for (Character character : nodeLineSet) {
+            String buffer = logRoute + character;
+            if (character.equals(toCityNm.charAt(0))) {
+                if (count == exactlyStops) {
+//System.out.println(buffer);
+                    result++;
+                }
+            }
+            result = logicForSolution7(exactlyStops, toCityNm, count, character, buffer, result);
+        }
+        return result;
     }
 
 }
