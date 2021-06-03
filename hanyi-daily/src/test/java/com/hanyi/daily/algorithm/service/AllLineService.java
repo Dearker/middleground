@@ -2,10 +2,7 @@ package com.hanyi.daily.algorithm.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.hanyi.daily.algorithm.pojo.LineParam;
-import com.hanyi.daily.algorithm.pojo.MaxDistanceParam;
-import com.hanyi.daily.algorithm.pojo.MaxLineParam;
-import com.hanyi.daily.algorithm.pojo.ShortLineParam;
+import com.hanyi.daily.algorithm.pojo.*;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -198,15 +195,33 @@ public class AllLineService {
     /**
      * https://www.itdaan.com/blog/2016/04/30/a853438cd534.html
      *
-     * @param lmtStops
-     * @param roundCity
-     * @return
+     * 该处理方式暂时不支持回路，即lmtStops的值变大时，路径集合中不会存在回路
+     *
+     * @param lmtStops 步长
+     * @param roundCity 开始节点
+     * @param endCity 结束节点
+     * @return 返回路线总数
      */
     public static int solution6(int lmtStops, String roundCity, String endCity) {
-        return logicForSolution6(lmtStops, endCity, 0, roundCity, roundCity, 0);
+        List<String> resultLineList = new ArrayList<>();
+        CustomizeLengthParam customizeLengthParam = CustomizeLengthParam.builder()
+                .stepLength(lmtStops)
+                .cycleCount(0)
+                .originNode(endCity)
+                .nextNode(roundCity)
+                .bufferLine(roundCity)
+                .resultLineList(resultLineList)
+                .build();
+
+        logicForSolution6(customizeLengthParam);
+        System.out.println(resultLineList);
+
+        //return logicForSolution6(lmtStops, endCity, 0, roundCity, roundCity, 0);
+        return resultLineList.size();
     }
 
-    private static int logicForSolution6(int lmtStops, String roundCtyNm, int count, String nextNode, String logRoute, int result) {
+    private static int logicForSolution6(int lmtStops, String roundCtyNm, int count,
+                                         String nextNode, String logRoute, int result) {
         count++;
         if (count > lmtStops) {
             return result;
@@ -224,35 +239,94 @@ public class AllLineService {
         return result;
     }
 
-    public static int solution7(int exactlyStops, String fromCity, String toCityNm) {
-        return logicForSolution7(exactlyStops, toCityNm, 0, fromCity, fromCity, 0);
+    private static void logicForSolution6(CustomizeLengthParam customizeLengthParam) {
+        int cycleCount = customizeLengthParam.getCycleCount();
+        cycleCount++;
+        if (cycleCount > customizeLengthParam.getStepLength()) {
+            return;
+        }
+
+        String bufferLine = customizeLengthParam.getBufferLine();
+        Set<String> nodeLineSet = NODE_LINE_MAP.getOrDefault(customizeLengthParam.getNextNode(), Collections.emptySet());
+        for (String nodeName : nodeLineSet) {
+            String buffer = bufferLine + nodeName;
+            if (nodeName.equals(customizeLengthParam.getOriginNode())) {
+                customizeLengthParam.getResultLineList().add(buffer);
+                System.out.println(buffer);
+            } else {
+                customizeLengthParam.setCycleCount(cycleCount).setNextNode(nodeName).setBufferLine(buffer);
+                logicForSolution6(customizeLengthParam);
+            }
+        }
     }
 
-    private static int logicForSolution7(int exactlyStops, String toCityNm, int count, String city, String logRoute, int result) {
+    public static int solution7(int exactlyStops, String fromCity, String toCityNm) {
+        List<String> resultLineList = new ArrayList<>();
+        CustomizeLengthParam customizeLengthParam = CustomizeLengthParam.builder()
+                .stepLength(exactlyStops)
+                .cycleCount(0)
+                .originNode(toCityNm)
+                .nextNode(fromCity)
+                .bufferLine(fromCity)
+                .resultLineList(resultLineList)
+                .build();
+
+        logicForSolution7(customizeLengthParam);
+        System.out.println(resultLineList);
+
+        //return logicForSolution7(exactlyStops, toCityNm, 0, fromCity, fromCity, 0);
+        return resultLineList.size();
+    }
+
+    private static int logicForSolution7(int exactlyStops, String toCityNm, int count,
+                                         String city, String logRoute, int result) {
         count++;
         if (count > exactlyStops) {
             return result;
         }
         Set<String> nodeLineSet = NODE_LINE_MAP.getOrDefault(city, Collections.emptySet());
-        for (String character : nodeLineSet) {
-            String buffer = logRoute + character;
-            if (character.equals(toCityNm)) {
+        for (String nodeName : nodeLineSet) {
+            String buffer = logRoute + nodeName;
+            if (nodeName.equals(toCityNm)) {
                 if (count == exactlyStops) {
-//System.out.println(buffer);
+                    //System.out.println(buffer);
                     result++;
                 }
             }
-            result = logicForSolution7(exactlyStops, toCityNm, count, character, buffer, result);
+            result = logicForSolution7(exactlyStops, toCityNm, count, nodeName, buffer, result);
         }
         return result;
+    }
+
+    private static void logicForSolution7(CustomizeLengthParam customizeLengthParam) {
+        int cycleCount = customizeLengthParam.getCycleCount();
+        cycleCount++;
+        int stepLength = customizeLengthParam.getStepLength();
+        if (cycleCount > stepLength) {
+            return;
+        }
+
+        String bufferLine = customizeLengthParam.getBufferLine();
+        Set<String> nodeLineSet = NODE_LINE_MAP.getOrDefault(customizeLengthParam.getNextNode(), Collections.emptySet());
+        for (String nodeName : nodeLineSet) {
+            String buffer = bufferLine + nodeName;
+            if (nodeName.equals(customizeLengthParam.getOriginNode())) {
+                if (cycleCount == stepLength) {
+                    //System.out.println(buffer);
+                    customizeLengthParam.getResultLineList().add(buffer);
+                }
+            }
+            customizeLengthParam.setNextNode(nodeName).setBufferLine(buffer).setCycleCount(cycleCount);
+            logicForSolution7(customizeLengthParam);
+        }
     }
 
     /**
      * 符合最大距离的所有路线总和
      *
      * @param maxDistance 最大距离
-     * @param fromCity 起点
-     * @param toCityNm 终点
+     * @param fromCity    起点
+     * @param toCityNm    终点
      * @return 返回路线总共
      */
     public static int solution10(int maxDistance, String fromCity, String toCityNm) {
@@ -266,9 +340,8 @@ public class AllLineService {
                 .build();
         logicForSolution10(maxDistanceParam);
 
-        System.out.println(maxDistanceParam.getResultLineList().size()+"---111111");
-
-        return logicForSolution10(maxDistance, toCityNm, 0, fromCity, fromCity, 0);
+        //return logicForSolution10(maxDistance, toCityNm, 0, fromCity, fromCity, 0);
+        return maxDistanceParam.getResultLineList().size();
     }
 
     private static int logicForSolution10(int maxDistance, String toCityNm, int distance, String fromCity,
@@ -291,34 +364,30 @@ public class AllLineService {
         return result;
     }
 
-    private static int logicForSolution10(MaxDistanceParam maxDistanceParam) {
+    private static void logicForSolution10(MaxDistanceParam maxDistanceParam) {
         int maxDistance = maxDistanceParam.getMaxDistance();
         int distance = maxDistanceParam.getBufferDistance();
 
-        int resultTotal = maxDistanceParam.getResultTotal();
         if (distance > maxDistance) {
-            return resultTotal;
+            return;
         }
 
-        String startNode = maxDistanceParam.getStartNode();
-        String originNode = maxDistanceParam.getOriginNode();
-        Set<String> nodeLineSet = NODE_LINE_MAP.getOrDefault(startNode, Collections.emptySet());
+        String bufferLine = maxDistanceParam.getBufferLine();
+
+        Set<String> nodeLineSet = NODE_LINE_MAP.getOrDefault(maxDistanceParam.getStartNode(), Collections.emptySet());
         for (String nodeName : nodeLineSet) {
-            String buffer = maxDistanceParam.getBufferLine() + nodeName;
+            String buffer = bufferLine + nodeName;
             //截取后两位的字符串，即当前路线
             String substring = buffer.substring(buffer.length() - 2);
             int distanceBuffer = distance + LINE_LENGTH_MAP.getOrDefault(substring, 0);
-            if (nodeName.equals(originNode) && distanceBuffer < maxDistance) {
+            if (nodeName.equals(maxDistanceParam.getOriginNode()) && distanceBuffer < maxDistance) {
                 maxDistanceParam.getResultLineList().add(buffer);
-                resultTotal++;
                 System.out.println(buffer + "," + distanceBuffer + ", " + maxDistance);
             }
             maxDistanceParam.setBufferLine(buffer).setBufferDistance(distanceBuffer).setStartNode(nodeName);
-            resultTotal = logicForSolution10(maxDistanceParam);
+            logicForSolution10(maxDistanceParam);
         }
-        return resultTotal;
     }
-
 
     /**
      * 查询最短路径距离
