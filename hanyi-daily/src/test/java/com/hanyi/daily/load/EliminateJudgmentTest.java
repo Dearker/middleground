@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 /**
  * <p>
- * 使用表驱动法消除if判断
+ * 使用表驱动法消除if判断，静态方法则使用类名点的方式代替
  * </p>
  *
  * @author wenchangwei
