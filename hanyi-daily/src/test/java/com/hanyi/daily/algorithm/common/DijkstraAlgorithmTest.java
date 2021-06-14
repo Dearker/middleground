@@ -3,6 +3,7 @@ package com.hanyi.daily.algorithm.common;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -132,22 +133,13 @@ public class DijkstraAlgorithmTest {
         //即将三个数组的情况输出
         public void show() {
             System.out.println("==========================");
-            //���already_arr
-            for (int i : already_arr) {
-                System.out.print(i + " ");
-            }
+            Stream.of(already_arr).forEach(System.out::print);
             System.out.println();
-            //���pre_visited
-            for (int i : pre_visited) {
-                System.out.print(i + " ");
-            }
+
+            Stream.of(pre_visited).forEach(System.out::print);
             System.out.println();
-            //���dis
-            for (int i : dis) {
-                System.out.print(i + " ");
-            }
+            Stream.of(dis).forEach(System.out::print);
             System.out.println();
-            //Ϊ�˺ÿ�������̾��룬���Ǵ���
             char[] vertex = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};
             int count = 0;
             for (int i : dis) {

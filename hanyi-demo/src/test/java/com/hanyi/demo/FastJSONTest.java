@@ -6,7 +6,6 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RuntimeUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -42,12 +41,6 @@ public class FastJSONTest {
         String aPackage = ClassUtil.getPackage(FastJSONTest.class);
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation(aPackage, SpringBootApplication.class);
         classes.forEach(s -> System.out.println(ClassUtil.getPackage(s)));
-    }
-
-    @Test
-    public void ExecTest() {
-        Process exec = RuntimeUtil.exec("ls -l");
-        String str = RuntimeUtil.execForStr("ipconfig");
     }
 
     /**
