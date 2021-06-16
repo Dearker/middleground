@@ -1,5 +1,7 @@
 package com.hanyi.daily.load;
 
+import cn.hutool.core.util.RuntimeUtil;
+import com.hanyi.daily.property.Book;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -47,11 +49,30 @@ public class SystemTest {
 
     /**
      * 如果两个对象的identityHashCode值相等，则两个对象绝对是同一个对象；
-     * 对象的hashCode()计算出来的值不同的属性可能为同一个
+     * 不同的两个对象的hashCode()计算出来的值可能相同
      */
     @Test
     public void systemIdentityHashCodeTest() {
-        System.out.println(System.identityHashCode("1111"));
+        String a = "重地";
+        String b = "通话";
+        //相同
+        System.out.println(a.hashCode());
+        System.out.println(b.hashCode());
+
+        //不同
+        System.out.println(System.identityHashCode(a));
+        System.out.println(System.identityHashCode("重地"));
+        System.out.println(System.identityHashCode(b));
+
+        System.out.println("-------------------");
+
+        Book book = new Book("重地", 1);
+        Book book1 = new Book("通话", 1);
+
+        //相同
+        System.out.println(book.hashCode() + " || " + book1.hashCode());
+        //不同
+        System.out.println(System.identityHashCode(book) + " || " + System.identityHashCode(book1));
     }
 
     /**
@@ -100,6 +121,12 @@ public class SystemTest {
         Process process = runtime.exec("ls -l");
 
         System.out.println(process.getInputStream());
+
+        Process exec = RuntimeUtil.exec("ls -l");
+        System.out.println(exec);
+
+        String str = RuntimeUtil.execForStr("ipconfig");
+        System.out.println(str);
     }
 
 }

@@ -41,6 +41,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.Charset;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -511,12 +512,55 @@ public class LoaderTest {
     }
 
     /**
+     * 字符串格式化，可用于拼接或转换成字符串内容
+     * %s	字符串类型
+     * %c	字符类型
+     * %b	布尔类型
+     * %d	整数类型 （十进制）
+     * %n	换行符
+     */
+    @Test
+    public void stringFormatTest() {
+        String strFormat = String.format(" %s/%s/%s ", "柯基", "哈士奇", "柴犬");
+        System.out.println(strFormat);
+
+        String charFormat = String.format(" %c/%c/%c ", '柯', '哈', '柴');
+        System.out.println(charFormat);
+
+        String booleanFormat = String.format(" %b/%b/%b ", false, true, false);
+        System.out.println(booleanFormat);
+
+        String numberFormat = String.format(" %d?%d?%d", 12, 13, 14);
+        System.out.println(numberFormat);
+    }
+
+    /**
+     * 字符串格式化时间
+     * T	“HH:MM:SS”格式（24时制）
+     * R	“HH:MM”格式（24时制）
+     * c	包括全部日期和时间信息	   星期六 十月 27 14:21:20 CST 2007
+     * F	“年-月-日”格式	       2007-10-27
+     * D	“月/日/年”格式	       10/27/07
+     * r	“HH:MM:SS PM”格式（12时制）	02:25:51 下午
+     */
+    @Test
+    public void stringFormatDateTest() {
+        LocalTime localTime = LocalTime.now();
+        //21:38:46
+        String allFormat = String.format(" %tT ...", localTime);
+        System.out.println(allFormat);
+
+        String format = String.format(" %tR ", localTime);
+        System.out.println(format);
+    }
+
+    /**
      * insert(): 在索引的前面添加字符串
      */
     @Test
-    public void stringInsertTest(){
+    public void stringInsertTest() {
         StringBuilder stringBuilder = new StringBuilder("BCD");
-        stringBuilder.insert(0,"A");
+        stringBuilder.insert(0, "A");
         System.out.println(stringBuilder);
     }
 

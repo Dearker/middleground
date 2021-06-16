@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.LongStream;
 
@@ -207,6 +208,54 @@ public class CollectionApiTest {
 
         // 返回此map的部分map，其键的范围从fromKey到toKey(inclusive为true时包括toKey)
         System.out.println(treeMap.subMap("1", Boolean.TRUE, "4", Boolean.TRUE));
+    }
+
+    @Test
+    public void otherTreeMapTest() {
+        TreeMap<String, String> treeMap = new TreeMap<>();
+
+        treeMap.put("1", "aaa");
+        treeMap.put("2", "bbb");
+        treeMap.put("3", "ccc");
+        treeMap.put("4", "ddd");
+
+        System.out.println("第一个key：" + treeMap.firstKey());
+        System.out.println("最后一个key值：" + treeMap.lastKey());
+
+        System.out.println("删除并返回第一个entry对象：" + treeMap.pollFirstEntry());
+        System.out.println("删除并返回最后一个entry对象：" + treeMap.pollLastEntry());
+    }
+
+    /**
+     * 以下对元素的操作，如果没有匹配的元素都会返回null
+     */
+    @Test
+    public void treeSetTest() {
+        TreeSet<String> treeSet = new TreeSet<>();
+        treeSet.add("aaa");
+        treeSet.add("ccc");
+        treeSet.add("bbb");
+
+        System.out.println("默认升序：" + treeSet);
+        System.out.println("降序的set集合：" + treeSet.descendingSet());
+        System.out.println("返回大于等于该元素的第一个集合：" + treeSet.ceiling("bbb"));
+        System.out.println("获取第一个元素：" + treeSet.first());
+        System.out.println("获取最后一个元素：" + treeSet.last());
+
+        System.out.println("返回最大的元素小于或等于给定元素:" + treeSet.floor("bbb"));
+
+        System.out.println("返回小于指定元素的所有元素:" + treeSet.headSet("bbb"));
+        System.out.println("返回小于等于指定元素的所有元素:" + treeSet.headSet("bbb", true));
+
+        System.out.println("返回大于给定元素的该集合中的最小元素：" + treeSet.higher("bbb"));
+        System.out.println("返回这个集合中最大的元素小于给定的元素:" + treeSet.lower("bbb"));
+
+        System.out.println("返回大于等于开始值并小于最后的值的所有集合：" + treeSet.subSet("aaa", "bbb"));
+        System.out.println("返回大于等于开始值并小于等于截止值的所有集合：" +
+                treeSet.subSet("aaa", true, "bbb", true));
+
+        System.out.println("返回大于等于指定元素的所有元素：" + treeSet.tailSet("bbb"));
+        System.out.println("返回大于指定元素的所有元素：" + treeSet.tailSet("bbb", false));
     }
 
 }
