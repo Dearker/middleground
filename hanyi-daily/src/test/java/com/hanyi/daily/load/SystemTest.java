@@ -48,8 +48,11 @@ public class SystemTest {
     }
 
     /**
-     * 如果两个对象的identityHashCode值相等，则两个对象绝对是同一个对象；
-     * 不同的两个对象的hashCode()计算出来的值可能相同
+     * 如果两个对象的identityHashCode值相等，则两个对象绝对是同一个对象，即调用Object的hashcode()方法；
+     * 返回与默认方法hashCode（）返回的给定对象相同的哈希码，无论给定对象的类是否覆盖了hashCode（）。 空引用的哈希码为零。
+     * 如果在web请求中传入的为String类型，则每次都会创建一个新的String，即hashCode()值每次都不一样.
+     * 如果想每次相同的值计算出来的结果相同，使用HashUtil.jsHash()方法，如果传入的参数为对象的toString()则需要先重写其toString()
+     * 不同的两个对象的hashCode()计算出来的值可能相同；如果在程序内部自己使用可适当的使用System.identityHashCode()
      */
     @Test
     public void systemIdentityHashCodeTest() {
