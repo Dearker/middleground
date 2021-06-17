@@ -206,6 +206,21 @@
 
     docker run -d --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq:management    
     
+9、docker-compose常用命令
+
+      docker-compose up -d nginx            构建启动nignx容器
+      docker-compose exec nginx bash        登录到nginx容器中
+      docker-compose down                   停止并删除运行中的Compose应用
+      docker-compose ps                     列出项目中目前的所有容器
+      docker-compose start nginx            启动nginx容器
+      docker-compose stop nginx             停止nginx容器 
+      docker-compose restart nginx          重新启动nginx容器
+      docker-compose rm                     用于删除已停止的 Compose 应用
+      docker-compose top                    查看各个服务容器内运行的进程
+      docker-compose logs -f nginx          查看nginx的实时日志
+
+      注：docker-compose后面的命令如果不指定具体的容器名称，则会对docker-compose.yaml文件中的所有容器进行操作
+
 ### 使用kubernetes命令
  
 1、查看dashboard令牌(最高权限)
