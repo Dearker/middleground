@@ -127,7 +127,7 @@
     mvn clean install -Dmaven.test.skip=true
 
 
-### docker 部署数据库及三方依赖 电子商务 business
+### docker 部署数据库及三方依赖
 
     注：docker中强制删除未使用的镜像文件命令：docker image prune -a -f
 
@@ -221,6 +221,18 @@
 
       注：docker-compose后面的命令如果不指定具体的容器名称，则会对docker-compose.yaml文件中的所有容器进行操作
 
+10、Nginx常用命令
+     
+      ./nginx -t           验证nginx配置文件是否正确
+      ./nginx -s reload    重启nginx服务
+      ./nginx              启动nginx服务
+      ./nginx -s stop      停止nginx服务
+      ./nginx -c /etc/nginx/nginx.conf     使用指定的配置文件启动nginx
+      ./nginx -t -c /etc/nginx/nginx.conf  测试检查配置文件是否存在语法错误
+      ./nginx -v             显示版本信息   
+      whereis nginx          查找nginx路径
+      ps -ef | grep nginx    在进程列表中的master进程，即主进程号
+    
 ### 使用kubernetes命令
  
 1、查看dashboard令牌(最高权限)
@@ -246,6 +258,11 @@
     docker system prune -a: 可以将没有容器使用Docker镜像删掉
     
     查看文档：https://blog.csdn.net/ujm097/article/details/90402158
+
+4、DockerFile
+     
+    VOLUME /tmp /usr/tmp     前者为宿主机目录，后者为容器目录；如果只指定一个目录，则会将宿主机的目录挂载到容器中相同的目录
+        
     
 ### 其他组件
 
