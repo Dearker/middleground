@@ -49,6 +49,7 @@
         <module>hanyi-canal</module>
         <module>hanyi-sharding-jdbc</module>
         <module>hanyi-mq-rocketmq</module>
+        <module>hanyi-dynamic-datasource</module>
     </modules>
     <packaging>pom</packaging>
 

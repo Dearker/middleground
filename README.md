@@ -300,8 +300,9 @@
     2、文件中显示行号
         显示所有行号： :set nu
     
-    3、根据文件名称查询文件路径，该查询为精确查询
-        find / -name hanyi-web.jar
+    3、根据文件名称查询文件路径
+        find / -name hanyi-web.jar    精确查询
+        find / -name hanyi-web*       模糊匹配
     
     4、过滤出文件中关键字并显示行号,file指文件名称
         cat  file | grep -n 关键字 或者 tail -f file | grep -n 关键字
