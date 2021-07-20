@@ -3,7 +3,6 @@ package com.hanyi.hikari.common.thread;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import com.hanyi.hikari.dao.BookDao;
 import com.hanyi.hikari.pojo.Book;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +13,15 @@ import java.util.concurrent.Callable;
 
 /**
  * <p>
- *
+ * 批量插入任务
  * </p>
  *
  * @author wenchangwei
+ * @date 2021/07/04
  * @since 10:19 下午 2020/6/8
  */
 @RequiredArgsConstructor
-public class BatchInsertTask implements Callable<String> {
+public class BatchInsertTask implements Callable<Integer> {
 
     private static final int COUNT = 500;
 
@@ -30,15 +30,12 @@ public class BatchInsertTask implements Callable<String> {
     private final BookDao bookDao;
 
     @Override
-    public String call() throws Exception {
-
+    public Integer call() throws Exception {
         List<Book> bookList = new ArrayList<>(COUNT);
         for (int i = 0; i < COUNT; i++) {
             bookList.add(new Book(snowflake.nextId(), RandomUtil.randomString(15),
                     RandomUtil.randomString(20), i % 100, i, DateUtil.date()));
         }
-        bookDao.batchInsertBook(bookList);
-
-        return StrUtil.EMPTY;
+        return bookDao.batchInsertBook(bookList);
     }
 }

@@ -66,4 +66,20 @@ public interface UserService extends IService<UserEntity> {
      * @return 返回查询结果
      */
     List<UserEntity> findUerByUnionAll(Integer version, String userName);
+
+
+    /**
+     * 删除用户的用户名
+     *
+     * @param userName 用户名
+     */
+    void removeUserByUserName(String userName);
+
+    /**
+     * 获取用户的用户名
+     *
+     * @param userName 用户名
+     * @return 返回用户集合
+     */
+    List<UserEntity> getUserByUserName(String userName);
 }

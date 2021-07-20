@@ -11,10 +11,6 @@
 
     <artifactId>hanyi-hikaricp</artifactId>
 
-    <properties>
-        <mybatisplus.version>3.1.2</mybatisplus.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -37,7 +33,6 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatisplus.version}</version>
         </dependency>
 
     </dependencies>

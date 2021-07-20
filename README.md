@@ -205,8 +205,19 @@
 8、rabbitmq
 
     docker run -d --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq:management    
-    
-9、docker-compose常用命令
+
+9、clickhouse
+       
+    docker run -d --name some-clickhouse-server -p 8123:8123 --ulimit nofile=262144:262144 yandex/clickhouse-server
+
+10、docker拷贝文件命令
+     
+    docker cp 容器名:要拷贝的文件在容器里面的路径 要拷贝到宿主机的相应路径     将容器里面文件拷贝到宿主机
+    docker cp 要拷贝到宿主机的相应路径 容器名:要拷贝的文件在容器里面的路径     将宿主机文件拷贝到容器中
+
+    注：不管容器有没有启动，拷贝命令都会生效
+
+11、docker-compose常用命令
 
       docker-compose up -d nginx            构建启动nignx容器
       docker-compose exec nginx bash        登录到nginx容器中
@@ -221,7 +232,7 @@
 
       注：docker-compose后面的命令如果不指定具体的容器名称，则会对docker-compose.yaml文件中的所有容器进行操作
 
-10、Nginx常用命令
+12、Nginx常用命令
      
       ./nginx -t           验证nginx配置文件是否正确
       ./nginx -s reload    重启nginx服务

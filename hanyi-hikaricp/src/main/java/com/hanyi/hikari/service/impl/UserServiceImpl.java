@@ -148,4 +148,26 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
     public List<UserEntity> findUerByUnionAll(Integer version, String userName) {
         return baseMapper.findUerByUnionAll(version, userName);
     }
+
+    /**
+     * 删除用户的用户名
+     *
+     * @param userName 用户名
+     */
+    @Override
+    public void removeUserByUserName(String userName) {
+        this.lambdaUpdate().like(UserEntity::getUserName, userName).set(UserEntity::getDeleted, 1).update();
+    }
+
+    /**
+     * 获取用户的用户名
+     *
+     * @param userName 用户名
+     * @return 返回用户集合
+     */
+    @Override
+    public List<UserEntity> getUserByUserName(String userName) {
+        IPage<UserEntity> page = new Page<>(0, 3);
+        return this.lambdaQuery().like(UserEntity::getUserName, userName).page(page).getRecords();
+    }
 }

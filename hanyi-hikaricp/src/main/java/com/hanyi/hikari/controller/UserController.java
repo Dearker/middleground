@@ -140,4 +140,25 @@ public class UserController {
         return ResponseResult.success(userService.findUerByUnionAll(version, userName));
     }
 
+    /**
+     * 删除用户的用户名
+     *
+     * @param userName 用户名
+     */
+    @GetMapping("/remove")
+    public void removeUserByUserName(String userName){
+        userService.removeUserByUserName(userName);
+    }
+
+    /**
+     * 获取用户的用户名
+     *
+     * @param userName 用户名
+     * @return 返回用户集合
+     */
+    @GetMapping("/getUserByPage")
+    public ResponseResult getUserByPage(String userName){
+        return ResponseResult.success(userService.getUserByUserName(userName));
+    }
+
 }

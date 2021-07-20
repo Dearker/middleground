@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -53,10 +52,5 @@ public class Book extends Model<Book> {
      * 书籍创建时间
      */
     private Date createTime;
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
 }

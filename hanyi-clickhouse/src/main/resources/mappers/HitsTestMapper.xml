@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanyi.clickhouse.dao.HitsTestMapper">
+
+    <delete id="deleteByWatchId">
+        ALTER TABLE default.hits_test DELETE WHERE watchId = #{watchId}
+    </delete>
+
+    <update id="updateTitleByWatchId">
+        ALTER TABLE default.hits_test UPDATE title=#{title} where watchId = #{watchId}
+    </update>
+
+</mapper>
