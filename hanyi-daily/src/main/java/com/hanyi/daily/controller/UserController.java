@@ -123,4 +123,10 @@ public class UserController {
         return ResponseResult.success(userService.countUserByUserName(userName));
     }
 
+    @PostMapping("/saveAll")
+    public ResponseResult saveAll(@RequestBody User user){
+        userService.insertAll(user);
+        return ResponseResult.success();
+    }
+
 }

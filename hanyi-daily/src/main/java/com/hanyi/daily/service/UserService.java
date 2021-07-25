@@ -89,8 +89,18 @@ public class UserService {
      * @param userName 用户名称
      * @return 返回总数
      */
-    public Long countUserByUserName(String userName){
+    public Long countUserByUserName(String userName) {
         return primaryUserMapper.countUserByUserName(userName);
+    }
+
+    /**
+     * 切换数据源时不能使用事务注解@Transactional，负责会切换失败
+     *
+     * @param user 用户对象
+     */
+    public void insertAll(User user) {
+        primaryUserMapper.insert(user);
+        secondaryUserMapper.insert(user);
     }
 
 }

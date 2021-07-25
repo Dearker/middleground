@@ -8,5 +8,12 @@
         select * from sys_user2;
     </select>
 
+    <!-- 新增用户 -->
+    <insert id="insert" parameterType="com.hanyi.daily.pojo.User" keyProperty="id" useGeneratedKeys="true" >
+        insert into sys_user2
+            (user_id,user_name,user_age)
+        values
+            (#{userId},#{userName},#{userAge})
+    </insert>
 
 </mapper>

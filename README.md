@@ -243,7 +243,21 @@
       ./nginx -v             显示版本信息   
       whereis nginx          查找nginx路径
       ps -ef | grep nginx    在进程列表中的master进程，即主进程号
-    
+ 
+13、TiDB快速安装命令
+      
+      #下载并安装TiUP
+      curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh     
+
+      #声明全局变量
+      source ~/.bash_profile
+      
+      #在当前session执行以下命令启动集群
+      tiup playground --host 0.0.0.0
+      
+      #也可以指定TiDB版本以及各组件实例个数，monitor表示同时部署监控组件
+      #tiup playground v5.1.0 --db 2 --pd 3 --kv 3 --monitor 
+
 ### 使用kubernetes命令
  
 1、查看dashboard令牌(最高权限)

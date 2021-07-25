@@ -18,4 +18,12 @@ public interface SecondaryUserMapper {
      */
     @DataSource(DataType.SECONDARY)
     List<User> findAll();
+
+    /**
+     * 插入
+     *
+     * @param user 用户
+     */
+    @DataSource(DataType.SECONDARY)
+    void insert(User user);
 }
