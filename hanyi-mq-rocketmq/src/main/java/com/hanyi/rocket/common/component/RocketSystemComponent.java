@@ -9,9 +9,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.hanyi.rocket.pojo.ConsumerGroup;
 import com.hanyi.rocket.pojo.RocketTopic;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -51,6 +55,12 @@ public class RocketSystemComponent {
 
     @Value("${rocketmq.console.address}")
     private String rocketAddress;
+
+    /**
+     * 默认mqpush消费者
+     */
+    @Resource
+    private DefaultMQPushConsumer defaultMQPushConsumer;
 
     /**
      * 得到目标主题列表
@@ -145,6 +155,16 @@ public class RocketSystemComponent {
             return totalMap;
         }
         return Collections.emptyMap();
+    }
+
+    //@PostConstruct
+    public void registerConsumerLister() {
+        defaultMQPushConsumer.registerMessageListener((MessageListenerConcurrently) (list, consumeConcurrentlyContext) -> {
+            List<String> collect = list.stream().map(s -> Arrays.toString(s.getBody())).collect(Collectors.toList());
+            log.info("新的消费监听器：" + collect);
+            //消费成功
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        });
     }
 
 }
