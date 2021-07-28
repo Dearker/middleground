@@ -66,6 +66,29 @@ public class RocketAppTest {
         defaultMQProducer.send(messageList);
     }
 
+    @Test
+    public void sendTimeTest() throws Exception{
+        final int total = 10000;
+
+        String messageStr = "test-message-";
+        for (int i = 0; i < total; i++) {
+            final int batchTotal = 300;
+            List<org.apache.rocketmq.common.message.Message> messageList = new ArrayList<>(batchTotal);
+            int start = i * batchTotal;
+            for (int j = 0; j < batchTotal; j++) {
+                org.apache.rocketmq.common.message.Message message = new org.apache.rocketmq.common.message.Message();
+                message.setTopic("test-topic-1");
+                int startIndex = start + j;
+                String s = messageStr + startIndex;
+                message.setBody(s.getBytes(RemotingHelper.DEFAULT_CHARSET));
+                messageList.add(message);
+            }
+            defaultMQProducer.send(messageList);
+            //休眠50毫秒
+            //TimeUnit.MILLISECONDS.sleep(50);
+        }
+    }
+
     /**
      * 发送异步消息
      */
