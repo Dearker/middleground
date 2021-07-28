@@ -15,6 +15,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +43,27 @@ public class RocketAppTest {
     public void sendTest() {
         SendResult sendResult = rocketMQTemplate.syncSend("test-topic-1", "这是一条同步消息");
         System.out.println(sendResult);
+    }
+
+    /**
+     * 批量发送测试
+     *
+     * @throws Exception 异常
+     */
+    @Test
+    public void batchSendTest() throws Exception {
+        final int total = 50;
+        String messageStr = "test-message-";
+        List<org.apache.rocketmq.common.message.Message> messageList = new ArrayList<>(total);
+        for (int i = 0; i < total; i++) {
+            org.apache.rocketmq.common.message.Message message = new org.apache.rocketmq.common.message.Message();
+            message.setTopic("test-topic-1");
+            String s = messageStr + i;
+            message.setBody(s.getBytes(RemotingHelper.DEFAULT_CHARSET));
+            messageList.add(message);
+        }
+
+        defaultMQProducer.send(messageList);
     }
 
     /**
