@@ -2,6 +2,7 @@ package com.hanyi.rocket.common.config;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.MQConsumer;
@@ -9,10 +10,12 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,9 @@ import java.util.stream.Collectors;
 @Configuration
 public class GlobalConfig {
 
+    @Value("${rocketmq.name-server}")
+    private String nameServerAddress;
+
     /**
      * 分布式id
      *
@@ -40,13 +46,12 @@ public class GlobalConfig {
 
     @Bean
     public MQConsumer mqConsumer() throws MQClientException {
-
         //instance
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer();
         //group
         consumer.setConsumerGroup("test-consumer-2");
         //setNamesrvAddr，cluster with ; spit
-        consumer.setNamesrvAddr("114.67.102.117");
+        consumer.setNamesrvAddr(nameServerAddress);
 
         //consumer offset
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
@@ -59,18 +64,27 @@ public class GlobalConfig {
         //or use setSubscription, method is deprecated
         //consumer.setSubscription();
 
-        //batch consumer max message limit
-        consumer.setConsumeMessageBatchMaxSize(1000);
+        consumer.setConsumeMessageBatchMaxSize(1024);
+        //一次拉取1000条消息
+        consumer.setPullBatchSize(1024);
         //min thread
         consumer.setConsumeThreadMin(30);
+        consumer.setConsumeThreadMax(64);
         consumer.registerMessageListener((MessageListenerConcurrently) (list, consumeConcurrentlyContext) -> {
-            List<String> collect = list.stream().map(s -> Arrays.toString(s.getBody())).collect(Collectors.toList());
+            List<String> collect = list.stream().map(s -> {
+                try {
+                    return new String((s.getBody()), RemotingHelper.DEFAULT_CHARSET);
+                } catch (UnsupportedEncodingException e) {
+                    log.error("",e);
+                    return null;
+                }
+            }).filter(StrUtil::isNotBlank).collect(Collectors.toList());
             log.info("获取的监听消息：" + collect);
+            log.info("消息总数为：" + collect.size());
             return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         });
 
         consumer.start();
-
         return consumer;
     }
 

@@ -3,14 +3,14 @@ server:
 
 rocketmq:
   #rocketMQ服务的地址
-  name-server: 114.67.102.117:9876
+  name-server: 192.168.243.128:9876
   producer:
     # 生产者组
     group: shop-order
     #消息发送超时时长
     send-message-timeout: 3000
   console:
-    address: 114.67.102.117:8180
+    address: 192.168.243.128:8180
 
 spring:
   application:

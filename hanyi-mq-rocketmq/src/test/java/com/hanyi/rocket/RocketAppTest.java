@@ -68,7 +68,7 @@ public class RocketAppTest {
 
     @Test
     public void sendTimeTest() throws Exception{
-        final int total = 10000;
+        final int total = 5;
 
         String messageStr = "test-message-";
         for (int i = 0; i < total; i++) {
