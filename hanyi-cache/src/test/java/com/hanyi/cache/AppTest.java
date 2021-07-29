@@ -1,5 +1,6 @@
 package com.hanyi.cache;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.hanyi.cache.entity.Book;
@@ -202,6 +203,39 @@ public class AppTest {
         System.out.println("获取元素的得分：" + score);
         opsForZSet.incrementScore(setKey, firstString, 10);
         System.out.println("获取增加后的得分：" + opsForZSet.score(setKey, firstString));
+    }
+
+    @Test
+    public void bitSetTest(){
+        long currentTimeMillis = System.currentTimeMillis();
+        final long total = 10;
+
+        String bitSet = "test-bitSet";
+        for (long i = 0; i < total; i++) {
+            stringRedisTemplate.opsForValue().setBit(bitSet,i,true);
+        }
+    }
+
+    @Test
+    public void getBitSetTest(){
+        String bitSet = "test-bitSet";
+        String data = stringRedisTemplate.opsForValue().get(bitSet);
+        if(StrUtil.isNotBlank(data)){
+            byte[] bytes = data.getBytes();
+            BitSet bitSetData = byteArray2BitSet(bytes);
+            System.out.println(bitSetData);
+        }
+    }
+
+    private static BitSet byteArray2BitSet(byte[] bytes) {
+        BitSet bitSet = new BitSet(bytes.length * 8);
+        int index = 0;
+        for (byte aByte : bytes) {
+            for (int j = 7; j >= 0; j--) {
+                bitSet.set(index++, (aByte & (1 << j)) >> j == 1);
+            }
+        }
+        return bitSet;
     }
 
 }

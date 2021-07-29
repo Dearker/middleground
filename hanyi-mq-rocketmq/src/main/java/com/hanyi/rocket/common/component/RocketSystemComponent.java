@@ -15,7 +15,6 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -59,7 +58,7 @@ public class RocketSystemComponent {
     /**
      * 默认mqpush消费者
      */
-    @Resource
+    //@Resource
     private DefaultMQPushConsumer defaultMQPushConsumer;
 
     /**

@@ -144,7 +144,7 @@
 
 3、redis
     
-    docker run -d --privileged=true -p 6379:6379 --restart always -v /opt/data/redis/conf/redis.conf:/etc/redis/redis.conf -v /opt/data/redis/data:/data --name redis redis:5.0.7 redis-server /etc/redis/redis.conf --appendonly yes
+    docker run -d --privileged=true -p 6379:6379 --restart always -v /opt/data/redis/conf/redis.conf:/etc/redis/redis.conf -v /opt/data/redis/data:/data --name redis redis:6.2.5 redis-server /etc/redis/redis.conf --appendonly yes
 
     --restart always   -> 开机启动
     --privileged=true  -> 提升容器内权限
@@ -245,6 +245,12 @@
       ps -ef | grep nginx    在进程列表中的master进程，即主进程号
  
 13、TiDB快速安装命令
+      
+      #推荐集群安装：https://docs.pingcap.com/zh/tidb/dev/quick-start-with-tidb#Linux
+      参考配置文件：topo.yaml 
+      集群启动命令：tiup cluster start tidb-cluster  (tidb-cluster为集群名称)
+      
+      注：tiup playground只能运行一次，部署后session端口即服务停止
       
       #下载并安装TiUP
       curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh     
