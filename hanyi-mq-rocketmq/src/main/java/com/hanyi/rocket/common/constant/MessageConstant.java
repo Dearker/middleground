@@ -28,5 +28,9 @@ public class MessageConstant {
      */
     public static final String TX_ID = "txId";
 
+    /**
+     * 消息批量大小
+     */
+    public static final int MESSAGE_BATCH_SIZE = 1024;
 
 }

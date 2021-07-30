@@ -9,9 +9,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.hanyi.rocket.pojo.ConsumerGroup;
 import com.hanyi.rocket.pojo.RocketTopic;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -56,12 +53,6 @@ public class RocketSystemComponent {
     private String rocketAddress;
 
     /**
-     * 默认mqpush消费者
-     */
-    //@Resource
-    private DefaultMQPushConsumer defaultMQPushConsumer;
-
-    /**
      * 得到目标主题列表
      *
      * @param topicPrefix 主题的前缀
@@ -92,7 +83,7 @@ public class RocketSystemComponent {
         JSONObject jsonObject = JSON.parseObject(s);
         if (Objects.equals(jsonObject.getInteger(STATUS), 0)) {
             JSONArray dataJsonArray = jsonObject.getJSONArray(DATA);
-            return JSONArray.parseArray(dataJsonArray.toJSONString(), ConsumerGroup.class);
+            return JSON.parseArray(dataJsonArray.toJSONString(), ConsumerGroup.class);
         }
         log.error("当前查询消费者分组出错");
         return Collections.emptyList();
@@ -154,16 +145,6 @@ public class RocketSystemComponent {
             return totalMap;
         }
         return Collections.emptyMap();
-    }
-
-    //@PostConstruct
-    public void registerConsumerLister() {
-        defaultMQPushConsumer.registerMessageListener((MessageListenerConcurrently) (list, consumeConcurrentlyContext) -> {
-            List<String> collect = list.stream().map(s -> Arrays.toString(s.getBody())).collect(Collectors.toList());
-            log.info("新的消费监听器：" + collect);
-            //消费成功
-            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-        });
     }
 
 }
