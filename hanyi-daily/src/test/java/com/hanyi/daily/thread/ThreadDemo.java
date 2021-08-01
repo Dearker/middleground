@@ -20,11 +20,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * @PackAge: middleground com.hanyi.daily.thread
+ * ThreadPoolExecutor调用其对应的setXXX()方法可以动态的修改线程池的相关配置属性
+ *
  * @Author: weiwenchang
  * @Description: 线程测试类
  * @CreateDate: 2020-02-09 16:47
- * @Version: 1.0
  */
 @Slf4j
 public class ThreadDemo {

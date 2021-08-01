@@ -6,7 +6,9 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.hanyi.rocket.pojo.ConsumerGroup;
+import com.hanyi.rocket.pojo.ConsumerMessage;
 import com.hanyi.rocket.pojo.RocketTopic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -90,7 +93,7 @@ public class RocketSystemComponent {
     }
 
     /**
-     * 得到主题下的所有消息总数
+     * 得到主题下的所有消息总数，该消息总数中包含已消费的消息
      *
      * @param topic 主题
      * @return 返回消息总共
@@ -145,6 +148,40 @@ public class RocketSystemComponent {
             return totalMap;
         }
         return Collections.emptyMap();
+    }
+
+    /**
+     * 根据主题获取所有未读消息总数
+     *
+     * @param topic 主题
+     */
+    public void getAllUnreadMessageTotalByTopic(String topic) {
+        String url = rocketAddress + "/topic/queryConsumerByTopic.query";
+        Map<String, Object> paramMap = new HashMap<>(1);
+        paramMap.put("topic", topic);
+        String resultStr = HttpUtil.get(url, paramMap);
+
+        JSONObject jsonObject = JSON.parseObject(resultStr);
+        if (Objects.equals(jsonObject.getInteger(STATUS), 0)) {
+            //key为消费组，value为对应的消费组队列信息
+            Map<String, ConsumerMessage> dataMap = jsonObject.getObject(DATA, new TypeReference<Map<String, ConsumerMessage>>() {
+            });
+
+            dataMap.forEach((k, v) -> {
+                AtomicInteger totalMessage = new AtomicInteger(0);
+                v.getQueueStatInfoList().forEach(s -> {
+                    Integer brokerOffset = s.getBrokerOffset();
+                    Integer consumerOffset = s.getConsumerOffset();
+                    //当前队列未消费的消息总数
+                    int i = brokerOffset - consumerOffset;
+                    totalMessage.getAndAdd(i);
+                });
+                //该topic积压的消息总数
+                v.setMessageBacklogTotal(totalMessage.get());
+            });
+
+            log.info("获取的消息数据：" + dataMap);
+        }
     }
 
 }

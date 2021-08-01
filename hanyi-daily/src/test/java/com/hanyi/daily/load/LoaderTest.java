@@ -554,6 +554,15 @@ public class LoaderTest {
         System.out.println(format);
     }
 
+    @Test
+    public void mapStringFormatTest(){
+        Map<String,Object> paramMap = new HashMap<>(2);
+        paramMap.put("name","柯基");
+        paramMap.put("age",26);
+
+        System.out.println(StrUtil.format("the string name is {name}, the age is {age}", paramMap));
+    }
+
     /**
      * insert(): 在索引的前面添加字符串
      */

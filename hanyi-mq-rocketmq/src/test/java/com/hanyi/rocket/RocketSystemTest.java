@@ -50,4 +50,9 @@ public class RocketSystemTest {
         System.out.println("topic 对应的消息总数：" + topicMessageTotalMap);
     }
 
+    @Test
+    public void getUnreadMessageTotalTest(){
+        rocketSystemComponent.getAllUnreadMessageTotalByTopic("test-topic-1");
+    }
+
 }

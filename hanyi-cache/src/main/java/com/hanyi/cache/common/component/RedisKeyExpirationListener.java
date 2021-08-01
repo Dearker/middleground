@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
  * @CreateDate: 2020-01-04 18:07
  * @Version: 1.0
  */
-@Component
 @Slf4j
+@Component
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
 
     @Resource
@@ -36,13 +36,10 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
-
         String s = message.toString();
 
         log.info("过期的key值: {}",s);
-
         if(StrUtil.isNotBlank(s)){
-
             stringRedisTemplate.opsForValue().set(s,"456",20,TimeUnit.SECONDS);
             log.info("设置新的缓存成功");
         }

@@ -15,6 +15,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class RocketAppTest {
      */
     @Test
     public void sendTest() {
-        SendResult sendResult = rocketMQTemplate.syncSend("test-topic-1", "这是一条同步消息");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        SendResult sendResult = rocketMQTemplate.syncSend("test-topic-1", "这是一条同步消息" + localDateTime);
         System.out.println(sendResult);
     }
 
@@ -68,7 +70,7 @@ public class RocketAppTest {
 
     @Test
     public void sendTimeTest() throws Exception{
-        final int total = 5;
+        final int total = 10000;
 
         String messageStr = "test-message-";
         for (int i = 0; i < total; i++) {

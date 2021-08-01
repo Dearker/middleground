@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -182,7 +183,7 @@ public class AppTest {
         bookSet.forEach(s -> opsForZSet.add(setKey, JSON.toJSONString(s), s.getId()));
         stringRedisTemplate.expire(setKey, 20, TimeUnit.MINUTES);
 
-        //从低到高排行榜
+        //从低到高排行榜，0表示最开始的位置，-1表示取出所有数据
         Set<String> range = opsForZSet.range(setKey, 0, -1);
         System.out.println(range);
         range.forEach(s -> System.out.println(JSON.parseObject(s, Book.class)));
@@ -197,6 +198,8 @@ public class AppTest {
 
         Long size = opsForZSet.size(setKey);
         System.out.println("当前key元素总数：" + size);
+        Long count = opsForZSet.zCard(setKey);
+        System.out.println("当前key元素总数方式二(推荐)：" + count);
 
         String firstString = JSON.toJSONString(firstBook);
         Double score = opsForZSet.score(setKey, firstString);
@@ -205,22 +208,26 @@ public class AppTest {
         System.out.println("获取增加后的得分：" + opsForZSet.score(setKey, firstString));
     }
 
+    /**
+     * bitSet的offset的最大值为：4294967295，即2^32 - 1，超过该值写入会报错
+     * increment: 自增
+     */
     @Test
-    public void bitSetTest(){
-        long currentTimeMillis = System.currentTimeMillis();
-        final long total = 10;
+    public void bitSetTest() {
+        final long total = 5;
 
         String bitSet = "test-bitSet";
+        ValueOperations<String, String> forValue = stringRedisTemplate.opsForValue();
         for (long i = 0; i < total; i++) {
-            stringRedisTemplate.opsForValue().setBit(bitSet,i,true);
+            forValue.setBit(bitSet, i, true);
         }
     }
 
     @Test
-    public void getBitSetTest(){
+    public void getBitSetTest() {
         String bitSet = "test-bitSet";
         String data = stringRedisTemplate.opsForValue().get(bitSet);
-        if(StrUtil.isNotBlank(data)){
+        if (StrUtil.isNotBlank(data)) {
             byte[] bytes = data.getBytes();
             BitSet bitSetData = byteArray2BitSet(bytes);
             System.out.println(bitSetData);
