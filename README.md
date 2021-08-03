@@ -294,6 +294,14 @@
      
     VOLUME /tmp /usr/tmp     前者为宿主机目录，后者为容器目录；如果只指定一个目录，则会将宿主机的目录挂载到容器中相同的目录
         
+5、清除Linux内存缓存
+    
+    echo 3 > /proc/sys/vm/drop_caches
+    
+    echo 0 是不释放缓存
+    echo 1 是释放页缓存
+    ehco 2 是释放dentries和inodes缓存
+    echo 3 是释放 1 和 2 中的的所有缓存
     
 ### 其他组件
 

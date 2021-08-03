@@ -52,6 +52,7 @@
         <module>hanyi-dynamic-datasource</module>
         <module>hanyi-clickhouse</module>
         <module>hanyi-hbase</module>
+        <module>hanyi-dynamic-threadpool</module>
     </modules>
     <packaging>pom</packaging>
 
