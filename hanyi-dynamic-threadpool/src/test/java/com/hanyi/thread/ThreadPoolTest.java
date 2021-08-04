@@ -3,12 +3,18 @@ package com.hanyi.thread;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.NumberUtil;
+import com.hanyi.thread.common.handler.LogRejectedExecutionHandler;
 import org.junit.Test;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -99,6 +105,74 @@ public class ThreadPoolTest {
         Long firstThreadId = threadIdList.get(0);
         //停止线程
         longThreadMap.get(firstThreadId).interrupt();
+    }
+
+    /**
+     * 自定义拒绝策略测试
+     */
+    @Test
+    public void threadPoolExceptionTest(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,1,1,
+                TimeUnit.MINUTES,new LinkedBlockingDeque<>(1),new LogRejectedExecutionHandler());
+
+        for (int i = 0; i < 2; i++) {
+            threadPoolExecutor.execute(()->{
+                System.out.println(Thread.currentThread().getName());
+                ThreadUtil.sleep(1,TimeUnit.HOURS);
+            });
+        }
+        ThreadUtil.sleep(1,TimeUnit.HOURS);
+    }
+
+    @Test
+    public void threadPoolUseInfoTest(){
+        ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(5, 10);
+        threadPoolExecutor.prestartAllCoreThreads();
+
+        double div = NumberUtil.div(threadPoolExecutor.getActiveCount(), threadPoolExecutor.getMaximumPoolSize(),2);
+        System.out.println("线程池活跃度：" + div);
+
+        BlockingQueue<Runnable> queue = threadPoolExecutor.getQueue();
+        int size = queue.size();
+        System.out.println("当前排队线程数：" + size);
+
+        int remainingCapacity = queue.remainingCapacity();
+        System.out.println("队列剩余大小：" + remainingCapacity);
+        int queueTotalSize = size + remainingCapacity;
+        System.out.println("队列大小：" + queueTotalSize);
+
+        double div1 = NumberUtil.div(size, queueTotalSize, 2);
+        System.out.println("队列使用率：" + div1);
+    }
+
+    @Test
+    public void threadUseTimeTest(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,1,1,
+                TimeUnit.MINUTES,new LinkedBlockingDeque<>(1),new LogRejectedExecutionHandler());
+
+        List<String> threadNameList = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            threadPoolExecutor.execute(() -> {
+                String name = Thread.currentThread().getName();
+                threadNameList.add(name);
+                System.out.println(name);
+                ThreadUtil.sleep(5,TimeUnit.SECONDS);
+            });
+        }
+
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(true, true);
+
+        Map<String, ThreadInfo> threadInfoMap = Stream.of(threadInfos).collect(Collectors.toMap(ThreadInfo::getThreadName, Function.identity()));
+
+        threadNameList.forEach(s -> {
+            ThreadInfo threadInfo = threadInfoMap.get(s);
+            System.out.println("线程名称：" + s);
+            System.out.println("线程阻塞时间：" + threadInfo.getBlockedTime());
+        });
+
+        ThreadUtil.sleep(15,TimeUnit.SECONDS);
     }
 
 }
