@@ -49,16 +49,19 @@ public class JvmBeanTest {
         System.out.println("getVersion() " + osMBean.getVersion());
         System.out.println("getArch() " + osMBean.getArch());
         System.out.println("getAvailableProcessors() " + osMBean.getAvailableProcessors());
+        //当前进程占用cpu情况
+        System.out.println("当前操作系统的cpu负载：" + osMBean.getSystemLoadAverage());
 
         //==========================Thread=========================
         System.out.println("==========================Thread=========================");
         //获取各个线程的各种状态，CPU 占用情况，以及整个系统中的线程状况
+        long ns = 1000000;
         ThreadMXBean threadMBean = ManagementFactory.getThreadMXBean();
         System.out.println("getThreadCount() " + threadMBean.getThreadCount());
         System.out.println("getPeakThreadCount() " + threadMBean.getPeakThreadCount());
-        System.out.println("getCurrentThreadCpuTime() " + threadMBean.getCurrentThreadCpuTime());
+        System.out.println("getCurrentThreadCpuTime() /ms " + threadMBean.getCurrentThreadCpuTime() / ns);
         System.out.println("getDaemonThreadCount() " + threadMBean.getDaemonThreadCount());
-        System.out.println("getCurrentThreadUserTime() " + threadMBean.getCurrentThreadUserTime());
+        System.out.println("getCurrentThreadUserTime() /ms " + threadMBean.getCurrentThreadUserTime() / ns);
 
         //==========================Compilation=========================
         System.out.println("==========================Compilation=========================");
@@ -81,7 +84,7 @@ public class JvmBeanTest {
         List<GarbageCollectorMXBean> gcMBeanList = ManagementFactory.getGarbageCollectorMXBeans();
         for (GarbageCollectorMXBean gcMBean : gcMBeanList) {
             System.out.println("getName() " + gcMBean.getName());
-            System.out.println("getMemoryPoolNames() " + gcMBean.getMemoryPoolNames());
+            System.out.println("getMemoryPoolNames() " + gcMBean.getMemoryPoolNames().toString());
         }
 
         //==========================Other=========================

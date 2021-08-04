@@ -2,21 +2,23 @@ package com.hanyi.thread.common.component;
 
 import com.hanyi.thread.domain.ScheduledTask;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.config.CronTask;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * cron任务注册器
+ *
  * @author wcwei@iflytek.com
  * @since 2021-08-03 10:29
  */
 @Component
 @RequiredArgsConstructor
-public class CronTaskRegistrar implements DisposableBean {
+public class CronTaskRegistrar {
 
     /**
      * 计划任务
@@ -35,7 +37,7 @@ public class CronTaskRegistrar implements DisposableBean {
      * @param cronExpression cron表达式
      */
     public void addCronTask(Runnable task, String cronExpression) {
-        addCronTask(new CronTask(task, cronExpression));
+        this.addCronTask(new CronTask(task, cronExpression));
     }
 
     /**
@@ -46,10 +48,8 @@ public class CronTaskRegistrar implements DisposableBean {
     public void addCronTask(CronTask cronTask) {
         if (cronTask != null) {
             Runnable task = cronTask.getRunnable();
-            if (this.scheduledTasks.containsKey(task)) {
-                this.removeCronTask(task);
-            }
-            this.scheduledTasks.put(task, this.scheduleCronTask(cronTask));
+            this.removeCronTask(task);
+            this.scheduledTasks.computeIfAbsent(task, k -> this.scheduledTasks.put(k, this.scheduleCronTask(cronTask)));
         }
     }
 
@@ -73,17 +73,15 @@ public class CronTaskRegistrar implements DisposableBean {
      */
     public ScheduledTask scheduleCronTask(CronTask cronTask) {
         ScheduledTask scheduledTask = new ScheduledTask();
-        scheduledTask.future = this.taskScheduler.schedule(cronTask.getRunnable(), cronTask.getTrigger());
+        scheduledTask.setFuture(this.taskScheduler.schedule(cronTask.getRunnable(), cronTask.getTrigger()));
         return scheduledTask;
     }
 
     /**
      * 摧毁
-     *
-     * @throws Exception 异常
      */
-    @Override
-    public void destroy() throws Exception {
+    @PreDestroy
+    public void destroy() {
         this.scheduledTasks.values().forEach(ScheduledTask::cancel);
         this.scheduledTasks.clear();
     }

@@ -1,5 +1,9 @@
 package com.hanyi.thread.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
 
 /**
@@ -13,15 +17,16 @@ public final class ScheduledTask {
     /**
      * 调度结果
      */
-    public volatile ScheduledFuture<?> future;
+    @Getter
+    @Setter
+    private ScheduledFuture<?> future;
 
     /**
      * 取消定时任务
      */
     public void cancel() {
-        ScheduledFuture<?> future = this.future;
-        if (future != null) {
-            future.cancel(true);
+        if (Objects.nonNull(this.future)) {
+            this.future.cancel(true);
         }
     }
 

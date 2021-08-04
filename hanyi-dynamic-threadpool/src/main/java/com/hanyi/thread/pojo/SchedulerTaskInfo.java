@@ -33,9 +33,4 @@ public class SchedulerTaskInfo implements Serializable {
      */
     private String threadNamePrefix;
 
-    /**
-     * 线程组
-     */
-    private ThreadGroup threadGroup;
-
 }

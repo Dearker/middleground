@@ -103,7 +103,7 @@ public class ScheduledJobServiceImpl extends ServiceImpl<ScheduledJobMapper, Sch
             SchedulingRunnable task = new SchedulingRunnable(scheduledJobPo);
             cronTaskRegistrar.removeCronTask(task);
         }
-        return false;
+        return true;
     }
 
     /**
@@ -130,7 +130,6 @@ public class ScheduledJobServiceImpl extends ServiceImpl<ScheduledJobMapper, Sch
     public SchedulerTaskInfo getScheduledTaskInfo() {
         SchedulerTaskInfo schedulerTaskInfo = new SchedulerTaskInfo();
         schedulerTaskInfo.setPoolSize(threadPoolTaskScheduler.getPoolSize());
-        schedulerTaskInfo.setThreadGroup(threadPoolTaskScheduler.getThreadGroup());
         schedulerTaskInfo.setActiveCount(threadPoolTaskScheduler.getActiveCount());
         schedulerTaskInfo.setThreadPriority(threadPoolTaskScheduler.getThreadPriority());
         schedulerTaskInfo.setThreadNamePrefix(threadPoolTaskScheduler.getThreadNamePrefix());
