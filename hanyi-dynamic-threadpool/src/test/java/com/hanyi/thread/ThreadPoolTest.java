@@ -2,9 +2,11 @@ package com.hanyi.thread;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.thread.NamedThreadFactory;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.hanyi.thread.common.handler.LogRejectedExecutionHandler;
+import com.hanyi.thread.domain.TimingThreadPoolExecutor;
 import org.junit.Test;
 
 import java.lang.management.ManagementFactory;
@@ -111,25 +113,25 @@ public class ThreadPoolTest {
      * 自定义拒绝策略测试
      */
     @Test
-    public void threadPoolExceptionTest(){
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,1,1,
-                TimeUnit.MINUTES,new LinkedBlockingDeque<>(1),new LogRejectedExecutionHandler());
+    public void threadPoolExceptionTest() {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 1,
+                TimeUnit.MINUTES, new LinkedBlockingDeque<>(1), new LogRejectedExecutionHandler());
 
         for (int i = 0; i < 2; i++) {
-            threadPoolExecutor.execute(()->{
+            threadPoolExecutor.execute(() -> {
                 System.out.println(Thread.currentThread().getName());
-                ThreadUtil.sleep(1,TimeUnit.HOURS);
+                ThreadUtil.sleep(1, TimeUnit.HOURS);
             });
         }
-        ThreadUtil.sleep(1,TimeUnit.HOURS);
+        ThreadUtil.sleep(1, TimeUnit.HOURS);
     }
 
     @Test
-    public void threadPoolUseInfoTest(){
+    public void threadPoolUseInfoTest() {
         ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(5, 10);
         threadPoolExecutor.prestartAllCoreThreads();
 
-        double div = NumberUtil.div(threadPoolExecutor.getActiveCount(), threadPoolExecutor.getMaximumPoolSize(),2);
+        double div = NumberUtil.div(threadPoolExecutor.getActiveCount(), threadPoolExecutor.getMaximumPoolSize(), 2);
         System.out.println("线程池活跃度：" + div);
 
         BlockingQueue<Runnable> queue = threadPoolExecutor.getQueue();
@@ -145,34 +147,24 @@ public class ThreadPoolTest {
         System.out.println("队列使用率：" + div1);
     }
 
+    /**
+     * 通过自定义线程池统计线程执行时间
+     */
     @Test
-    public void threadUseTimeTest(){
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1,1,1,
-                TimeUnit.MINUTES,new LinkedBlockingDeque<>(1),new LogRejectedExecutionHandler());
+    public void threadUseTimeTest() {
+        ThreadPoolExecutor threadPoolExecutor = new TimingThreadPoolExecutor(1, 2, 1,
+                TimeUnit.MINUTES, new LinkedBlockingDeque<>(1), new NamedThreadFactory("test-", true),
+                new LogRejectedExecutionHandler());
 
-        List<String> threadNameList = new ArrayList<>();
-
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             threadPoolExecutor.execute(() -> {
                 String name = Thread.currentThread().getName();
-                threadNameList.add(name);
                 System.out.println(name);
-                ThreadUtil.sleep(5,TimeUnit.SECONDS);
+                ThreadUtil.sleep(5, TimeUnit.SECONDS);
             });
         }
 
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(true, true);
-
-        Map<String, ThreadInfo> threadInfoMap = Stream.of(threadInfos).collect(Collectors.toMap(ThreadInfo::getThreadName, Function.identity()));
-
-        threadNameList.forEach(s -> {
-            ThreadInfo threadInfo = threadInfoMap.get(s);
-            System.out.println("线程名称：" + s);
-            System.out.println("线程阻塞时间：" + threadInfo.getBlockedTime());
-        });
-
-        ThreadUtil.sleep(15,TimeUnit.SECONDS);
+        ThreadUtil.sleep(11, TimeUnit.SECONDS);
     }
 
 }
