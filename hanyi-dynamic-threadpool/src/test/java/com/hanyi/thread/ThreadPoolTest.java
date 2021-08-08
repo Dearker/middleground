@@ -8,10 +8,13 @@ import cn.hutool.core.util.NumberUtil;
 import com.hanyi.thread.common.handler.LogRejectedExecutionHandler;
 import com.hanyi.thread.domain.TimingThreadPoolExecutor;
 import org.junit.Test;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.support.PeriodicTrigger;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -165,6 +168,29 @@ public class ThreadPoolTest {
         }
 
         ThreadUtil.sleep(11, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 定时周期执行线程池，支持毫秒级任务，corn表达式不支持毫秒级任务
+     * 可延迟执行，通过设置FixedRate（true）和InitialDelay属性实现
+     */
+    @Test
+    public void periodicThreadPoolTaskExecutorTest() {
+        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+        // 定时任务执行线程池核心线程数
+        taskScheduler.setPoolSize(4);
+        taskScheduler.setRemoveOnCancelPolicy(true);
+        taskScheduler.setThreadNamePrefix("TaskSchedulerThreadPool-");
+        taskScheduler.initialize();
+
+        PeriodicTrigger periodicTrigger = new PeriodicTrigger(500);
+
+        taskScheduler.schedule(() -> {
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(LocalDateTime.now());
+        }, periodicTrigger);
+
+        ThreadUtil.sleep(1, TimeUnit.MINUTES);
     }
 
 }
