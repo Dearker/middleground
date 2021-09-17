@@ -365,4 +365,7 @@
         删除单行数据：dd 
         删除光标下的多行数据：Ndd ,N表示需要删除的行数
         
-            
+    10、防火墙开放指定端口命令        
+        
+        iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+    
