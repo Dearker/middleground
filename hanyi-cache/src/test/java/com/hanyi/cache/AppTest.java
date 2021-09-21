@@ -127,7 +127,7 @@ public class AppTest {
         books.add(new Book(5, "哈士奇22", "234"));
         books.add(new Book(6, "柴犬33", "345"));
 
-        String[] toArray = books.stream().map(JSON::toJSONString).collect(Collectors.toList()).toArray(new String[0]);
+        String[] toArray = books.stream().map(JSON::toJSONString).toArray(String[]::new);
 
         stringRedisTemplate.opsForList().leftPushAll(arrayKey, toArray);
         stringRedisTemplate.expire(arrayKey, 20, TimeUnit.MINUTES);
@@ -155,7 +155,7 @@ public class AppTest {
         bookSet.add(new Book(2, "哈士奇", "234"));
         bookSet.add(new Book(3, "柴犬", "345"));
 
-        String[] toArray = bookSet.stream().map(JSON::toJSONString).collect(Collectors.toSet()).toArray(new String[0]);
+        String[] toArray = bookSet.stream().map(JSON::toJSONString).distinct().toArray(String[]::new);
 
         stringRedisTemplate.opsForSet().add(setKey, toArray);
         stringRedisTemplate.expire(setKey, 20, TimeUnit.MINUTES);

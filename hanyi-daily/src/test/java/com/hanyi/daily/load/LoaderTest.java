@@ -22,6 +22,8 @@ import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.hanyi.daily.common.enums.CodeEnum;
@@ -432,11 +434,11 @@ public class LoaderTest {
     @Test
     public void optionalTest() {
         PersonDesc personDesc = new PersonDesc();
-        String orElse = Optional.ofNullable(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
+        String orElse = Optional.of(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
         System.out.println("空：" + orElse);
 
         personDesc.setName("哈士奇");
-        String s = Optional.ofNullable(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
+        String s = Optional.of(personDesc).map(PersonDesc::getName).orElse(StrUtil.EMPTY_JSON);
         System.out.println("name: " + s);
 
         PersonDesc p = null;
@@ -448,7 +450,7 @@ public class LoaderTest {
     public void optionsMapTest() {
         PersonDesc personDesc = new PersonDesc();
         personDesc.setName("哈哈哈");
-        String orElse = Optional.ofNullable(personDesc).map(s -> {
+        String orElse = Optional.of(personDesc).map(s -> {
             User user = new User();
             user.setUserName(s.getName());
             return user;
@@ -456,7 +458,7 @@ public class LoaderTest {
         System.out.println(orElse);
 
         personDesc.setName(null);
-        String name = Optional.ofNullable(personDesc).map(s -> {
+        String name = Optional.of(personDesc).map(s -> {
             User user = new User();
             user.setUserName(s.getName());
             return user;
@@ -464,11 +466,11 @@ public class LoaderTest {
         System.out.println(name);
 
         List<String> stringList = null;
-        List<String> list = Optional.ofNullable(stringList).orElse(Collections.singletonList("1"));
+        List<String> list = Optional.of(stringList).orElse(Collections.singletonList("1"));
         System.out.println(list);
 
         stringList = new ArrayList<>();
-        list = Optional.ofNullable(stringList).orElse(Collections.singletonList("1"));
+        list = Optional.of(stringList).orElse(Collections.singletonList("1"));
         System.out.println(list);
     }
 
@@ -652,6 +654,21 @@ public class LoaderTest {
 
         System.out.println(integerSet.remove(1));
         System.out.println(integerSet.remove(2));
+    }
+
+    /**
+     * 加解密
+     */
+    @Test
+    public void secureTest(){
+        AES aes = SecureUtil.aes();
+        //加密
+        String encryptHex = aes.encryptHex("123");
+        System.out.println(encryptHex);
+
+        //解密
+        String decryptStr = aes.decryptStr(encryptHex);
+        System.out.println(decryptStr);
     }
 
 }
