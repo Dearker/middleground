@@ -65,12 +65,13 @@ public class MultiThreadTransactionComponent {
      *
      * @return 返回执行结果集合
      */
-    public List<?> execute() {
+    public List<Future<Object>> execute() {
         List<Future<Object>> futures = null;
         try {
             futures = THREAD_POOL_EXECUTOR.invokeAll(SUPPLIER_LIST);
         } catch (InterruptedException e) {
             log.error(" mutilate transaction execute fail：", e);
+            Thread.currentThread().interrupt();
         }
         return futures;
     }
