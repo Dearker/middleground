@@ -53,6 +53,7 @@
         <module>hanyi-clickhouse</module>
         <module>hanyi-hbase</module>
         <module>hanyi-dynamic-threadpool</module>
+        <module>hanyi-tomcat</module>
     </modules>
     <packaging>pom</packaging>
 

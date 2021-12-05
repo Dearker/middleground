@@ -1,0 +1,12 @@
+server:
+  port: 8022
+  tomcat:
+    uri-encoding: UTF-8
+    accept-count: 900
+    max-threads: 200
+    min-spare-threads: 100
+  compression:
+    enabled: true
+    min-response-size: 1024
+  connection-timeout: 2000
+
