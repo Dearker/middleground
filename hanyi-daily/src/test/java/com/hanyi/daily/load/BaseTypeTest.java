@@ -5,6 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import org.junit.Test;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +117,18 @@ public class BaseTypeTest {
         System.out.println(defaultValues.get(byte.class));
         System.out.println(defaultValues.get(double.class));
         System.out.println(defaultValues.get(float.class));
+    }
+
+    @Test
+    public void longTest(){
+        long l = 23;
+        double d = 60.0;
+
+        double v = l / d;
+
+        BigDecimal divide = BigDecimal.valueOf(23).divide(BigDecimal.valueOf(v), RoundingMode.HALF_UP);
+        System.out.println(divide);
+        System.out.println(v);
     }
 
 }

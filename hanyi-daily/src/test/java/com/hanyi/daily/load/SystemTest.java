@@ -5,6 +5,7 @@ import com.hanyi.daily.property.Book;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Properties;
 
@@ -130,6 +131,30 @@ public class SystemTest {
 
         String str = RuntimeUtil.execForStr("ipconfig");
         System.out.println(str);
+    }
+
+    /**
+     * 创建堆外内存
+     */
+    @Test
+    public void directTest(){
+        //申请128M堆外内存
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024 * 1024 * 128);
+        byteBuffer.clear();
+    }
+
+    /**
+     * 字符串hash算法
+     */
+    @Test
+    public void hashTest(){
+        String name = "哈士奇-1";
+        String name2 = "哈士奇-2";
+
+        //-730639064
+        System.out.println(name.hashCode());
+        //-730639063
+        System.out.println(name2.hashCode());
     }
 
 }

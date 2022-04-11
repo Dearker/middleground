@@ -24,6 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Period           时间段
  * ZoneOffset       时区偏移量
  * ZonedDateTime    带时区的时间
+ * OffsetDateTime   相对于Instant和ZonedDateTime，功能更全面的时间类，用于数据库和网络协议通信
  * Clock            时钟，比如获取目前美国纽约的时间
  * DateTimeFormatter 时间格式化
  * </p>
@@ -103,6 +104,22 @@ public class DateTest {
 
         LocalDate previousOrSame = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         System.out.println("获取上周的周一：" + previousOrSame);
+    }
+
+    @Test
+    public void instantSecondTest() {
+        LocalDate localDate = LocalDate.of(2022, 1, 18);
+
+        int value = localDate.getDayOfWeek().getValue();
+        LocalDate fistLocalData = localDate.minus(6 + value, ChronoUnit.DAYS);
+        LocalDate lastLocalData = localDate.minus(value, ChronoUnit.DAYS);
+        System.out.println("上周开始日期：" + fistLocalData);
+        System.out.println("上周结束日期：" + lastLocalData);
+
+        long toEpochMilli = LocalDateTime.of(fistLocalData, LocalTime.MIN).toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+        long epochMilli = LocalDateTime.of(lastLocalData, LocalTime.MAX).toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+        System.out.println("获取上周一的开始时间：" + toEpochMilli);
+        System.out.println("获取上周天的结束时间：" + epochMilli);
     }
 
     @Test
@@ -264,6 +281,12 @@ public class DateTest {
 
         System.out.println("获取当前秒数：" + instant.getLong(ChronoField.INSTANT_SECONDS));
         System.out.println("仅获取当前毫秒的3位数：" + instant.getLong(ChronoField.MILLI_OF_SECOND));
+
+        System.out.println("---------------------");
+
+
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.of("Europe/London"));
+        System.out.println("英国伦敦时间和UTC一致：" + localDateTime);
     }
 
     /**

@@ -49,10 +49,10 @@ public class AccessGatewayFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> checkToken(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain){
         log.info("check token and user permission....");
-        LinkedHashSet requiredAttribute = serverWebExchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+        LinkedHashSet<URI> requiredAttribute = serverWebExchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
         ServerHttpRequest request = serverWebExchange.getRequest();
         String requestUri = request.getPath().pathWithinApplication().value();
-        for (URI next : (Iterable<URI>) requiredAttribute) {
+        for (URI next : requiredAttribute) {
             if (next.getPath().startsWith(GATE_WAY_PREFIX)) {
                 requestUri = next.getPath().substring(GATE_WAY_PREFIX.length());
             }

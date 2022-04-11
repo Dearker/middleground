@@ -401,6 +401,16 @@ public class CollectionTest {
         System.out.println(studentMap);
     }
 
+    @Test
+    public void mapComputeIfAbsentTest2(){
+        Map<String,List<Integer>> listMap = new HashMap<>();
+        listMap.put("1",Arrays.asList(1,3));
+
+        List<Integer> integerList = new ArrayList<>(Arrays.asList(4, 5));
+        listMap.computeIfAbsent("2",k -> new ArrayList<>()).addAll(integerList);
+        System.out.println(listMap);
+    }
+
     /**
      * 如果key的值在map中存在且value不为null时，才对该k，v进行操作；
      * 如果想删除对应的key，则将其value值设置为null即可，如果value的值本身为null则无法删除
