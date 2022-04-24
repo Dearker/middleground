@@ -1,11 +1,15 @@
 package com.hanyi.daily.thread;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.HashUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.hanyi.daily.pojo.TimeInfo;
 import com.hanyi.daily.thread.pojo.Accumulator;
+import com.hanyi.daily.thread.pojo.AskThread;
 import com.hanyi.daily.thread.pojo.Athlete;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -510,6 +514,17 @@ public class ThreadDemo {
         System.out.println("获取的数据：" + stringList);
     }
 
+    @Test
+    public void completableFutureCompleteTest(){
+        CompletableFuture<String> completableFuture = new CompletableFuture<>();
+
+        new Thread(new AskThread(completableFuture)).start();
+        System.out.println("当前时间：" + LocalDateTime.now());
+        ThreadUtil.sleep(1000);
+        completableFuture.complete("柯基");
+        System.out.println("当前时间：" + LocalDateTime.now());
+    }
+
     /**
      * 应用场景测试
      */
@@ -565,6 +580,66 @@ public class ThreadDemo {
         System.out.println("获取的数据：" + timeInfo);
         //总共耗时3秒
         System.out.println("耗时：" + timer.intervalMs());
+    }
+
+    @Test
+    public void randomStrTest(){
+        TimeInterval timer = DateUtil.timer();
+
+        int total = 10000000;
+        LongAdder longAdder = new LongAdder();
+
+        IntStream.range(0,total).forEach(i -> {
+            if (String.valueOf(i).hashCode() % 7 == 0){
+                longAdder.increment();
+            }
+        });
+
+        System.out.println(longAdder.longValue());
+        System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void randomStrThreadTest(){
+        int total = 10000000;
+
+        List<Integer> integerList = new ArrayList<>(total);
+        IntStream.range(0,total).forEach(i -> integerList.add(String.valueOf(i).hashCode()));
+
+        List<List<Integer>> splitList = CollUtil.split(integerList, 1000000);
+        ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(10, 10);
+
+        LongAdder longAdder = new LongAdder();
+        TimeInterval timer = DateUtil.timer();
+        List<CompletableFuture<Void>> completableFutureList = new ArrayList<>(splitList.size());
+        splitList.forEach(s -> {
+            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                s.forEach(a -> {
+                    if (a % 7 == 0){
+                        longAdder.increment();
+                    }
+                });
+            },threadPoolExecutor);
+            completableFutureList.add(completableFuture);
+        });
+
+        completableFutureList.stream().map(CompletableFuture::allOf).forEach(s -> {});
+
+        System.out.println(longAdder.longValue());
+        System.out.println("总共耗时：" + timer.intervalRestart());
+    }
+
+    @Test
+    public void hashTest(){
+        TimeInterval timer = DateUtil.timer();
+        int total = 10000000;
+        List<String> stringList = new ArrayList<>(total);
+        IntStream.range(0,total).forEach(s -> stringList.add(RandomUtil.randomString(10)));
+        List<Integer> integerList = new ArrayList<>(total);
+        stringList.forEach(s -> {
+            integerList.add(HashUtil.fnvHash(s));
+        });
+        System.out.println("总共耗时：" + timer.intervalRestart());
     }
 
 }

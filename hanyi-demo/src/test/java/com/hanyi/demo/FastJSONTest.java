@@ -5,7 +5,9 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.HashUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.digest.MD5;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -52,6 +54,31 @@ public class FastJSONTest {
 
         Console.log("This is Console log for {}.", l);
         //Props props = new Props("test.properties");
+    }
+
+    @Test
+    public void manyIdTest() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(snowflake.nextId());
+        }
+    }
+
+    @Test
+    public void md5Test() {
+        String name = "红红火火恍恍惚惚";
+
+        MD5 md5 = MD5.create();
+        for (int i = 0; i < 5; i++) {
+            System.out.println(md5.digestHex16(name + i));
+        }
+    }
+
+    @Test
+    public void fnvHashTest() {
+        String name = "红红火火恍恍惚惚";
+        for (int i = 0; i < 5; i++) {
+            System.out.println(HashUtil.fnvHash(name + i));
+        }
     }
 
     /**

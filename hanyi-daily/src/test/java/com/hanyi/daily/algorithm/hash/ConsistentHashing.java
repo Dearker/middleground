@@ -1,10 +1,9 @@
 package com.hanyi.daily.algorithm.hash;
 
 import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.Data;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 一致性哈希算法
@@ -31,6 +30,14 @@ public class ConsistentHashing {
             // 创建虚拟节点
             add(node);
         }
+    }
+
+    public Map<String, List<Integer>> getHashCircle() {
+        Map<String, List<Integer>> nodeListMap = new TreeMap<>();
+        hashCircle.forEach((k, v) -> nodeListMap.computeIfAbsent(v.getName(), a -> new ArrayList<>()).add(k));
+
+        nodeListMap.forEach((k, v) -> v.sort(Comparator.comparingInt(Integer::intValue)));
+        return nodeListMap;
     }
 
     /**
@@ -77,9 +84,9 @@ public class ConsistentHashing {
      * FNV1_32_HASH算法
      *
      * @param key the key
-     * @return
+     * @return 返回哈希值
      */
-    private int hash(String key) {
+    public static int hash(String key) {
         final int p = 16777619;
         int hash = (int) 2166136261L;
         for (int i = 0; i < key.length(); i++) {
@@ -100,7 +107,7 @@ public class ConsistentHashing {
     /**
      * 集群节点的机器地址
      */
-    @ToString
+    @Data
     @AllArgsConstructor
     public static class Node {
 

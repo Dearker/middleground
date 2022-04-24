@@ -1,5 +1,7 @@
 package com.hanyi.daily.algorithm.hash;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,8 @@ import java.util.stream.IntStream;
  */
 public class ConsistentHashingTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void hashTest() {
         ConsistentHashing.Node[] nodes = new ConsistentHashing.Node[4];
         Map<ConsistentHashing.Node, List<String>> map = new HashMap<>();
 
@@ -67,6 +70,28 @@ public class ConsistentHashingTest {
 
     private static int sum(int[] data) {
         return IntStream.of(data).reduce(0,Integer::sum);
+    }
+
+    @Test
+    public void hashCircleTest(){
+        ConsistentHashing.Node[] nodes = new ConsistentHashing.Node[3];
+        ConsistentHashing.Node[] newNodes = new ConsistentHashing.Node[4];
+
+        // make nodes 4台服务器节点
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i] = new ConsistentHashing.Node("10.1.32.2" + i, 8070, "myNode" + i);
+        }
+
+        for (int i = 0; i < newNodes.length; i++) {
+            newNodes[i] = new ConsistentHashing.Node("10.1.32.2" + i, 8070, "myNode" + i);
+        }
+
+        ConsistentHashing ch = new ConsistentHashing(nodes, 5);
+        ch.getHashCircle().forEach((k,v) -> System.out.println(k +":" + v));
+
+        System.out.println("==========================");
+        ConsistentHashing chTen = new ConsistentHashing(newNodes, 5);
+        chTen.getHashCircle().forEach((k,v) -> System.out.println(k +":" + v));
     }
 
 }
