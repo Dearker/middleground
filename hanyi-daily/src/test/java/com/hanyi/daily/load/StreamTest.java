@@ -9,6 +9,7 @@ import com.hanyi.daily.pojo.Person;
 import com.hanyi.daily.pojo.Student;
 import com.hanyi.daily.pojo.StudentSort;
 import com.hanyi.daily.thread.pojo.Accumulator;
+import com.hanyi.framework.exception.BizException;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -809,4 +810,24 @@ public class StreamTest {
         studentSortList.sort(Comparator.reverseOrder());
         System.out.println("自然降序排序：" + studentSortList);
     }
+
+    /**
+     * 抛出异常测试，异常之后的代码不会再执行
+     */
+    @Test
+    public void throwTest() {
+        //Optional.ofNullable(null).orElseThrow(BizException::new);
+        StudentSort studentSort = new StudentSort();
+        try {
+            //该代码会直接报错
+            Optional.empty().orElseThrow(BizException::new);
+            Optional.ofNullable(studentSort).filter(s -> Objects.nonNull(s.getId()))
+                    .orElseThrow(() -> new BizException("空指针"));
+            //该代码不会执行
+            System.out.println("111111111");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
 }
