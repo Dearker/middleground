@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,16 +17,17 @@ import com.hanyi.hikari.request.BookQueryPageParam;
 import com.hanyi.hikari.request.BookQueryParam;
 import com.hanyi.hikari.service.BookService;
 import com.hanyi.hikari.vo.BookPageVo;
+import com.hanyi.hikari.vo.BookVo;
 import com.hanyi.hikari.vo.QueryStats;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -109,7 +111,12 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
     public BookPageVo findBookListByPage(BookQueryPageParam bookQueryPageParam) {
         //构建查询条件
         LambdaQueryWrapper<Book> bookLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        bookLambdaQueryWrapper.eq(Book::getBookType, bookQueryPageParam.getBookType());
+        Integer bookType = bookQueryPageParam.getBookType();
+
+        Set<String> fieldSet = Stream.of(BookVo.class.getDeclaredFields()).map(s -> StrUtil.toUnderlineCase(s.getName())).collect(Collectors.toSet());
+
+        bookLambdaQueryWrapper.select(Book.class,s -> fieldSet.contains(s.getColumn()))
+                .eq(Objects.nonNull(bookType), Book::getBookType, bookType);
 
         //构建分页查询对象
         Page<Book> queryPage = new Page<>(bookQueryPageParam.getCurrentPage(), bookQueryPageParam.getPageSize());
