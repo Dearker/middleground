@@ -13,9 +13,11 @@
 
     <properties>
         <easyexcel.version>2.2.6</easyexcel.version>
+        <disruptor.version>3.4.4</disruptor.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.github.hanyi</groupId>
             <artifactId>hanyi-utils</artifactId>
@@ -32,6 +34,13 @@
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
             <version>${easyexcel.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>${disruptor.version}</version>
         </dependency>
 
     </dependencies>
