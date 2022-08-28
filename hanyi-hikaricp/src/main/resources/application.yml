@@ -4,11 +4,17 @@ server:
 spring:
   # datasource 数据源配置内容
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
     password:
     # HikariCP 自定义配置，对应 HikariConfig 配置属性类
     hikari:
+      # 一个连接idle状态的最大时长（毫秒），超时则被释放（retired），缺省:10分钟
+      idle-timeout: 30000
+      # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟，建议设置比数据库超时时长少30秒
+      max-lifetime: 1800000
+      # 自动提交
+      #auto-commit: true
       minimum-idle: 20 # 池中维护的最小空闲连接数，默认为 10 个。
       maximum-pool-size: 20 # 池中最大连接数，包括闲置和使用中的连接，默认为 10 个。
 

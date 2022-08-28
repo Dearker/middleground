@@ -82,4 +82,16 @@ public interface UserService extends IService<UserEntity> {
      * @return 返回用户集合
      */
     List<UserEntity> getUserByUserName(String userName);
+
+    /**
+     * 批量保存用户
+     */
+    void batchSaveUserByTransactionStatus(int number);
+
+    /**
+     * 通过连接批量保存数据
+     *
+     * @param number 数量
+     */
+    void batchSaveByConnection(int number);
 }

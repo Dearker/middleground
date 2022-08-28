@@ -1,22 +1,39 @@
 package com.hanyi.hikari.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hanyi.hikari.common.component.UserComponent;
 import com.hanyi.hikari.dao.UserDao;
+import com.hanyi.hikari.dao.UserInfoDao;
 import com.hanyi.hikari.pojo.UserEntity;
+import com.hanyi.hikari.pojo.UserInfoEntity;
 import com.hanyi.hikari.request.UserQueryPageParam;
 import com.hanyi.hikari.service.UserService;
 import com.hanyi.hikari.vo.UserTotalVo;
+import javafx.util.Pair;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 /**
  * <p>
@@ -26,8 +43,25 @@ import java.util.Map;
  * @author wenchangwei
  * @since 9:39 上午 2020/12/12
  */
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
+
+    @Resource
+    private PlatformTransactionManager transactionManager;
+
+    @Resource
+    private UserComponent userComponent;
+
+    @Resource
+    private SqlSessionTemplate sqlSessionTemplate;
+
+    /**
+     * 线程池
+     */
+    private final ThreadPoolExecutor threadPoolExecutor = ThreadUtil.newExecutor(4, 4);
+
+    private final List<TransactionStatus> transactionStatuses = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * 根据条件查询用户信息
@@ -37,7 +71,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
      */
     @Override
     public Page<UserEntity> findUserByCondition(UserQueryPageParam userQueryPageParam) {
-
         Long currentPage = userQueryPageParam.getCurrentPage();
         Long pageSize = userQueryPageParam.getPageSize();
 
@@ -170,4 +203,133 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
         IPage<UserEntity> page = new Page<>(0, 3);
         return this.lambdaQuery().like(UserEntity::getUserName, userName).page(page).getRecords();
     }
+
+    /**
+     * 批量保存用户，此处必须调用方和被调用方都使用@Transactional，具体操作事务的代码不能和本类写在同一个文件，
+     * 否则动态代理无法获取到对应的数据源
+     */
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void batchSaveUserByTransactionStatus(int number) {
+        List<UserEntity> userEntityList = this.buildDataList().getKey();
+        List<UserInfoEntity> userInfoEntityList = this.buildDataList().getValue();
+
+        CountDownLatch countDownLatch = new CountDownLatch(4);
+        AtomicBoolean isError = new AtomicBoolean(false);
+
+        try {
+            for (int i = 0; i < 4; i++) {
+                List<UserEntity> limitList = userEntityList.stream().skip(i).limit(1).collect(Collectors.toList());
+                List<UserInfoEntity> infoEntityList = userInfoEntityList.stream().skip(i).limit(1).collect(Collectors.toList());
+                int finalI = i;
+                threadPoolExecutor.execute(() -> {
+                    try {
+                        userComponent.batchAdd(limitList, infoEntityList, transactionStatuses, finalI, number);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        isError.set(true);
+                    } finally {
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+
+            // 倒计时锁设置超时时间 30s
+            boolean await = countDownLatch.await(10, TimeUnit.SECONDS);
+            // 判断是否超时
+            if (!await) {
+                isError.set(true);
+            }
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+            isError.set(true);
+        }
+
+        if (!transactionStatuses.isEmpty()) {
+            if (isError.get()) {
+                transactionStatuses.forEach(s -> transactionManager.rollback(s));
+            } else {
+                transactionStatuses.forEach(s -> transactionManager.commit(s));
+            }
+        }
+    }
+
+    @Override
+    public void batchSaveByConnection(int number) {
+        SqlSession sqlSession = SqlSessionUtils.getSqlSession(sqlSessionTemplate.getSqlSessionFactory(),
+                sqlSessionTemplate.getExecutorType(), sqlSessionTemplate.getPersistenceExceptionTranslator());
+        Connection connection = sqlSession.getConnection();
+
+        List<UserEntity> userEntityList = this.buildDataList().getKey();
+        List<UserInfoEntity> userInfoEntityList = this.buildDataList().getValue();
+
+        try {
+            // 设置手动提交
+            connection.setAutoCommit(false);
+            //获取mapper
+            UserDao userDao = sqlSession.getMapper(UserDao.class);
+            UserInfoDao userInfoDao = sqlSession.getMapper(UserInfoDao.class);
+            List<Callable<Integer>> callableList = new ArrayList<>();
+
+            for (int i = 0; i < 4; i++) {
+                List<UserEntity> limitList = userEntityList.stream().skip(i).limit(1).collect(Collectors.toList());
+                List<UserInfoEntity> infoEntityList = userInfoEntityList.stream().skip(i).limit(1).collect(Collectors.toList());
+                int finalI = i;
+
+                //使用返回结果的callable去执行,
+                Callable<Integer> callable = () -> {
+                    //让最后一个线程抛出异常
+                    if (Objects.equals(finalI, number)) {
+                        throw new RuntimeException("出现事务异常");
+                    }
+                    userInfoDao.batchSaveUserInfo(infoEntityList);
+                    return userDao.batchSaveUser(limitList);
+                };
+                callableList.add(callable);
+            }
+
+            //执行子线程
+            List<Future<Integer>> futures = threadPoolExecutor.invokeAll(callableList);
+            for (Future<Integer> future : futures) {
+                //如果有一个执行不成功,则全部回滚
+                if (future.get() <= 0) {
+                    connection.rollback();
+                    return;
+                }
+            }
+            connection.commit();
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                log.error("error", e);
+            }
+
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                log.error("数据库连接关闭失败：{}", e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 构建数据列表
+     *
+     * @return {@link Pair}<{@link List}<{@link UserEntity}>, {@link List}<{@link UserInfoEntity}>>
+     */
+    private Pair<List<UserEntity>, List<UserInfoEntity>> buildDataList() {
+        List<UserEntity> userEntityList = new ArrayList<>();
+        List<UserInfoEntity> userInfoEntityList = new ArrayList<>();
+        LongStream.range(10, 14).forEach(s -> {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(s);
+            userEntity.setUserName("userName: " + s);
+            userEntityList.add(userEntity);
+            userInfoEntityList.add(new UserInfoEntity(s, "idCard: " + s, "info: " + s));
+        });
+        return new Pair<>(userEntityList, userInfoEntityList);
+    }
+
 }

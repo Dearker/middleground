@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanyi.hikari.dao.UserInfoDao">
+
+    <insert id="batchSaveUserInfo" parameterType="com.hanyi.hikari.pojo.UserInfoEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into tb_user_info (id,id_card,info_code) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.idCard}, #{item.infoCode})
+        </foreach>
+    </insert>
+
+</mapper>

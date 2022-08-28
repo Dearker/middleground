@@ -1,7 +1,9 @@
 package com.hanyi.hikari.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -14,6 +16,8 @@ import java.io.Serializable;
  * @since 9:35 上午 2020/12/12
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("tb_user_info")
 public class UserInfoEntity implements Serializable {
 

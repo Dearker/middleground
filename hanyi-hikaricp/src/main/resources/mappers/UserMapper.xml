@@ -51,22 +51,40 @@
 
     <!-- 根据版本号查询用户集合 -->
     <select id="findUserByExist" resultType="com.hanyi.hikari.pojo.UserEntity">
-        select * from tb_user a where exists
-        (select version from tb_user b where b.version &gt;= #{version} and a.id=b.id)
+        select *
+        from tb_user a
+        where exists
+                  (select version from tb_user b where b.version &gt;= #{version} and a.id = b.id)
     </select>
 
     <!-- 根据版本号和用户名进行or查询 -->
     <select id="findUserByUnion" resultType="com.hanyi.hikari.pojo.UserEntity">
-        select * from tb_user where version=#{version}
-            union
-        select * from tb_user where user_name like concat('%',#{userName},'%')
+        select *
+        from tb_user
+        where version = #{version}
+        union
+        select *
+        from tb_user
+        where user_name like concat('%', #{userName}, '%')
     </select>
 
     <!--  -->
     <select id="findUerByUnionAll" resultType="com.hanyi.hikari.pojo.UserEntity">
-        select * from tb_user where version=#{version}
-            union all
-        select * from tb_user where user_name like concat('%',#{userName},'%')
+        select *
+        from tb_user
+        where version = #{version}
+        union all
+        select *
+        from tb_user
+        where user_name like concat('%', #{userName}, '%')
     </select>
+
+    <insert id="batchSaveUser" parameterType="com.hanyi.hikari.pojo.UserEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_user (id,user_name,id_card,birthday,version,deleted,gmt_create,gmt_modified) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.userName}, #{item.idCard},#{item.birthday},
+            #{item.version},#{item.deleted},#{item.gmtCreate},#{item.gmtModified})
+        </foreach>
+    </insert>
 
 </mapper>

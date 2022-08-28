@@ -57,4 +57,12 @@ public interface UserDao extends BaseMapper<UserEntity> {
      * @return 返回查询结果
      */
     List<UserEntity> findUerByUnionAll(Integer version, String userName);
+
+    /**
+     * 批量保存用户
+     *
+     * @param userEntityList 用户实体列表
+     * @return int
+     */
+    int batchSaveUser(List<UserEntity> userEntityList);
 }

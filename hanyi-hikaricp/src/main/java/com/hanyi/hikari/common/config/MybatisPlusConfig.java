@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * <p>
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since 10:07 下午 2020/6/11
  */
 @Configuration
-@EnableTransactionManagement
 @MapperScan(basePackages = {"com.hanyi.hikari.dao"})
 public class MybatisPlusConfig {
 
