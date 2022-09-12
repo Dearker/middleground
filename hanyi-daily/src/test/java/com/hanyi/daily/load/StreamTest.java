@@ -19,7 +19,9 @@ import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -828,6 +830,30 @@ public class StreamTest {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    @Test
+    public void predicateTest(){
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
+
+        List<Integer> andList = integerList.stream().filter(((Predicate<Integer>) integer -> integer == 1)
+                .and(a -> a == 2)).collect(toList());
+        //1,2
+        System.out.println("andList: " + andList);
+        //(integer == 1 && integer == 2) || integer == 3
+        List<Integer> filterList = integerList.stream().filter(((Predicate<Integer>) integer -> integer == 1)
+                .and(integer -> integer == 2)
+                .or(integer -> integer == 3)).collect(toList());
+        //3
+        System.out.println(filterList);
+    }
+
+    @Test
+    public void consumerTest(){
+        StudentSort studentSort = new StudentSort(1,"哈哈哈");
+        Optional.of(studentSort).ifPresent(((Consumer<StudentSort>) studentSort1 -> studentSort1.setId(2))
+                .andThen(studentSort12 -> studentSort12.setName("看看看")));
+        System.out.println(studentSort);
     }
 
 }
