@@ -1,11 +1,13 @@
 package com.hanyi.daily.load;
 
 import cn.hutool.core.util.StrUtil;
+import com.hanyi.daily.common.util.LambdaUtil;
 import com.hanyi.daily.pojo.Person;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -128,6 +130,29 @@ public class EliminateJudgmentTest {
 
     private boolean predicateName(Person person) {
         return person.getName().isEmpty();
+    }
+
+    @Test
+    public void predicateConsumerTest() {
+        Person person = new Person(2, "哈哈哈");
+        LambdaUtil.of(person).predicateConsumer(p -> p.getId() == 1, p -> p.setId(2), p -> p.setName("看看看"));
+        System.out.println(person);
+        LambdaUtil.of().nullPredicateConsumer(Objects::isNull, p -> System.out.println(1111), p -> System.out.println(2222));
+    }
+
+    @Test
+    public void predicateFunctionTest() {
+        Person person = new Person(2, "哈哈哈");
+        LambdaUtil<String> function = LambdaUtil.of(person).predicateFunction(p -> p.getId() == 1,
+                p -> p.getId() + " ||", Person::getName);
+        System.out.println(function);
+    }
+
+    @Test
+    public void predicateSupplierTest() {
+        Person person = new Person(1, "哈哈哈");
+        LambdaUtil<Person> supplier = LambdaUtil.of(person).predicateSupplier(p -> p.getId() == 1, () -> person, () -> null);
+        System.out.println(supplier);
     }
 
 }
